@@ -1108,7 +1108,9 @@ ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://storytimeai.preview.emergentagent.com",
     "https://masal.space",
-    "http://masal.space"
+    "http://masal.space",
+    "https://www.masal.space",
+    "http://www.masal.space"
 ]
 
 app.add_middleware(
