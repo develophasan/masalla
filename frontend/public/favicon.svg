@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#EC4899"/>
+    </linearGradient>
+    <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FCD34D"/>
+      <stop offset="100%" style="stop-color:#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="url(#bookGrad)"/>
+  <!-- Open book -->
+  <path d="M16 20 L32 24 L32 48 L16 44 Z" fill="#FFFFFF" opacity="0.95"/>
+  <path d="M48 20 L32 24 L32 48 L48 44 Z" fill="#F3E8FF" opacity="0.9"/>
+  <!-- Book spine -->
+  <path d="M31 24 L33 24 L33 48 L31 48 Z" fill="#DDD6FE"/>
+  <!-- Book lines -->
+  <line x1="19" y1="28" x2="29" y2="30" stroke="#C4B5FD" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="19" y1="33" x2="29" y2="35" stroke="#C4B5FD" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="19" y1="38" x2="29" y2="40" stroke="#C4B5FD" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="35" y1="30" x2="45" y2="28" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="35" y1="35" x2="45" y2="33" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="35" y1="40" x2="45" y2="38" stroke="#DDD6FE" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Sparkle stars -->
+  <path d="M12 14 L13 17 L16 18 L13 19 L12 22 L11 19 L8 18 L11 17 Z" fill="url(#starGrad)"/>
+  <path d="M52 12 L53 14 L55 15 L53 16 L52 18 L51 16 L49 15 L51 14 Z" fill="url(#starGrad)"/>
+  <path d="M50 46 L51 48 L53 49 L51 50 L50 52 L49 50 L47 49 L49 48 Z" fill="url(#starGrad)"/>
+</svg>
