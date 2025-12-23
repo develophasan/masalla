@@ -12,6 +12,7 @@ import TopicCard from "@/components/TopicCard";
 import StoryCard from "@/components/StoryCard";
 import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
+import HowToCreateStory from "@/components/HowToCreateStory";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
