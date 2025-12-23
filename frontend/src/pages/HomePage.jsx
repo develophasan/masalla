@@ -123,8 +123,18 @@ export default function HomePage() {
               <span className="text-sm font-medium text-violet-600">15 Ana Kategori • 150+ Alt Konu • Kazanım Destekli</span>
             </div>
             
+            {/* Hero Logo */}
+            <div className="flex justify-center mb-4 animate-slide-up">
+              <img 
+                src="/logo.svg" 
+                alt="Masal Sepeti" 
+                className="h-32 md:h-40 w-auto"
+              />
+            </div>
+            
             <h2 className="text-4xl md:text-6xl font-bold text-slate-800 mb-4 animate-slide-up stagger-1">
-              <span className="text-violet-600">Masal</span> Sepeti
+              <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">Masal</span>{" "}
+              <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 bg-clip-text text-transparent">Sepeti</span>
             </h2>
             
             <p className="text-lg md:text-xl text-slate-600 mb-8 animate-slide-up stagger-2">
