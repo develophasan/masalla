@@ -146,30 +146,25 @@ export default function StoryCreatePage() {
         message="Masalınız hazırlanıyor..."
       />
 
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <button 
-              onClick={() => navigate(-1)} 
-              className="back-button"
-              data-testid="back-button"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="hidden sm:inline">Geri</span>
-            </button>
-            
-            <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
-              <BookOpen className="w-6 h-6 text-violet-500" />
-              <span className="text-xl font-bold text-violet-600">Masal Sepeti</span>
-            </Link>
-            
-            <div className="w-20" /> {/* Spacer */}
-          </div>
-        </div>
-      </header>
+      {/* Navbar */}
+      <Navbar />
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        {/* Credit Warning */}
+        {isAuthenticated && user?.credits <= 0 && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
+            <div>
+              <p className="text-amber-800 font-medium">Krediniz bitti!</p>
+              <p className="text-amber-600 text-sm">
+                Yeni masal oluşturmak için{" "}
+                <Link to="/profile" className="underline">profil sayfasından</Link>{" "}
+                kredi talebi oluşturun.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Page Header */}
         <div className="text-center mb-10 animate-slide-up">
           <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center shadow-lg animate-pulse-glow">
