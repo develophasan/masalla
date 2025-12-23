@@ -468,6 +468,16 @@ async def get_stories(
 async def get_popular_stories(limit: int = 6):
     """Get most popular stories by play count"""
     stories = await db.stories.find({}, {"_id": 0}).sort("play_count", -1).limit(limit).to_list(limit)
+    
+    # Enrich stories with creator info
+    for story in stories:
+        if story.get("user_id"):
+            user = await db.users.find_one({"user_id": story["user_id"]}, {"_id": 0, "name": 1, "surname": 1, "picture": 1})
+            if user:
+                story["creator_name"] = f"{user.get('name', '')} {user.get('surname', '')}".strip()
+                story["creator_id"] = story["user_id"]
+                story["creator_picture"] = user.get("picture")
+    
     return stories
 
 
