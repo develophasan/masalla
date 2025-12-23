@@ -154,6 +154,51 @@ export default function StoryDetailPage() {
     }
   };
 
+  const handleDownloadClick = () => {
+    // Show ad before download
+    setShowDownloadAd(true);
+  };
+
+  const handleDownloadAdClose = () => {
+    setShowDownloadAd(false);
+    setCanDownload(true);
+    // Trigger actual download
+    downloadStory();
+  };
+
+  const downloadStory = () => {
+    if (!story || !story.audio_base64) {
+      toast.error("Ses dosyası bulunamadı");
+      return;
+    }
+    
+    try {
+      // Convert base64 to blob
+      const byteCharacters = atob(story.audio_base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+      
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${story.title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ ]/g, '')}.mp3`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast.success("Masal indiriliyor!");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("İndirme sırasında hata oluştu");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
