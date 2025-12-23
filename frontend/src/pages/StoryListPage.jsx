@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Search, BookOpen, Filter, X, GraduationCap } from "lucide-react";
+import { ArrowLeft, Search, BookOpen, Filter, X, GraduationCap, Clock, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,6 +18,12 @@ import Navbar from "@/components/Navbar";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+const SORT_OPTIONS = [
+  { id: "popular", name: "En Popüler" },
+  { id: "newest", name: "En Yeni" },
+  { id: "oldest", name: "En Eski" },
+];
+
 export default function StoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [stories, setStories] = useState([]);
@@ -25,6 +31,7 @@ export default function StoryListPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic_id") || "");
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "popular");
   const [showSearchAd, setShowSearchAd] = useState(false);
   const [pendingSearch, setPendingSearch] = useState(null);
 
