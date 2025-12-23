@@ -94,6 +94,202 @@ class MasalSepetiAPITester:
         """Test API root endpoint"""
         return self.run_test("API Root", "GET", "", 200)
 
+    def test_user_registration(self):
+        """Test POST /auth/register - User registration"""
+        timestamp = datetime.now().strftime('%H%M%S')
+        test_data = {
+            "name": "Test",
+            "surname": "User",
+            "email": f"test_user_{timestamp}@example.com",
+            "phone": "05551234567",
+            "password": "testpass123"
+        }
+        
+        success, response = self.run_test(
+            "User Registration",
+            "POST",
+            "auth/register",
+            200,
+            data=test_data
+        )
+        
+        if success and response.get('success'):
+            self.test_user_email = test_data['email']
+            self.test_user_password = test_data['password']
+            print(f"   ✓ User registered: {self.test_user_email}")
+            return True
+        return False
+
+    def test_user_login(self):
+        """Test POST /auth/login - User login"""
+        if not self.test_user_email:
+            print("❌ Cannot test login - no registered user")
+            return False
+            
+        login_data = {
+            "email": self.test_user_email,
+            "password": self.test_user_password
+        }
+        
+        success, response = self.run_test(
+            "User Login",
+            "POST",
+            "auth/login",
+            200,
+            data=login_data
+        )
+        
+        if success and response.get('session_token'):
+            self.user_token = response['session_token']
+            print(f"   ✓ User logged in, token received")
+            return True
+        return False
+
+    def test_get_current_user(self):
+        """Test GET /auth/me - Get current user info"""
+        if not self.user_token:
+            print("❌ Cannot test /auth/me - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Get Current User",
+            "GET",
+            "auth/me",
+            200
+        )
+        
+        if success and response.get('user_id'):
+            print(f"   ✓ User info retrieved: {response.get('name')} {response.get('surname')}")
+            print(f"   ✓ Credits: {response.get('credits', 0)}")
+            return True
+        return False
+
+    def test_admin_login(self):
+        """Test POST /admin/login - Admin login with admin/masallardiyariai"""
+        admin_data = {
+            "username": "admin",
+            "password": "masallardiyariai"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login",
+            "POST",
+            "admin/login",
+            200,
+            data=admin_data,
+            headers={'Content-Type': 'application/json'}  # Don't use user token
+        )
+        
+        if success and response.get('session_token'):
+            self.admin_token = response['session_token']
+            print(f"   ✓ Admin logged in successfully")
+            return True
+        return False
+
+    def test_admin_stats(self):
+        """Test GET /admin/stats - Admin dashboard stats"""
+        if not self.admin_token:
+            print("❌ Cannot test admin stats - no admin token")
+            return False
+            
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
+        success, response = self.run_test(
+            "Admin Stats",
+            "GET",
+            "admin/stats",
+            200,
+            headers=headers
+        )
+        
+        if success and 'total_users' in response:
+            print(f"   ✓ Total users: {response.get('total_users', 0)}")
+            print(f"   ✓ Total stories: {response.get('total_stories', 0)}")
+            print(f"   ✓ Pending requests: {response.get('pending_requests', 0)}")
+            return True
+        return False
+
+    def test_credit_balance(self):
+        """Test GET /credits/balance - Get user credit balance"""
+        if not self.user_token:
+            print("❌ Cannot test credit balance - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Get Credit Balance",
+            "GET",
+            "credits/balance",
+            200
+        )
+        
+        if success and 'credits' in response:
+            print(f"   ✓ Credit balance: {response.get('credits')}")
+            return True
+        return False
+
+    def test_credit_request(self):
+        """Test POST /credits/request - Create credit request"""
+        if not self.user_token:
+            print("❌ Cannot test credit request - no user token")
+            return False
+            
+        request_data = {
+            "requested_credits": 10,
+            "message": "Test credit request from API testing"
+        }
+        
+        success, response = self.run_test(
+            "Create Credit Request",
+            "POST",
+            "credits/request",
+            200,
+            data=request_data
+        )
+        
+        if success and response.get('success'):
+            print(f"   ✓ Credit request created successfully")
+            return True
+        return False
+
+    def test_invalid_login(self):
+        """Test login with invalid credentials"""
+        invalid_data = {
+            "email": "invalid@example.com",
+            "password": "wrongpassword"
+        }
+        
+        success, _ = self.run_test(
+            "Invalid Login (should fail)",
+            "POST",
+            "auth/login",
+            401,  # Expecting 401 for invalid credentials
+            data=invalid_data,
+            headers={'Content-Type': 'application/json'}  # Don't use user token
+        )
+        
+        return success  # Success means we got the expected 401
+
+    def test_invalid_admin_login(self):
+        """Test admin login with invalid credentials"""
+        invalid_data = {
+            "username": "wrongadmin",
+            "password": "wrongpassword"
+        }
+        
+        success, _ = self.run_test(
+            "Invalid Admin Login (should fail)",
+            "POST",
+            "admin/login",
+            401,  # Expecting 401 for invalid credentials
+            data=invalid_data,
+            headers={'Content-Type': 'application/json'}  # Don't use user token
+        )
+        
+        return success  # Success means we got the expected 401
+
     def test_get_topics(self):
         """Test GET /topics endpoint - Should return 15 categories"""
         success, data = self.run_test("Get Topics", "GET", "topics", 200)
