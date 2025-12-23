@@ -17,6 +17,11 @@ class MasalSepetiAPITester:
         self.tests_passed = 0
         self.test_results = []
         self.created_story_id = None
+        self.user_token = None
+        self.admin_token = None
+        self.test_user_email = None
+        self.test_user_password = None
+        self.session = requests.Session()
 
     def log_test(self, name, success, details="", response_data=None):
         """Log test result"""
