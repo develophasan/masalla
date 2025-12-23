@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, authAxios } from '@/contexts/AuthContext';
 import { 
   Shield, Users, BookOpen, Coins, Bell, LogOut, 
   Home, ChevronRight, Loader2, Mail, Phone, MessageSquare
