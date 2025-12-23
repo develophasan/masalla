@@ -135,10 +135,17 @@ export default function HomePage() {
       
       if (needStories) {
         setPopularStories(responses[idx].data);
-        localStorage.setItem('masal_popular_cache', JSON.stringify({
-          data: responses[idx].data,
-          timestamp: Date.now()
-        }));
+        // Cache without audio_base64 to save space
+        try {
+          const cacheData = responses[idx].data.map(s => ({...s, audio_base64: null}));
+          localStorage.setItem('masal_popular_cache', JSON.stringify({
+            data: cacheData,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          // localStorage quota exceeded - ignore
+          console.warn('Cache quota exceeded, skipping cache');
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
