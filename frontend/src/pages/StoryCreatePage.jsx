@@ -113,6 +113,7 @@ export default function StoryCreatePage() {
       
       const response = await axios.post(`${API}/stories/generate`, formData, {
         timeout: 120000, // 2 minute timeout
+        withCredentials: true
       });
       
       toast.success("Masal başarıyla oluşturuldu!");
