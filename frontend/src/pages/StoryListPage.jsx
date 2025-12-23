@@ -65,13 +65,21 @@ export default function StoryListPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams(searchParams);
-    if (searchQuery) {
-      params.set("search", searchQuery);
-    } else {
-      params.delete("search");
+    if (searchQuery.trim()) {
+      // Show interstitial ad before search
+      setPendingSearch(searchQuery);
+      setShowSearchAd(true);
     }
-    setSearchParams(params);
+  };
+
+  const handleSearchAdClose = () => {
+    setShowSearchAd(false);
+    if (pendingSearch) {
+      const params = new URLSearchParams(searchParams);
+      params.set("search", pendingSearch);
+      setSearchParams(params);
+      setPendingSearch(null);
+    }
   };
 
   const handleTopicChange = (value) => {
