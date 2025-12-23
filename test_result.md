@@ -219,3 +219,18 @@ agent_communication:
       5. Responsive Navbar with credit display
       
       Test all auth flows and admin functionality
+  - agent: "main"
+    message: |
+      P0 Cross-domain authentication fix COMPLETED:
+      - Fixed cookie-based auth to token-based auth (localStorage + Authorization header)
+      - AuthContext already refactored by previous agent
+      - Backend logout endpoint now also accepts Authorization header
+      - All protected routes use authAxios with Bearer token
+      
+      Manual testing passed:
+      - User registration: WORKING
+      - User login: WORKING (token stored, navbar shows user + credits)
+      - Admin login: WORKING (admin dashboard accessible)
+      - Protected API calls with Bearer token: WORKING
+      
+      Ready for comprehensive testing agent verification
