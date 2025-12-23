@@ -34,6 +34,11 @@ export default function AdminDashboard() {
       const response = await axios.get(`${API}/admin/stats`, { withCredentials: true });
       setStats(response.data);
     } catch (error) {
+      // If unauthorized, redirect to admin login
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        navigate('/admin/login');
+        return;
+      }
       toast.error('Veriler yüklenemedi');
     } finally {
       setLoading(false);
