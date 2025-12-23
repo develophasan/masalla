@@ -283,7 +283,7 @@ export default function HomePage() {
             Çocuklar için yapay zeka destekli, kazanım temelli eğitici masal platformu
           </p>
           <p className="text-slate-400 text-xs mt-4">
-            © 2025 Masal Sepeti. Tüm hakları saklıdır.
+            © 2025 masal.space - Masal Sepeti. Tüm hakları saklıdır.
           </p>
           <p className="text-slate-400 text-xs mt-2">
             Designed by{" "}
