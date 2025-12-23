@@ -116,6 +116,10 @@ export default function StoryCreatePage() {
       });
       
       toast.success("Masal başarıyla oluşturuldu!");
+      // Refresh user to update credits
+      if (isAuthenticated) {
+        refreshUser();
+      }
       navigate(`/stories/${response.data.id}`);
     } catch (error) {
       console.error("Error creating story:", error);
