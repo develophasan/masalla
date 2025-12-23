@@ -134,6 +134,10 @@ export default function StoryCreatePage() {
       });
       
       toast.success("Masal başarıyla oluşturuldu!");
+      
+      // Clear stories cache so new story appears
+      localStorage.removeItem('masal_stories_cache');
+      
       // Refresh user to update credits
       if (isAuthenticated) {
         refreshUser();
