@@ -142,7 +142,7 @@ export default function StoryDetailPage() {
       try {
         await navigator.share({
           title: story.title,
-          text: `"${story.title}" masalını Masal Sepeti'nde dinle!`,
+          text: `"${story.title}" masalını masal.space'de dinle!`,
           url: window.location.href,
         });
       } catch (error) {
