@@ -165,28 +165,28 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="hero-section relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-violet-200 mb-6 animate-slide-up">
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-violet-200 mb-4 animate-slide-up">
               <Sparkles className="w-4 h-4 text-amber-500" />
               <span className="text-sm font-medium text-violet-600">15 Ana Kategori • 150+ Alt Konu • Kazanım Destekli</span>
             </div>
             
             {/* Hero Logo */}
-            <div className="flex justify-center mb-4 animate-slide-up">
+            <div className="flex justify-center mb-2 animate-slide-up">
               <img 
                 src="/logo.svg" 
                 alt="Masal Sepeti" 
-                className="h-32 md:h-40 w-auto"
+                className="h-24 md:h-32 w-auto"
               />
             </div>
             
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-800 mb-4 animate-slide-up stagger-1">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-3 animate-slide-up stagger-1">
               <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">Masal</span>{" "}
               <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 bg-clip-text text-transparent">Sepeti</span>
             </h2>
             
-            <p className="text-lg md:text-xl text-slate-600 mb-8 animate-slide-up stagger-2">
+            <p className="text-base md:text-lg text-slate-600 mb-6 animate-slide-up stagger-2">
               Konu seç, kazanım belirle, masalı dinle! Çocuklarınız için pedagojik temelli eğitici masallar.
             </p>
 
