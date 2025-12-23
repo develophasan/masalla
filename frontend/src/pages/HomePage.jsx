@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Search, Plus, BookOpen, Star, Play, Sparkles, Heart, Leaf, Smile, Users, Activity } from "lucide-react";
+import { 
+  Search, Plus, BookOpen, Star, Sparkles, Heart, Leaf, Smile, 
+  Users, Activity, Shield, Rocket, Palette, GraduationCap, 
+  Cat, BookMarked, Baby
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TopicCard from "@/components/TopicCard";
@@ -16,15 +20,33 @@ const TOPIC_ICONS = {
   smile: Smile,
   users: Users,
   activity: Activity,
+  shield: Shield,
+  rocket: Rocket,
+  palette: Palette,
+  book: GraduationCap,
+  cat: Cat,
+  school: GraduationCap,
+  "heart-handshake": Heart,
+  sparkles: Sparkles,
+  bookmark: BookMarked,
 };
 
-const TOPIC_IMAGES = {
-  organlar: "https://images.unsplash.com/photo-1720630601846-0680b45b512a?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
-  degerler: "https://images.unsplash.com/flagged/photo-1564353730046-e911abc7b4c6?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
-  doga: "https://images.unsplash.com/photo-1762871950969-55419104d2d0?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
-  duygular: "https://images.unsplash.com/photo-1719035589536-3ce5f4169ac5?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
-  arkadaslik: "https://images.unsplash.com/photo-1611708314849-8bb91fe0fa56?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
-  saglik: "https://images.unsplash.com/photo-1552825896-8059df63a1fb?crop=entropy&cs=srgb&fm=jpg&q=85&w=400",
+const TOPIC_COLORS = {
+  rose: "from-rose-400 to-pink-500",
+  emerald: "from-emerald-400 to-green-500",
+  amber: "from-amber-400 to-orange-500",
+  violet: "from-violet-400 to-purple-500",
+  pink: "from-pink-400 to-rose-500",
+  sky: "from-sky-400 to-blue-500",
+  orange: "from-orange-400 to-red-500",
+  teal: "from-teal-400 to-cyan-500",
+  indigo: "from-indigo-400 to-blue-500",
+  purple: "from-purple-400 to-violet-500",
+  cyan: "from-cyan-400 to-teal-500",
+  fuchsia: "from-fuchsia-400 to-pink-500",
+  red: "from-red-400 to-rose-500",
+  lime: "from-lime-400 to-green-500",
+  slate: "from-slate-400 to-gray-500",
 };
 
 export default function HomePage() {
@@ -61,7 +83,7 @@ export default function HomePage() {
   };
 
   const handleTopicClick = (topicId) => {
-    navigate(`/stories?topic=${topicId}`);
+    navigate(`/topics/${topicId}`);
   };
 
   return (
@@ -96,7 +118,7 @@ export default function HomePage() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-violet-200 mb-6 animate-slide-up">
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-medium text-violet-600">Yapay Zeka Destekli Masallar</span>
+              <span className="text-sm font-medium text-violet-600">15 Ana Kategori • 150+ Alt Konu • Kazanım Destekli</span>
             </div>
             
             <h2 className="text-4xl md:text-6xl font-bold text-slate-800 mb-4 animate-slide-up stagger-1">
@@ -104,7 +126,7 @@ export default function HomePage() {
             </h2>
             
             <p className="text-lg md:text-xl text-slate-600 mb-8 animate-slide-up stagger-2">
-              Konu seç, masalı dinle! Çocuklarınız için eğitici ve eğlenceli masallar.
+              Konu seç, kazanım belirle, masalı dinle! Çocuklarınız için pedagojik temelli eğitici masallar.
             </p>
 
             {/* Search Box */}
@@ -112,7 +134,7 @@ export default function HomePage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <Input
                 type="text"
-                placeholder="Masal ara... (örn: dostluk, doğa)"
+                placeholder="Masal veya kazanım ara... (örn: empati, paylaşma)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="search-input pl-12 pr-4 py-6 text-lg"
@@ -148,27 +170,28 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <h3 className="text-3xl md:text-4xl font-bold text-slate-800 mb-3">
-              Konu Seç
+              Konu Havuzu
             </h3>
-            <p className="text-slate-500 text-lg">Hangi konuda masal dinlemek istersin?</p>
+            <p className="text-slate-500 text-lg">15 ana kategori, 150+ alt konu ve pedagojik kazanımlar</p>
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="skeleton h-64 rounded-3xl" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {[...Array(15)].map((_, i) => (
+                <div key={i} className="skeleton h-48 rounded-2xl" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {topics.map((topic, index) => (
                 <TopicCard
                   key={topic.id}
                   topic={topic}
-                  icon={TOPIC_ICONS[topic.icon]}
-                  image={TOPIC_IMAGES[topic.id]}
+                  icon={TOPIC_ICONS[topic.icon] || Star}
+                  gradient={TOPIC_COLORS[topic.color] || "from-violet-400 to-pink-500"}
                   onClick={() => handleTopicClick(topic.id)}
-                  className={`animate-slide-up stagger-${index + 1}`}
+                  className={`animate-slide-up`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
                   data-testid={`topic-card-${topic.id}`}
                 />
               ))}
@@ -200,7 +223,8 @@ export default function HomePage() {
                 <StoryCard 
                   key={story.id} 
                   story={story}
-                  className={`animate-slide-up stagger-${index + 1}`}
+                  className={`animate-slide-up`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 />
               ))}
             </div>
@@ -217,10 +241,10 @@ export default function HomePage() {
             
             <div className="relative z-10">
               <h3 className="text-3xl md:text-4xl font-bold mb-4">
-                Kendi Masalını Oluştur!
+                Kazanım Temelli Masal Oluştur!
               </h3>
               <p className="text-lg text-white/90 mb-8 max-w-xl mx-auto">
-                Yapay zeka ile dakikalar içinde kişiselleştirilmiş, eğitici masallar oluştur ve seslendir.
+                Hedef kazanıma göre kişiselleştirilmiş, pedagojik temelli masallar oluştur ve seslendir.
               </p>
               <Link to="/create" data-testid="create-story-cta-btn">
                 <Button className="bg-white text-violet-600 hover:bg-white/90 font-bold py-6 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-shadow">
@@ -241,7 +265,7 @@ export default function HomePage() {
             <span className="text-xl font-bold text-violet-600">Masal Sepeti</span>
           </div>
           <p className="text-slate-500 text-sm">
-            Çocuklar için yapay zeka destekli eğitici masal platformu
+            Çocuklar için yapay zeka destekli, kazanım temelli eğitici masal platformu
           </p>
           <p className="text-slate-400 text-xs mt-4">
             © 2025 Masal Sepeti. Tüm hakları saklıdır.
