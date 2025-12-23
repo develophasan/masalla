@@ -108,6 +108,13 @@ export default function StoryListPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white">
+      {/* Search Interstitial Ad */}
+      <AdInterstitial 
+        isOpen={showSearchAd} 
+        onClose={handleSearchAdClose}
+        message="Masallar aranıyor..."
+      />
+
       {/* Header */}
       <header className="glass sticky top-0 z-50 border-b border-purple-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
