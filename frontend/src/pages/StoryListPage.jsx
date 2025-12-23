@@ -202,16 +202,24 @@ export default function StoryListPage() {
             ))}
           </div>
         ) : stories.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {stories.map((story, index) => (
-              <StoryCard
-                key={story.id}
-                story={story}
-                className="animate-slide-up"
-                style={{ animationDelay: `${(index % 6) * 0.1}s` }}
-              />
-            ))}
-          </div>
+          <>
+            {/* Ad Banner in results */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-full max-w-3xl bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <AdBanner className="rounded-xl overflow-hidden" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {stories.map((story, index) => (
+                <StoryCard
+                  key={story.id}
+                  story={story}
+                  className="animate-slide-up"
+                  style={{ animationDelay: `${(index % 6) * 0.1}s` }}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <div className="empty-state animate-slide-up">
             <div className="empty-state-icon">
