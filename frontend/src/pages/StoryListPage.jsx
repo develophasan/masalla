@@ -121,7 +121,7 @@ export default function StoryListPage() {
     setSearchParams({});
   };
 
-  const hasFilters = searchParams.get("topic_id") || searchParams.get("search");
+  const hasFilters = searchParams.get("topic_id") || searchParams.get("search") || searchParams.get("sort");
 
   const getTopicName = (topicId) => {
     const topic = topics.find((t) => t.id === topicId);
