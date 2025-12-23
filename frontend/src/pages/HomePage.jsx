@@ -192,11 +192,9 @@ export default function HomePage() {
       {popularStories.length > 0 && (
         <section className="py-12 md:py-20 px-4 bg-gradient-to-b from-white to-violet-50">
           <div className="max-w-7xl mx-auto">
-            {/* Ad Banner Before Popular Stories */}
-            <div className="mb-10 flex justify-center">
-              <div className="w-full max-w-3xl bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-                <AdBanner className="rounded-xl overflow-hidden" />
-              </div>
+            {/* How to Create Story Guide - Slide */}
+            <div className="mb-10">
+              <HowToCreateStory />
             </div>
 
             <div className="flex items-center justify-between mb-10">
