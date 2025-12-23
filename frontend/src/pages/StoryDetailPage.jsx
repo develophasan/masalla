@@ -265,29 +265,30 @@ export default function StoryDetailPage() {
         />
       )}
 
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <button 
-              onClick={() => navigate(-1)} 
-              className="back-button"
-              data-testid="back-button"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="hidden sm:inline">Geri</span>
-            </button>
-            
-            <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
-              <BookOpen className="w-6 h-6 text-violet-500" />
-              <span className="text-xl font-bold text-violet-600 hidden sm:inline">Masal Sepeti</span>
-            </Link>
-            
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Membership Required Banner for non-popular stories */}
+      {!isAuthenticated && !isPopularStory && (
+        <div className="bg-gradient-to-r from-violet-500 to-pink-500 text-white px-4 py-3">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {story.audio_base64 && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+              <Lock className="w-5 h-5" />
+              <span className="font-medium">Bu masalı dinlemek için üye olun</span>
+            </div>
+            <div className="flex gap-2">
+              <Link to="/login">
+                <Button size="sm" variant="secondary">Giriş Yap</Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" className="bg-white text-violet-600 hover:bg-violet-50">Kayıt Ol</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
                   onClick={handleDownloadClick}
                   className="text-violet-500 hover:bg-violet-50"
                   title="Masalı İndir"
