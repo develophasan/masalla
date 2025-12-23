@@ -83,18 +83,19 @@ class StoryResponse(BaseModel):
     id: str
     title: str
     content: str
-    topic_id: str
-    topic_name: str
+    topic_id: Optional[str] = None  # Made optional for legacy stories
+    topic_name: Optional[str] = None  # Made optional for legacy stories
+    topic: Optional[str] = None  # Legacy field
     subtopic_id: Optional[str] = None
     subtopic_name: Optional[str] = None
     kazanim: Optional[str] = None
-    theme: str
-    age_group: str
+    theme: Optional[str] = None  # Made optional for legacy stories
+    age_group: Optional[str] = None  # Made optional for legacy stories
     character: Optional[str] = None
     audio_base64: Optional[str] = None
     duration: Optional[int] = None
-    play_count: int
-    created_at: str
+    play_count: int = 0
+    created_at: Optional[str] = None
 
 class TopicInfo(BaseModel):
     id: str
