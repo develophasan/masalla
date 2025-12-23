@@ -71,6 +71,12 @@ export default function StoryDetailPage() {
   const togglePlay = () => {
     if (!audioRef.current) return;
     
+    // Check if user can play this story
+    if (!isAuthenticated && !isPopularStory) {
+      toast.error("Bu masalı dinlemek için giriş yapmanız gerekiyor");
+      return;
+    }
+    
     if (isPlaying) {
       audioRef.current.pause();
     } else {
