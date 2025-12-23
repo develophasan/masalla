@@ -23,12 +23,20 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-3">
             <img 
               src="/logo.svg" 
               alt="Masal Sepeti" 
-              className="h-10 w-auto"
+              className="h-12 w-auto"
             />
+            <span className="text-2xl font-extrabold hidden sm:inline">
+              <span className="bg-gradient-to-r from-violet-600 via-pink-500 to-orange-400 bg-clip-text text-transparent drop-shadow-sm">
+                MASAL
+              </span>
+              <span className="bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-400 bg-clip-text text-transparent drop-shadow-sm ml-1">
+                SEPETİ
+              </span>
+            </span>
           </Link>
 
           {/* Desktop Menu */}
