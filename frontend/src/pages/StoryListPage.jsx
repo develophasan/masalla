@@ -103,9 +103,21 @@ export default function StoryListPage() {
     setSearchParams(params);
   };
 
+  const handleSortChange = (value) => {
+    setSortBy(value);
+    const params = new URLSearchParams(searchParams);
+    if (value && value !== "popular") {
+      params.set("sort", value);
+    } else {
+      params.delete("sort");
+    }
+    setSearchParams(params);
+  };
+
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedTopic("");
+    setSortBy("popular");
     setSearchParams({});
   };
 
