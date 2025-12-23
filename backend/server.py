@@ -886,6 +886,34 @@ async def admin_login(login_data: AdminLogin, response: Response):
 
 # ============= USER ENDPOINTS =============
 
+@api_router.get("/users/public/{user_id}")
+async def get_public_profile(user_id: str):
+    """Get public profile of a user"""
+    user = await db.users.find_one(
+        {"user_id": user_id}, 
+        {"_id": 0, "name": 1, "surname": 1, "picture": 1, "created_at": 1}
+    )
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    
+    # Get user's stories (public info only)
+    stories = await db.stories.find(
+        {"user_id": user_id},
+        {"_id": 0, "id": 1, "title": 1, "topic_name": 1, "play_count": 1, "duration": 1, "created_at": 1}
+    ).sort("created_at", -1).to_list(50)
+    
+    return {
+        "user_id": user_id,
+        "name": user.get("name", ""),
+        "surname": user.get("surname", ""),
+        "picture": user.get("picture"),
+        "member_since": user.get("created_at"),
+        "story_count": len(stories),
+        "stories": stories
+    }
+
+
 @api_router.get("/users/profile", response_model=UserResponse)
 async def get_profile(request: Request):
     """Get current user profile"""
