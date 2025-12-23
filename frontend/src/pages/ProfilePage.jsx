@@ -40,7 +40,7 @@ export default function ProfilePage() {
 
   const fetchUserStories = async () => {
     try {
-      const response = await axios.get(`${API}/users/stories`, {
+      const response = await authAxios.get(`${API}/users/stories`, {
         
       });
       setStories(response.data);
@@ -54,7 +54,7 @@ export default function ProfilePage() {
   const handleSaveProfile = async () => {
     setSavingProfile(true);
     try {
-      const response = await axios.put(`${API}/users/profile`, formData, {
+      const response = await authAxios.put(`${API}/users/profile`, formData, {
         
       });
       updateUser(response.data.user);
@@ -71,7 +71,7 @@ export default function ProfilePage() {
     if (!window.confirm('Bu masalı silmek istediğinizden emin misiniz?')) return;
     
     try {
-      await axios.delete(`${API}/users/stories/${storyId}`, {
+      await authAxios.delete(`${API}/users/stories/${storyId}`, {
         
       });
       setStories(stories.filter(s => s.id !== storyId));
@@ -83,7 +83,7 @@ export default function ProfilePage() {
 
   const handleCreditRequest = async () => {
     try {
-      await axios.post(`${API}/credits/request`, {
+      await authAxios.post(`${API}/credits/request`, {
         requested_credits: 10,
         message: creditMessage
       }, {  });
