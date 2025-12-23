@@ -285,6 +285,17 @@ export default function HomePage() {
           <p className="text-slate-400 text-xs mt-4">
             © 2025 Masal Sepeti. Tüm hakları saklıdır.
           </p>
+          <p className="text-slate-400 text-xs mt-2">
+            Designed by{" "}
+            <a 
+              href="https://github.com/develophasan" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-violet-500 hover:text-violet-600 font-medium transition-colors"
+            >
+              Hasan Özdemir
+            </a>
+          </p>
         </div>
       </footer>
     </div>
