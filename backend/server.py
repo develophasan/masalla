@@ -203,34 +203,49 @@ Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
 
 async def generate_audio_for_story(text: str) -> tuple[str, int]:
-    """Generate TTS audio using OpenAI via Emergent integrations"""
+    """Generate TTS audio using ElevenLabs for natural Turkish speech"""
+    import base64
     
-    api_key = os.environ.get('EMERGENT_LLM_KEY')
+    api_key = os.environ.get('ELEVENLABS_API_KEY')
     if not api_key:
-        raise HTTPException(status_code=500, detail="TTS API key not configured")
+        raise HTTPException(status_code=500, detail="ElevenLabs API key not configured")
     
     try:
-        tts = OpenAITextToSpeech(api_key=api_key)
+        client = ElevenLabs(api_key=api_key)
         
-        # Use shimmer voice - soft feminine voice for children's stories
-        # Limit text to 4096 chars for TTS API
-        text_chunk = text[:4000] if len(text) > 4000 else text
+        # Limit text for API (ElevenLabs has limits)
+        text_chunk = text[:5000] if len(text) > 5000 else text
         
-        audio_base64 = await tts.generate_speech_base64(
+        # Use eleven_multilingual_v2 model for Turkish
+        # Voice ID for a soft female voice - "Rachel" is multilingual and speaks Turkish well
+        audio_generator = client.text_to_speech.convert(
             text=text_chunk,
-            model="tts-1",
-            voice="shimmer",  # Soft, feminine voiceytelling voice
-            speed=0.9  # Slightly slower for children
+            voice_id="21m00Tcm4TlvDq8ikWAM",  # Rachel - multilingual female voice
+            model_id="eleven_multilingual_v2",  # Best for Turkish
+            voice_settings=VoiceSettings(
+                stability=0.5,
+                similarity_boost=0.75,
+                style=0.3,  # Some expressiveness for storytelling
+                use_speaker_boost=True
+            )
         )
         
-        # Estimate duration (roughly 150 words per minute for slow speech)
+        # Collect audio data
+        audio_data = b""
+        for chunk in audio_generator:
+            audio_data += chunk
+        
+        # Convert to base64
+        audio_base64 = base64.b64encode(audio_data).decode()
+        
+        # Estimate duration (roughly 150 words per minute)
         word_count = len(text.split())
         duration = int((word_count / 150) * 60)  # in seconds
         
         return audio_base64, duration
         
     except Exception as e:
-        logger.error(f"TTS generation error: {e}")
+        logger.error(f"ElevenLabs TTS error: {e}")
         raise HTTPException(status_code=500, detail=f"Ses üretilirken hata oluştu: {str(e)}")
 
 
