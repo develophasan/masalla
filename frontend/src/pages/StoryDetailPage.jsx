@@ -225,6 +225,14 @@ export default function StoryDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white">
+      {/* Download Ad Interstitial */}
+      <AdInterstitial 
+        isOpen={showDownloadAd} 
+        onClose={handleDownloadAdClose}
+        message="İndirme hazırlanıyor..."
+        autoCloseDelay={5000}
+      />
+
       {/* Hidden Audio Element */}
       {story.audio_base64 && (
         <audio
@@ -254,10 +262,22 @@ export default function StoryDetailPage() {
               <span className="text-xl font-bold text-violet-600 hidden sm:inline">Masal Sepeti</span>
             </Link>
             
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={handleShare}
+            <div className="flex items-center gap-2">
+              {story.audio_base64 && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={handleDownloadClick}
+                  className="text-violet-500 hover:bg-violet-50"
+                  title="Masalı İndir"
+                >
+                  <Download className="w-5 h-5" />
+                </Button>
+              )}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleShare}
               className="text-slate-500 hover:text-violet-600"
               data-testid="share-button"
             >
