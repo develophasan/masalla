@@ -1,0 +1,182 @@
+{
+  "design_system": {
+    "typography": {
+      "font_family": {
+        "heading": "Fredoka, sans-serif",
+        "body": "Quicksand, sans-serif",
+        "accent": "Patrick Hand, cursive"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-6xl font-bold tracking-tight",
+        "h2": "text-3xl md:text-5xl font-semibold tracking-tight",
+        "h3": "text-2xl md:text-3xl font-medium",
+        "body": "text-lg md:text-xl leading-relaxed",
+        "caption": "text-sm font-medium tracking-wide uppercase"
+      }
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#8B5CF6",
+          "foreground": "#FFFFFF",
+          "hover": "#7C3AED"
+        },
+        "secondary": {
+          "DEFAULT": "#F472B6",
+          "foreground": "#FFFFFF",
+          "hover": "#EC4899"
+        },
+        "accent": {
+          "DEFAULT": "#FBBF24",
+          "foreground": "#78350F",
+          "hover": "#F59E0B"
+        },
+        "background": {
+          "DEFAULT": "#F0F9FF",
+          "paper": "#FFFFFF",
+          "subtle": "#E0F2FE"
+        },
+        "text": {
+          "primary": "#1E293B",
+          "secondary": "#475569",
+          "muted": "#94A3B8"
+        }
+      },
+      "gradients": {
+        "hero": "bg-gradient-to-b from-sky-100 via-purple-100 to-white",
+        "card": "bg-gradient-to-br from-white to-slate-50",
+        "magic": "bg-gradient-to-r from-violet-400 to-fuchsia-400"
+      }
+    },
+    "visual_enhancers": {
+      "radius": {
+        "default": "rounded-2xl",
+        "large": "rounded-3xl",
+        "full": "rounded-full"
+      },
+      "shadows": {
+        "soft": "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+        "float": "shadow-[0_20px_50px_rgb(0,0,0,0.1)]",
+        "button": "shadow-[0_4px_0_rgb(0,0,0,0.1)] active:shadow-none active:translate-y-[4px]"
+      },
+      "borders": {
+        "soft": "border-2 border-slate-100",
+        "highlight": "border-2 border-violet-200"
+      }
+    }
+  },
+  "layout_strategies": {
+    "grid_system": {
+      "homepage": "grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 p-4 md:p-8",
+      "topics": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+      "detail": "grid grid-cols-1 lg:grid-cols-12 gap-8"
+    },
+    "spacing": {
+      "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "section": "py-12 md:py-24",
+      "element": "space-y-6"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-violet-500 hover:bg-violet-600 text-white font-bold py-4 px-8 rounded-full shadow-[0_6px_0_#6D28D9] active:shadow-none active:translate-y-[6px] transition-all duration-150 text-xl",
+      "secondary": "bg-white hover:bg-slate-50 text-violet-600 border-2 border-violet-100 font-bold py-3 px-6 rounded-full shadow-sm hover:shadow-md transition-all duration-200",
+      "icon": "p-3 rounded-full bg-white shadow-md hover:scale-110 transition-transform text-violet-500"
+    },
+    "cards": {
+      "topic": "group relative overflow-hidden bg-white rounded-3xl border-2 border-slate-100 hover:border-violet-200 transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(139,92,246,0.15)] hover:-translate-y-2",
+      "story": "bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-all border border-slate-100 flex flex-col gap-4"
+    },
+    "inputs": {
+      "search": "w-full pl-12 pr-4 py-4 rounded-full border-2 border-slate-200 focus:border-violet-400 focus:ring-4 focus:ring-violet-100 transition-all text-lg shadow-inner bg-slate-50/50"
+    }
+  },
+  "assets": {
+    "images": {
+      "hero": {
+        "url": "https://images.unsplash.com/photo-1690023835938-b078c130d58f?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Magical glowing book",
+        "usage": "Hero section main visual, potentially with floating CSS animations"
+      },
+      "backgrounds": {
+        "clouds": {
+          "url": "https://images.unsplash.com/photo-1593089758437-c306c558ac41?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Pastel clouds background",
+          "usage": "Page background or header background with overlay"
+        }
+      },
+      "topics": {
+        "nature": {
+          "url": "https://images.unsplash.com/photo-1762871950969-55419104d2d0?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Magical forest sunlight",
+          "usage": "Nature topic card"
+        },
+        "friendship": {
+          "url": "https://images.unsplash.com/photo-1611708314849-8bb91fe0fa56?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Kids holding hands",
+          "usage": "Friendship topic card"
+        },
+        "health": {
+          "url": "https://images.unsplash.com/photo-1552825896-8059df63a1fb?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Fresh colorful fruits",
+          "usage": "Health topic card"
+        },
+        "values": {
+          "url": "https://images.unsplash.com/flagged/photo-1564353730046-e911abc7b4c6?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Kids playing with leaves",
+          "usage": "Values education topic card"
+        },
+        "emotions": {
+          "url": "https://images.unsplash.com/photo-1719035589536-3ce5f4169ac5?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Child laughing",
+          "usage": "Emotions topic card"
+        },
+        "organs": {
+          "url": "https://images.unsplash.com/photo-1720630601846-0680b45b512a?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Plush heart toy",
+          "usage": "Organs/Body topic card"
+        }
+      },
+      "features": {
+        "ai_robot": {
+          "url": "https://images.unsplash.com/photo-1603356033288-acfcb54801e6?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "alt": "Cute robot toy",
+          "usage": "AI Story Generation section"
+        }
+      }
+    }
+  },
+  "motion": {
+    "hover": "transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg",
+    "tap": "active:scale-95 transition-transform",
+    "float": "animate-bounce duration-[3000ms]",
+    "fade_in": "animate-in fade-in slide-in-from-bottom-4 duration-700"
+  },
+  "instructions_to_main_agent": {
+    "general": "You are building a magical, child-friendly web app. Prioritize large touch targets, clear visual hierarchy, and joyful interactions. Do not use standard 'SaaS' layouts. Think 'Digital Playground'.",
+    "layout": "Use the 'Bento' grid for the topic selection. Ensure the Hero section feels immersive, using the cloud background and the glowing book image.",
+    "components": "Customize Shadcn components to match the 'Soft & Round' aesthetic. Override default radii to 'rounded-2xl' or 'rounded-3xl'. Use the 'Jelly' button style defined in components.buttons.primary.",
+    "accessibility": "Ensure high contrast for text. Use 'Fredoka' for headings to give a friendly vibe but keep 'Quicksand' for body text for readability.",
+    "testing": "Add data-testid to all interactive elements (buttons, cards, inputs) for testing."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file. This disrupts the human natural reading flow of text",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯📚🎭🎬🎪🎉🎊🎁🎀🎂🍰🎈🎨🎰💰💵💳🏦💎🪙💸🤑📊📈📉💹🔢🏆🥇 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN",
+    "Prioritize using pre-existing components from src/components/ui when applicable",
+    "Create new components that match the style and conventions of existing components when needed",
+    "Examine existing components to understand the project's component patterns before creating new ones",
+    "Components MUST use named exports (export const ComponentName = ...)",
+    "Pages MUST use default exports (export default function PageName() {...})",
+    "Use sonner for toasts. Sonner component are located in /app/src/components/ui/sonner.tsx"
+  ]
+}
