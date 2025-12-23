@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Play, Clock, Heart, GraduationCap } from "lucide-react";
+import { Play, Clock, Heart, GraduationCap, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TOPIC_COLORS = {
@@ -23,6 +23,14 @@ const TOPIC_COLORS = {
 export const StoryCard = ({ story, className, style }) => {
   const topicColor = TOPIC_COLORS[story.topic_id] || "from-violet-400 to-pink-500";
 
+  const handleCreatorClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (story.creator_id) {
+      window.location.href = `/user/${story.creator_id}`;
+    }
+  };
+
   return (
     <Link
       to={`/stories/${story.id}`}
@@ -35,16 +43,18 @@ export const StoryCard = ({ story, className, style }) => {
 
       {/* Content */}
       <div className="space-y-3">
-        {/* Topic Badge */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="badge-topic text-xs">
-            {story.topic_name}
-          </span>
-          {story.subtopic_name && (
-            <span className="text-xs text-slate-400">
-              • {story.subtopic_name}
+        {/* Topic Badge & Creator */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="badge-topic text-xs">
+              {story.topic_name}
             </span>
-          )}
+            {story.subtopic_name && (
+              <span className="text-xs text-slate-400">
+                • {story.subtopic_name}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Title */}
@@ -83,6 +93,25 @@ export const StoryCard = ({ story, className, style }) => {
             <Play className="w-4 h-4 ml-0.5" />
           </div>
         </div>
+
+        {/* Creator Info */}
+        {story.creator_name && (
+          <div 
+            className="flex items-center gap-2 pt-2 border-t border-slate-100"
+            onClick={handleCreatorClick}
+          >
+            {story.creator_picture ? (
+              <img src={story.creator_picture} alt="" className="w-6 h-6 rounded-full" />
+            ) : (
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-300 to-pink-300 flex items-center justify-center">
+                <User className="w-3 h-3 text-white" />
+              </div>
+            )}
+            <span className="text-xs text-slate-500 hover:text-violet-600 transition-colors cursor-pointer">
+              {story.creator_name}
+            </span>
+          </div>
+        )}
       </div>
     </Link>
   );
