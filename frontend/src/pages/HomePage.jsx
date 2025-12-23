@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TopicCard from "@/components/TopicCard";
 import StoryCard from "@/components/StoryCard";
+import AdBanner from "@/components/AdBanner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
