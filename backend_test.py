@@ -449,9 +449,27 @@ class MasalSepetiAPITester:
         
         # Test sequence
         tests = [
+            # Basic API tests
             self.test_root_endpoint,
             self.test_get_topics,
             self.test_get_topic_detail,
+            
+            # Auth tests
+            self.test_user_registration,
+            self.test_user_login,
+            self.test_get_current_user,
+            self.test_credit_balance,
+            self.test_credit_request,
+            
+            # Admin tests
+            self.test_admin_login,
+            self.test_admin_stats,
+            
+            # Security tests
+            self.test_invalid_login,
+            self.test_invalid_admin_login,
+            
+            # Story tests
             self.test_get_stories,
             self.test_get_stories_with_topic_filter,
             self.test_get_stories_with_search,
