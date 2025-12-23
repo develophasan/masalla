@@ -489,6 +489,14 @@ async def get_story(story_id: str):
     if not story:
         raise HTTPException(status_code=404, detail="Masal bulunamadı")
     
+    # Enrich with creator info
+    if story.get("user_id"):
+        user = await db.users.find_one({"user_id": story["user_id"]}, {"_id": 0, "name": 1, "surname": 1, "picture": 1})
+        if user:
+            story["creator_name"] = f"{user.get('name', '')} {user.get('surname', '')}".strip()
+            story["creator_id"] = story["user_id"]
+            story["creator_picture"] = user.get("picture")
+    
     return story
 
 
