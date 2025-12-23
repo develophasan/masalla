@@ -530,6 +530,16 @@ async def generate_story(story_input: StoryCreate, request: Request):
     
     # Save to database
     story_dict = story.model_dump()
+    
+    # Add user_id if logged in
+    if user_id:
+        story_dict["user_id"] = user_id
+        # Deduct credit
+        await db.users.update_one(
+            {"user_id": user_id},
+            {"$inc": {"credits": -1}}
+        )
+    
     await db.stories.insert_one(story_dict)
     
     # Remove _id for response
