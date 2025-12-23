@@ -41,7 +41,7 @@ export default function ProfilePage() {
   const fetchUserStories = async () => {
     try {
       const response = await axios.get(`${API}/users/stories`, {
-        withCredentials: true
+        
       });
       setStories(response.data);
     } catch (error) {
@@ -55,7 +55,7 @@ export default function ProfilePage() {
     setSavingProfile(true);
     try {
       const response = await axios.put(`${API}/users/profile`, formData, {
-        withCredentials: true
+        
       });
       updateUser(response.data.user);
       setEditing(false);
@@ -72,7 +72,7 @@ export default function ProfilePage() {
     
     try {
       await axios.delete(`${API}/users/stories/${storyId}`, {
-        withCredentials: true
+        
       });
       setStories(stories.filter(s => s.id !== storyId));
       toast.success('Masal silindi');
@@ -86,7 +86,7 @@ export default function ProfilePage() {
       await axios.post(`${API}/credits/request`, {
         requested_credits: 10,
         message: creditMessage
-      }, { withCredentials: true });
+      }, {  });
       toast.success('Kredi talebiniz oluşturuldu!');
       setShowCreditRequest(false);
       setCreditMessage('');
