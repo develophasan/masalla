@@ -85,18 +85,25 @@ class MasalSepetiAPITester:
         return self.run_test("API Root", "GET", "", 200)
 
     def test_get_topics(self):
-        """Test GET /topics endpoint"""
+        """Test GET /topics endpoint - Should return 15 categories"""
         success, data = self.run_test("Get Topics", "GET", "topics", 200)
         
         if success and data:
-            # Validate topics structure
-            expected_topics = ["organlar", "degerler", "doga", "duygular", "arkadaslik", "saglik"]
-            topic_ids = [topic.get('id') for topic in data]
-            
-            if all(topic_id in topic_ids for topic_id in expected_topics):
-                print("   ✓ All expected topics found")
+            # Validate we have 15 topics as required
+            if len(data) == 15:
+                print(f"   ✓ Correct number of topics: {len(data)}")
             else:
-                print(f"   ⚠ Missing topics: {set(expected_topics) - set(topic_ids)}")
+                print(f"   ⚠ Expected 15 topics, got {len(data)}")
+            
+            # Check topic structure
+            if data and isinstance(data[0], dict):
+                required_fields = ['id', 'name', 'icon', 'color', 'description', 'image', 'subtopic_count']
+                first_topic = data[0]
+                missing_fields = [field for field in required_fields if field not in first_topic]
+                if missing_fields:
+                    print(f"   ⚠ Missing fields in topic: {missing_fields}")
+                else:
+                    print("   ✓ Topic structure correct")
         
         return success
 
