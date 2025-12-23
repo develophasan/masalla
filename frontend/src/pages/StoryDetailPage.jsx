@@ -436,6 +436,25 @@ export default function StoryDetailPage() {
                 ))}
               </div>
             </div>
+
+            {/* Action Buttons: Share & Download */}
+            <div className="flex items-center justify-center gap-4 mt-6 pt-6 border-t border-slate-100">
+              <Button
+                variant="outline"
+                onClick={handleShare}
+                className="flex-1 rounded-full border-violet-200 text-violet-600 hover:bg-violet-50"
+              >
+                <Share2 className="w-5 h-5 mr-2" />
+                Paylaş
+              </Button>
+              <Button
+                onClick={handleDownloadClick}
+                className="flex-1 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                İndir
+              </Button>
+            </div>
           </div>
         )}
 
