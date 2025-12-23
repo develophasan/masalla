@@ -217,10 +217,10 @@ async def generate_audio_for_story(text: str) -> tuple[str, int]:
         text_chunk = text[:5000] if len(text) > 5000 else text
         
         # Use eleven_multilingual_v2 model for Turkish
-        # Voice ID for a soft female voice - "Rachel" is multilingual and speaks Turkish well
+        # Voice: İlknur Önal - Clear, Warm and Young (Turkish female voice)
         audio_generator = client.text_to_speech.convert(
             text=text_chunk,
-            voice_id="21m00Tcm4TlvDq8ikWAM",  # Rachel - multilingual female voice
+            voice_id="xFsOR54lR471QiCvQ5re",  # İlknur Önal - Turkish female voice
             model_id="eleven_multilingual_v2",  # Best for Turkish
             voice_settings=VoiceSettings(
                 stability=0.5,
