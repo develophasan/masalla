@@ -3,21 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-
-const TOPIC_NAMES = {
-  organlar: "Organlar",
-  degerler: "Değerler Eğitimi",
-  doga: "Doğa",
-  duygular: "Duygular",
-  arkadaslik: "Arkadaşlık",
-  saglik: "Sağlık",
-};
 
 export default function StoryDetailPage() {
   const { id } = useParams();
@@ -231,9 +222,14 @@ export default function StoryDetailPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Story Header */}
         <div className="text-center mb-8 animate-slide-up">
-          <span className="badge-topic inline-block mb-4">
-            {TOPIC_NAMES[story.topic] || story.topic}
-          </span>
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-4">
+            <span className="badge-topic">
+              {story.topic_name}
+            </span>
+            {story.subtopic_name && (
+              <span className="text-sm text-slate-500">• {story.subtopic_name}</span>
+            )}
+          </div>
           <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
             {story.title}
           </h1>
@@ -252,6 +248,21 @@ export default function StoryDetailPage() {
             </span>
           </div>
         </div>
+
+        {/* Kazanım Card */}
+        {story.kazanim && (
+          <div className="mb-8 p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 animate-slide-up">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                <GraduationCap className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="font-bold text-amber-800 mb-1">Hedef Kazanım</p>
+                <p className="text-amber-700">{story.kazanim}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Audio Player */}
         {story.audio_base64 && (
@@ -367,9 +378,15 @@ export default function StoryDetailPage() {
           <h3 className="font-bold text-slate-800 mb-4">Masal Bilgileri</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-slate-500">Konu:</span>
-              <p className="font-medium text-slate-700">{TOPIC_NAMES[story.topic] || story.topic}</p>
+              <span className="text-slate-500">Ana Konu:</span>
+              <p className="font-medium text-slate-700">{story.topic_name}</p>
             </div>
+            {story.subtopic_name && (
+              <div>
+                <span className="text-slate-500">Alt Konu:</span>
+                <p className="font-medium text-slate-700">{story.subtopic_name}</p>
+              </div>
+            )}
             <div>
               <span className="text-slate-500">Tema:</span>
               <p className="font-medium text-slate-700">{story.theme}</p>

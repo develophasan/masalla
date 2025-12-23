@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Search, BookOpen, Filter, X } from "lucide-react";
+import { ArrowLeft, Search, BookOpen, Filter, X, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,34 +15,39 @@ import StoryCard from "@/components/StoryCard";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-const TOPICS = [
-  { id: "organlar", name: "Organlar" },
-  { id: "degerler", name: "Değerler Eğitimi" },
-  { id: "doga", name: "Doğa" },
-  { id: "duygular", name: "Duygular" },
-  { id: "arkadaslik", name: "Arkadaşlık" },
-  { id: "saglik", name: "Sağlık" },
-];
-
 export default function StoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [stories, setStories] = useState([]);
+  const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
-  const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic") || "");
+  const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic_id") || "");
+
+  useEffect(() => {
+    fetchTopics();
+  }, []);
 
   useEffect(() => {
     fetchStories();
   }, [searchParams]);
 
+  const fetchTopics = async () => {
+    try {
+      const response = await axios.get(`${API}/topics`);
+      setTopics(response.data);
+    } catch (error) {
+      console.error("Error fetching topics:", error);
+    }
+  };
+
   const fetchStories = async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      const topic = searchParams.get("topic");
+      const topicId = searchParams.get("topic_id");
       const search = searchParams.get("search");
       
-      if (topic) params.append("topic", topic);
+      if (topicId) params.append("topic_id", topicId);
       if (search) params.append("search", search);
       
       const response = await axios.get(`${API}/stories?${params.toString()}`);
@@ -69,9 +74,9 @@ export default function StoryListPage() {
     setSelectedTopic(value);
     const params = new URLSearchParams(searchParams);
     if (value && value !== "all") {
-      params.set("topic", value);
+      params.set("topic_id", value);
     } else {
-      params.delete("topic");
+      params.delete("topic_id");
     }
     setSearchParams(params);
   };
@@ -82,10 +87,10 @@ export default function StoryListPage() {
     setSearchParams({});
   };
 
-  const hasFilters = searchParams.get("topic") || searchParams.get("search");
+  const hasFilters = searchParams.get("topic_id") || searchParams.get("search");
 
   const getTopicName = (topicId) => {
-    const topic = TOPICS.find((t) => t.id === topicId);
+    const topic = topics.find((t) => t.id === topicId);
     return topic ? topic.name : topicId;
   };
 
@@ -132,7 +137,7 @@ export default function StoryListPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <Input
               type="text"
-              placeholder="Masal ara..."
+              placeholder="Masal veya kazanım ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 pr-4 py-3 rounded-full border-2 border-slate-200 focus:border-violet-400"
@@ -142,13 +147,13 @@ export default function StoryListPage() {
 
           {/* Topic Filter */}
           <Select value={selectedTopic} onValueChange={handleTopicChange}>
-            <SelectTrigger className="w-full sm:w-48 rounded-full border-2 border-slate-200" data-testid="topic-filter">
+            <SelectTrigger className="w-full sm:w-56 rounded-full border-2 border-slate-200" data-testid="topic-filter">
               <Filter className="w-4 h-4 mr-2 text-slate-400" />
               <SelectValue placeholder="Konu Filtrele" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-80">
               <SelectItem value="all">Tüm Konular</SelectItem>
-              {TOPICS.map((topic) => (
+              {topics.map((topic) => (
                 <SelectItem key={topic.id} value={topic.id}>
                   {topic.name}
                 </SelectItem>
@@ -174,7 +179,7 @@ export default function StoryListPage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="skeleton h-48 rounded-2xl" />
+              <div key={i} className="skeleton h-56 rounded-2xl" />
             ))}
           </div>
         ) : stories.length > 0 ? (
@@ -183,7 +188,8 @@ export default function StoryListPage() {
               <StoryCard
                 key={story.id}
                 story={story}
-                className={`animate-slide-up stagger-${(index % 6) + 1}`}
+                className="animate-slide-up"
+                style={{ animationDelay: `${(index % 6) * 0.1}s` }}
               />
             ))}
           </div>
