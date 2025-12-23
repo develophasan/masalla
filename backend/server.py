@@ -786,9 +786,12 @@ async def logout(request: Request, response: Response):
 
 @api_router.post("/admin/login")
 async def admin_login(login_data: AdminLogin, response: Response):
-    """Admin login with hardcoded credentials"""
+    """Admin login with credentials from environment"""
     
-    if login_data.username != "admin" or login_data.password != "masallardiyariai":
+    admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
+    admin_password = os.environ.get('ADMIN_PASSWORD', 'masallardiyariai')
+    
+    if login_data.username != admin_username or login_data.password != admin_password:
         raise HTTPException(status_code=401, detail="Geçersiz kullanıcı adı veya şifre")
     
     # Check if admin user exists, if not create
