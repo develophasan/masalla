@@ -103,168 +103,119 @@
 #====================================================================================================
 
 user_problem_statement: |
-  MASAL SEPETİ - Türkçe eğitici çocuk masalları platformu. 15 ana kategori, 150+ alt konu ve 
-  kazanım destekli AI tabanlı masal üretimi ve TTS seslendirme sistemi.
+  MASAL SEPETİ V2 - Üyelik sistemi, kredi sistemi ve admin paneli eklendi.
+  - Kullanıcı kayıt/giriş (email + Google OAuth)
+  - Aylık 10 kredi, kredi talebi sistemi
+  - Admin paneli: kullanıcı, masal, kredi yönetimi
 
 backend:
-  - task: "Topics API - Get all categories"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "GET /api/topics returns 15 categories with subtopic counts"
-
-  - task: "Topic Detail API"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "GET /api/topics/{topic_id} returns topic with subtopics and kazanım"
-
-  - task: "Stories List API"
-    implemented: true
-    working: true
-    file: "/app/backend/server.py"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "GET /api/stories and /api/stories/popular working, fixed 500 error by cleaning legacy data"
-
-  - task: "Story Generation API"
+  - task: "User Registration"
     implemented: true
     working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "POST /api/stories/generate needs integration test with OpenAI"
 
-  - task: "Topics Database"
+  - task: "User Login"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+
+  - task: "Google OAuth Session"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+
+  - task: "Admin Login"
     implemented: true
     working: true
-    file: "/app/backend/topics_database.py"
+    file: "/app/backend/server.py"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "15 categories with 150+ subtopics and kazanım data"
+        comment: "admin / masallardiyariai credentials working"
+
+  - task: "Credit System"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
 
 frontend:
-  - task: "HomePage - Topic Grid"
+  - task: "Login Page"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/HomePage.jsx"
+    file: "/app/frontend/src/pages/LoginPage.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Shows 15 categories in grid, search box, and popular stories section"
 
-  - task: "TopicDetailPage"
+  - task: "Register Page"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/TopicDetailPage.jsx"
+    file: "/app/frontend/src/pages/RegisterPage.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Shows topic info with subtopics and kazanım, links to create page"
 
-  - task: "StoryCreatePage"
+  - task: "Profile Page"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/pages/StoryCreatePage.jsx"
+    file: "/app/frontend/src/pages/ProfilePage.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Form with topic/subtopic selection, kazanım toggle, needs end-to-end test"
 
-  - task: "StoryDetailPage"
-    implemented: true
-    working: "NA"
-    file: "/app/frontend/src/pages/StoryDetailPage.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: true
-    status_history:
-      - working: "NA"
-        agent: "main"
-        comment: "Audio player, text display, needs story to test"
-
-  - task: "StoryListPage"
+  - task: "About Page"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/StoryListPage.jsx"
+    file: "/app/frontend/src/pages/AboutPage.jsx"
     stuck_count: 0
     priority: "medium"
+    needs_retesting: false
+
+  - task: "Admin Dashboard"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/admin/AdminDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
     needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Shows empty state correctly, filter by topic working"
+
+  - task: "Responsive Navbar"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Navbar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
 
 metadata:
   created_by: "main_agent"
-  version: "1.0"
-  test_sequence: 1
+  version: "2.0"
+  test_sequence: 2
   run_ui: true
-
-test_plan:
-  current_focus:
-    - "Topics API - Get all categories"
-    - "Topic Detail API"
-    - "Stories List API"
-    - "HomePage - Topic Grid"
-    - "TopicDetailPage"
-    - "StoryCreatePage"
-  stuck_tasks: []
-  test_all: false
-  test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
     message: |
-      Fixed 520 backend error by:
-      1. Made StoryResponse model fields optional to handle legacy data
-      2. Cleaned up 2 legacy stories without proper topic_id
-      3. Backend now returns 200 on all endpoints
+      Major V2 update completed:
+      1. User auth system (register, login, Google OAuth)
+      2. Credit system (10 credits on signup, credit requests)
+      3. Admin panel (user/story/credit management)
+      4. New pages: Login, Register, Profile, About, Admin
+      5. Responsive Navbar with credit display
       
-      Updated TTS to ElevenLabs:
-      1. Changed from OpenAI TTS (shimmer) to ElevenLabs (Rachel voice)
-      2. Using eleven_multilingual_v2 model for natural Turkish speech
-      3. ElevenLabs API key added to .env
-      
-      Added Google AdSense:
-      1. Homepage banner ads (above topics)
-      2. Interstitial ads on story creation
-      3. Interstitial ads on story search
-      
-      Please test:
-      - Backend APIs: /api/topics, /api/topics/{id}, /api/stories, /api/stories/popular
-      - Frontend pages: Homepage topic grid, Topic detail page with subtopics
-      - Story creation flow with ElevenLabs Turkish TTS
+      Test all auth flows and admin functionality
