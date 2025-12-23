@@ -234,6 +234,35 @@ async def get_current_user(request: Request) -> Optional[dict]:
         {"_id": 0}
     )
     
+    if user:
+        # Check for monthly credit reset
+        user = await check_monthly_credit_reset(user)
+    
+    return user
+
+
+async def check_monthly_credit_reset(user: dict) -> dict:
+    """Check if user's credits should be reset for new month"""
+    now = datetime.now(timezone.utc)
+    current_month = now.strftime("%Y-%m")
+    
+    last_credit_reset = user.get("last_credit_reset")
+    
+    # If no reset recorded or reset was in a previous month
+    if not last_credit_reset or not last_credit_reset.startswith(current_month):
+        # Reset credits to 10
+        await db.users.update_one(
+            {"user_id": user["user_id"]},
+            {
+                "$set": {
+                    "credits": 10,
+                    "last_credit_reset": current_month
+                }
+            }
+        )
+        user["credits"] = 10
+        user["last_credit_reset"] = current_month
+    
     return user
 
 async def require_auth(request: Request) -> dict:
