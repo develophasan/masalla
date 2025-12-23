@@ -2,18 +2,18 @@ import { cn } from "@/lib/utils";
 
 export default function LoadingSpinner({ size = "default", className }) {
   const sizeClasses = {
-    small: "w-16 h-16",
-    default: "w-24 h-24",
-    large: "w-32 h-32"
+    small: "w-20 h-20",
+    default: "w-32 h-32",
+    large: "w-40 h-40"
   };
 
   return (
     <div className={cn("relative flex items-center justify-center", sizeClasses[size], className)}>
-      {/* Logo in center */}
+      {/* Logo in center - 2x bigger */}
       <img 
         src="/logo.svg" 
         alt="Yükleniyor" 
-        className="w-1/2 h-1/2 object-contain z-10"
+        className="w-3/4 h-3/4 object-contain z-10"
       />
       
       {/* Spinning yarn orbit */}
