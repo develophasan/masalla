@@ -92,6 +92,17 @@ export default function StoryCreatePage() {
       return;
     }
 
+    // Show interstitial ad before generating
+    setShowAd(true);
+    setPendingSubmit(true);
+  };
+
+  const handleAdClose = async () => {
+    setShowAd(false);
+    
+    if (!pendingSubmit) return;
+    setPendingSubmit(false);
+
     setLoading(true);
     
     try {
