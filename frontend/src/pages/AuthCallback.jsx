@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AuthCallback() {
@@ -9,6 +9,7 @@ export default function AuthCallback() {
   const location = useLocation();
   const { processGoogleCallback } = useAuth();
   const hasProcessed = useRef(false);
+  const [status, setStatus] = useState('processing'); // processing, success, error
 
   useEffect(() => {
     // Prevent double processing in StrictMode
@@ -29,12 +30,21 @@ export default function AuthCallback() {
         }
 
         await processGoogleCallback(sessionId);
+        setStatus('success');
         toast.success('Google ile giriş başarılı!');
-        navigate('/', { replace: true });
+        
+        // Small delay to ensure state is propagated, then force reload to home
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 500);
+        
       } catch (error) {
         console.error('Auth callback error:', error);
+        setStatus('error');
         toast.error('Giriş sırasında hata oluştu');
-        navigate('/login');
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
       }
     };
 
@@ -44,8 +54,24 @@ export default function AuthCallback() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 text-violet-500 animate-spin mx-auto mb-4" />
-        <p className="text-slate-600">Giriş yapılıyor...</p>
+        {status === 'processing' && (
+          <>
+            <Loader2 className="w-12 h-12 text-violet-500 animate-spin mx-auto mb-4" />
+            <p className="text-slate-600">Giriş yapılıyor...</p>
+          </>
+        )}
+        {status === 'success' && (
+          <>
+            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <p className="text-slate-600">Giriş başarılı! Yönlendiriliyorsunuz...</p>
+          </>
+        )}
+        {status === 'error' && (
+          <>
+            <div className="w-12 h-12 text-red-500 mx-auto mb-4 text-4xl">✕</div>
+            <p className="text-slate-600">Giriş başarısız. Yönlendiriliyorsunuz...</p>
+          </>
+        )}
       </div>
     </div>
   );
