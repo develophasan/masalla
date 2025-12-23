@@ -27,15 +27,15 @@ export default function Navbar() {
             <img 
               src="/logo.svg" 
               alt="Masal Sepeti" 
-              className="h-14 w-auto"
+              className="h-10 sm:h-14 w-auto"
             />
-            <div className="hidden sm:flex flex-col leading-tight">
-              <span className="text-2xl font-black tracking-tight">
+            <div className="flex flex-col leading-tight">
+              <span className="text-lg sm:text-2xl font-black tracking-tight">
                 <span className="bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
                   MASAL
                 </span>
               </span>
-              <span className="text-2xl font-black tracking-tight -mt-1">
+              <span className="text-lg sm:text-2xl font-black tracking-tight -mt-1">
                 <span className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
                   SEPETİ
                 </span>
