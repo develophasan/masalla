@@ -194,16 +194,40 @@ export default function StoryCreatePage() {
       <Navbar />
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        {/* Credit Warning */}
+        {/* Credit Warning - More Prominent */}
         {isAuthenticated && user?.credits <= 0 && (
+          <div className="mb-6 p-5 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl animate-pulse">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="w-6 h-6 text-red-500" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-red-800 font-bold text-lg mb-1">Krediniz Bitti!</h3>
+                <p className="text-red-600 text-sm mb-3">
+                  Masal oluşturmak için krediniz olması gerekiyor. Her ay 10 ücretsiz kredi yenilenir.
+                </p>
+                <Link 
+                  to="/profile" 
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full text-sm font-medium hover:bg-red-600 transition-colors"
+                >
+                  <Coins className="w-4 h-4" />
+                  Kredi Talep Et
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Low Credit Warning */}
+        {isAuthenticated && user?.credits > 0 && user?.credits <= 3 && (
           <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
             <div>
-              <p className="text-amber-800 font-medium">Krediniz bitti!</p>
+              <p className="text-amber-800 font-medium">Krediniz azalıyor! ({user.credits} kredi kaldı)</p>
               <p className="text-amber-600 text-sm">
-                Yeni masal oluşturmak için{" "}
+                Her ay 10 ücretsiz kredi yenilenir veya{" "}
                 <Link to="/profile" className="underline">profil sayfasından</Link>{" "}
-                kredi talebi oluşturun.
+                ek kredi talep edebilirsiniz.
               </p>
             </div>
           </div>
