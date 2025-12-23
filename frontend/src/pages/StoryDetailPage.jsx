@@ -278,11 +278,12 @@ export default function StoryDetailPage() {
                 variant="ghost" 
                 size="icon" 
                 onClick={handleShare}
-              className="text-slate-500 hover:text-violet-600"
-              data-testid="share-button"
-            >
-              <Share2 className="w-5 h-5" />
-            </Button>
+                className="text-slate-500 hover:text-violet-600"
+                data-testid="share-button"
+              >
+                <Share2 className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
