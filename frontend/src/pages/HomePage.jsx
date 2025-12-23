@@ -90,29 +90,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-violet-600">Masal Sepeti</h1>
-                <p className="text-xs text-slate-500">Hayallerin Dünyası</p>
-              </div>
-            </Link>
-            
-            <Link to="/create" data-testid="create-story-header-btn">
-              <Button className="jelly-btn hidden sm:flex items-center gap-2">
-                <Plus className="w-5 h-5" />
-                <span>Masal Ekle</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Navbar */}
+      <Navbar />
 
       {/* Hero Section */}
       <section className="hero-section relative">
