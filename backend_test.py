@@ -243,6 +243,7 @@ class MasalSepetiAPITester:
         tests = [
             self.test_root_endpoint,
             self.test_get_topics,
+            self.test_get_topic_detail,
             self.test_get_stories,
             self.test_get_stories_with_topic_filter,
             self.test_get_stories_with_search,
