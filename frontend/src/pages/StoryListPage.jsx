@@ -24,11 +24,30 @@ const SORT_OPTIONS = [
   { id: "oldest", name: "En Eski" },
 ];
 
+const CACHE_KEY = 'masal_stories_cache';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 export default function StoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [stories, setStories] = useState([]);
+  
+  // Initialize stories from cache for instant render
+  const [stories, setStories] = useState(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      try {
+        const { data, timestamp, params } = JSON.parse(cached);
+        // Only use cache for default view (no filters)
+        if (!searchParams.get("topic_id") && !searchParams.get("search") && 
+            Date.now() - timestamp < CACHE_DURATION) {
+          return data;
+        }
+      } catch (e) {}
+    }
+    return [];
+  });
+  
   const [topics, setTopics] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(stories.length === 0);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic_id") || "");
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "popular");
@@ -45,6 +64,15 @@ export default function StoryListPage() {
 
   const fetchTopics = async () => {
     try {
+      // Use cached topics
+      const cached = localStorage.getItem('masal_topics_cache');
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < CACHE_DURATION) {
+          setTopics(data);
+          return;
+        }
+      }
       const response = await axios.get(`${API}/topics`);
       setTopics(response.data);
     } catch (error) {
@@ -53,19 +81,43 @@ export default function StoryListPage() {
   };
 
   const fetchStories = async () => {
+    const topicId = searchParams.get("topic_id");
+    const search = searchParams.get("search");
+    const sort = searchParams.get("sort") || "popular";
+    
+    // Check cache for default view
+    const isDefaultView = !topicId && !search && sort === "popular";
+    if (isDefaultView) {
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        try {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < CACHE_DURATION && data.length > 0) {
+            setStories(data);
+            setLoading(false);
+            return;
+          }
+        } catch (e) {}
+      }
+    }
+    
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      const topicId = searchParams.get("topic_id");
-      const search = searchParams.get("search");
-      const sort = searchParams.get("sort") || "popular";
-      
       if (topicId) params.append("topic_id", topicId);
       if (search) params.append("search", search);
       params.append("sort_by", sort);
       
       const response = await axios.get(`${API}/stories?${params.toString()}`);
       setStories(response.data);
+      
+      // Cache default view
+      if (isDefaultView) {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          data: response.data,
+          timestamp: Date.now()
+        }));
+      }
     } catch (error) {
       console.error("Error fetching stories:", error);
     } finally {
