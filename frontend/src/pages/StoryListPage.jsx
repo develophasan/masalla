@@ -266,10 +266,9 @@ export default function StoryListPage() {
 
         {/* Stories Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="skeleton h-56 rounded-2xl" />
-            ))}
+          <div className="flex flex-col items-center justify-center py-16">
+            <LoadingSpinner size="large" />
+            <p className="mt-6 text-slate-500 animate-pulse">Masallar yükleniyor...</p>
           </div>
         ) : stories.length > 0 ? (
           <>
