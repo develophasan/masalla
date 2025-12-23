@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 
 class MasalSepetiAPITester:
-    def __init__(self, base_url="https://masalkitap.preview.emergentagent.com/api"):
+    def __init__(self, base_url="https://storytimeai.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
