@@ -29,6 +29,7 @@ const AGE_GROUPS = [
 export default function StoryCreatePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { user, isAuthenticated, refreshUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [topics, setTopics] = useState([]);
   const [subtopics, setSubtopics] = useState([]);
