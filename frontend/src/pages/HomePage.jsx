@@ -176,6 +176,13 @@ export default function HomePage() {
             <p className="text-slate-500 text-lg">15 ana kategori, 150+ alt konu ve pedagojik kazanımlar</p>
           </div>
 
+          {/* Ad Banner - Top of Topics */}
+          <div className="mb-8 flex justify-center">
+            <div className="w-full max-w-3xl bg-gradient-to-r from-violet-50 to-pink-50 rounded-2xl p-4 border border-violet-100">
+              <AdBanner className="rounded-xl overflow-hidden" />
+            </div>
+          </div>
+
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {[...Array(15)].map((_, i) => (
