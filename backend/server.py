@@ -464,8 +464,21 @@ async def get_story(story_id: str):
 
 
 @api_router.post("/stories/generate", response_model=StoryResponse)
-async def generate_story(story_input: StoryCreate):
+async def generate_story(story_input: StoryCreate, request: Request):
     """Generate a new story using AI and TTS"""
+    
+    # Check if user is logged in and has credits
+    user = await get_current_user(request)
+    user_id = None
+    
+    if user:
+        # Check credits
+        if user.get("credits", 0) <= 0:
+            raise HTTPException(
+                status_code=402, 
+                detail="Krediniz bitti! Yeni masal oluşturmak için kredi talebi oluşturun."
+            )
+        user_id = user["user_id"]
     
     # Get topic info
     topic = get_topic_detail(story_input.topic_id)
