@@ -102,6 +102,10 @@ class StoryResponse(BaseModel):
     duration: Optional[int] = None
     play_count: int = 0
     created_at: Optional[str] = None
+    user_id: Optional[str] = None
+    creator_name: Optional[str] = None
+    creator_id: Optional[str] = None
+    creator_picture: Optional[str] = None
 
 class TopicInfo(BaseModel):
     id: str
