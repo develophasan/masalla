@@ -489,6 +489,22 @@ export default function StoryDetailPage() {
                 <p className="font-medium text-slate-700">{story.character}</p>
               </div>
             )}
+            {story.creator_name && (
+              <div>
+                <span className="text-slate-500">Oluşturan:</span>
+                <Link 
+                  to={`/user/${story.creator_id}`}
+                  className="font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1"
+                >
+                  {story.creator_picture ? (
+                    <img src={story.creator_picture} alt="" className="w-5 h-5 rounded-full inline" />
+                  ) : (
+                    <User className="w-4 h-4" />
+                  )}
+                  {story.creator_name}
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </main>
