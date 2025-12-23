@@ -795,7 +795,7 @@ async def admin_login(login_data: AdminLogin, response: Response):
     admin_user = await db.users.find_one({"role": "admin", "email": "admin@masalsepeti.com"}, {"_id": 0})
     
     if not admin_user:
-        admin_user = {
+        admin_user_data = {
             "user_id": "admin_master",
             "name": "Admin",
             "surname": "Master",
@@ -807,7 +807,8 @@ async def admin_login(login_data: AdminLogin, response: Response):
             "auth_provider": "local",
             "created_at": datetime.now(timezone.utc).isoformat()
         }
-        await db.users.insert_one(admin_user)
+        await db.users.insert_one(admin_user_data)
+        admin_user = admin_user_data
     
     # Create session
     session_token = secrets.token_urlsafe(32)
@@ -830,7 +831,10 @@ async def admin_login(login_data: AdminLogin, response: Response):
         path="/"
     )
     
-    return {"success": True, "user": admin_user, "session_token": session_token}
+    # Return admin user without _id
+    return_user = {k: v for k, v in admin_user.items() if k != "_id"}
+    
+    return {"success": True, "user": return_user, "session_token": session_token}
 
 
 # ============= USER ENDPOINTS =============
