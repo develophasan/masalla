@@ -209,14 +209,14 @@ async def generate_audio_for_story(text: str) -> tuple[str, int]:
     try:
         tts = OpenAITextToSpeech(api_key=api_key)
         
-        # Use fable voice - storytelling style
+        # Use shimmer voice - soft feminine voice for children's stories
         # Limit text to 4096 chars for TTS API
         text_chunk = text[:4000] if len(text) > 4000 else text
         
         audio_base64 = await tts.generate_speech_base64(
             text=text_chunk,
             model="tts-1",
-            voice="fable",  # Expressive, storytelling voice
+            voice="shimmer",  # Soft, feminine voiceytelling voice
             speed=0.9  # Slightly slower for children
         )
         
