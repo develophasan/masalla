@@ -126,10 +126,14 @@ export default function HomePage() {
       
       if (needTopics) {
         setTopics(responses[idx].data);
-        localStorage.setItem('masal_topics_cache', JSON.stringify({
-          data: responses[idx].data,
-          timestamp: Date.now()
-        }));
+        try {
+          localStorage.setItem('masal_topics_cache', JSON.stringify({
+            data: responses[idx].data,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          console.warn('Cache quota exceeded, skipping cache');
+        }
         idx++;
       }
       
