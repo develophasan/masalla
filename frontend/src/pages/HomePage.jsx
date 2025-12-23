@@ -53,10 +53,23 @@ const TOPIC_COLORS = {
 };
 
 export default function HomePage() {
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState(() => {
+    // Load from cache immediately for faster render
+    const cached = localStorage.getItem('masal_topics_cache');
+    if (cached) {
+      try {
+        const { data, timestamp } = JSON.parse(cached);
+        // Cache valid for 1 hour
+        if (Date.now() - timestamp < 3600000) {
+          return data;
+        }
+      } catch (e) {}
+    }
+    return [];
+  });
   const [popularStories, setPopularStories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(topics.length === 0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,8 +82,15 @@ export default function HomePage() {
         axios.get(`${API}/topics`),
         axios.get(`${API}/stories/popular?limit=6`),
       ]);
+      
       setTopics(topicsRes.data);
       setPopularStories(storiesRes.data);
+      
+      // Cache topics for faster subsequent loads
+      localStorage.setItem('masal_topics_cache', JSON.stringify({
+        data: topicsRes.data,
+        timestamp: Date.now()
+      }));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
