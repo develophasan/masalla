@@ -288,28 +288,6 @@ export default function StoryDetailPage() {
         </div>
       )}
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
-                  onClick={handleDownloadClick}
-                  className="text-violet-500 hover:bg-violet-50"
-                  title="Masalı İndir"
-                >
-                  <Download className="w-5 h-5" />
-                </Button>
-              )}
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={handleShare}
-                className="text-slate-500 hover:text-violet-600"
-                data-testid="share-button"
-              >
-                <Share2 className="w-5 h-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Story Header */}
         <div className="text-center mb-8 animate-slide-up">
