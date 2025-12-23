@@ -126,6 +126,126 @@ class TopicDetail(BaseModel):
     image: str
     subtopics: List[SubtopicInfo]
 
+# ============= USER & AUTH MODELS =============
+
+class UserRegister(BaseModel):
+    name: str
+    surname: str
+    email: EmailStr
+    phone: str
+    password: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    user_id: str
+    name: str
+    surname: Optional[str] = None
+    email: str
+    phone: Optional[str] = None
+    picture: Optional[str] = None
+    credits: int = 10
+    role: str = "user"
+    is_verified: bool = False
+    created_at: Optional[str] = None
+
+class CreditRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    user_id: str
+    user_name: str
+    user_email: str
+    user_phone: Optional[str] = None
+    requested_credits: int = 10
+    message: Optional[str] = None
+    status: str = "pending"  # pending, approved, rejected
+    created_at: str
+
+class CreditRequestCreate(BaseModel):
+    requested_credits: int = 10
+    message: Optional[str] = None
+
+class AdminLogin(BaseModel):
+    username: str
+    password: str
+
+# ============= PASSWORD HELPERS =============
+
+def hash_password(password: str) -> str:
+    """Hash password with salt"""
+    salt = secrets.token_hex(16)
+    hashed = hashlib.sha256(f"{password}{salt}".encode()).hexdigest()
+    return f"{salt}:{hashed}"
+
+def verify_password(password: str, stored_hash: str) -> bool:
+    """Verify password against stored hash"""
+    try:
+        salt, hashed = stored_hash.split(":")
+        return hashlib.sha256(f"{password}{salt}".encode()).hexdigest() == hashed
+    except:
+        return False
+
+# ============= AUTH HELPERS =============
+
+async def get_current_user(request: Request) -> Optional[dict]:
+    """Get current user from session token"""
+    # Try cookie first
+    session_token = request.cookies.get("session_token")
+    
+    # Fallback to Authorization header
+    if not session_token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            session_token = auth_header.split(" ")[1]
+    
+    if not session_token:
+        return None
+    
+    # Find session
+    session = await db.user_sessions.find_one(
+        {"session_token": session_token},
+        {"_id": 0}
+    )
+    
+    if not session:
+        return None
+    
+    # Check expiry
+    expires_at = session.get("expires_at")
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+    if expires_at < datetime.now(timezone.utc):
+        return None
+    
+    # Get user
+    user = await db.users.find_one(
+        {"user_id": session["user_id"]},
+        {"_id": 0}
+    )
+    
+    return user
+
+async def require_auth(request: Request) -> dict:
+    """Require authentication - raises 401 if not authenticated"""
+    user = await get_current_user(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Giriş yapmanız gerekiyor")
+    return user
+
+async def require_admin(request: Request) -> dict:
+    """Require admin role"""
+    user = await get_current_user(request)
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin yetkisi gerekli")
+    return user
+
 # ============= AI HELPERS =============
 
 async def generate_story_with_ai(
