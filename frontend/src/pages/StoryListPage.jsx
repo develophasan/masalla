@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import StoryCard from "@/components/StoryCard";
+import AdInterstitial from "@/components/AdInterstitial";
+import AdBanner from "@/components/AdBanner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
