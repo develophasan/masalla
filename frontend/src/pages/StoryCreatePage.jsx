@@ -125,6 +125,8 @@ export default function StoryCreatePage() {
       console.error("Error creating story:", error);
       if (error.code === "ECONNABORTED") {
         toast.error("İşlem zaman aşımına uğradı. Lütfen tekrar deneyin.");
+      } else if (error.response?.status === 402) {
+        toast.error("Krediniz bitti! Profil sayfasından kredi talebi oluşturun.");
       } else {
         toast.error(error.response?.data?.detail || "Masal oluşturulurken bir hata oluştu");
       }
