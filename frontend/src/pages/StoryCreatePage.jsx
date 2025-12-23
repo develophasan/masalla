@@ -137,6 +137,7 @@ export default function StoryCreatePage() {
       
       // Clear stories cache so new story appears
       localStorage.removeItem('masal_stories_cache');
+      localStorage.removeItem('masal_popular_cache');
       
       // Refresh user to update credits
       if (isAuthenticated) {
