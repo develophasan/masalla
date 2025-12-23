@@ -3,10 +3,11 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import AdInterstitial from "@/components/AdInterstitial";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -24,6 +25,8 @@ export default function StoryDetailPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showText, setShowText] = useState(false);
+  const [showDownloadAd, setShowDownloadAd] = useState(false);
+  const [canDownload, setCanDownload] = useState(false);
 
   useEffect(() => {
     fetchStory();
