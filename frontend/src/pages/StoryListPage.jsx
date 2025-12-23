@@ -168,7 +168,7 @@ export default function StoryListPage() {
 
           {/* Topic Filter */}
           <Select value={selectedTopic} onValueChange={handleTopicChange}>
-            <SelectTrigger className="w-full sm:w-56 rounded-full border-2 border-slate-200" data-testid="topic-filter">
+            <SelectTrigger className="w-full sm:w-48 rounded-full border-2 border-slate-200" data-testid="topic-filter">
               <Filter className="w-4 h-4 mr-2 text-slate-400" />
               <SelectValue placeholder="Konu Filtrele" />
             </SelectTrigger>
@@ -177,6 +177,21 @@ export default function StoryListPage() {
               {topics.map((topic) => (
                 <SelectItem key={topic.id} value={topic.id}>
                   {topic.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Sort Filter */}
+          <Select value={sortBy} onValueChange={handleSortChange}>
+            <SelectTrigger className="w-full sm:w-40 rounded-full border-2 border-slate-200" data-testid="sort-filter">
+              <ArrowUpDown className="w-4 h-4 mr-2 text-slate-400" />
+              <SelectValue placeholder="Sırala" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((option) => (
+                <SelectItem key={option.id} value={option.id}>
+                  {option.name}
                 </SelectItem>
               ))}
             </SelectContent>
