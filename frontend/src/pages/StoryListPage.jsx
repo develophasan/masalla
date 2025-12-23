@@ -58,9 +58,11 @@ export default function StoryListPage() {
       const params = new URLSearchParams();
       const topicId = searchParams.get("topic_id");
       const search = searchParams.get("search");
+      const sort = searchParams.get("sort") || "popular";
       
       if (topicId) params.append("topic_id", topicId);
       if (search) params.append("search", search);
+      params.append("sort_by", sort);
       
       const response = await axios.get(`${API}/stories?${params.toString()}`);
       setStories(response.data);
