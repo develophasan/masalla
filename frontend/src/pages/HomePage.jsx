@@ -244,10 +244,9 @@ export default function HomePage() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-              {[...Array(15)].map((_, i) => (
-                <div key={i} className="skeleton h-48 rounded-2xl" />
-              ))}
+            <div className="flex flex-col items-center justify-center py-12">
+              <LoadingSpinner size="large" />
+              <p className="mt-6 text-slate-500 animate-pulse">Konular yükleniyor...</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
