@@ -16,7 +16,7 @@ import {
 import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
 import Navbar from "@/components/Navbar";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, authAxios } from "@/contexts/AuthContext";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
