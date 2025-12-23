@@ -421,6 +421,7 @@ async def get_stories(
     topic_id: Optional[str] = None, 
     subtopic_id: Optional[str] = None,
     search: Optional[str] = None, 
+    sort_by: Optional[str] = None,  # "newest", "oldest", "popular"
     limit: int = 20
 ):
     """Get all stories, optionally filtered by topic, subtopic or search query"""
@@ -441,7 +442,25 @@ async def get_stories(
             {"kazanim": {"$regex": search, "$options": "i"}}
         ]
     
-    stories = await db.stories.find(query, {"_id": 0}).sort("play_count", -1).limit(limit).to_list(limit)
+    # Determine sort order
+    if sort_by == "newest":
+        sort_field, sort_order = "created_at", -1
+    elif sort_by == "oldest":
+        sort_field, sort_order = "created_at", 1
+    else:  # default: popular
+        sort_field, sort_order = "play_count", -1
+    
+    stories = await db.stories.find(query, {"_id": 0}).sort(sort_field, sort_order).limit(limit).to_list(limit)
+    
+    # Enrich stories with creator info
+    for story in stories:
+        if story.get("user_id"):
+            user = await db.users.find_one({"user_id": story["user_id"]}, {"_id": 0, "name": 1, "surname": 1, "picture": 1})
+            if user:
+                story["creator_name"] = f"{user.get('name', '')} {user.get('surname', '')}".strip()
+                story["creator_id"] = story["user_id"]
+                story["creator_picture"] = user.get("picture")
+    
     return stories
 
 
