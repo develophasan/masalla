@@ -24,7 +24,8 @@ export default function LoginPage() {
     try {
       await login(formData.email, formData.password);
       toast.success('Giriş başarılı!');
-      navigate('/');
+      // Force reload to ensure auth state is fresh across all components
+      window.location.href = '/';
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Giriş yapılamadı');
     } finally {
