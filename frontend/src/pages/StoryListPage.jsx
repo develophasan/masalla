@@ -24,6 +24,8 @@ export default function StoryListPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic_id") || "");
+  const [showSearchAd, setShowSearchAd] = useState(false);
+  const [pendingSearch, setPendingSearch] = useState(null);
 
   useEffect(() => {
     fetchTopics();
