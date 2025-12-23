@@ -126,10 +126,12 @@ class MasalSepetiAPITester:
     def test_create_story_ai_generation(self):
         """Test POST /stories/generate - AI story generation (CRITICAL TEST)"""
         story_data = {
-            "topic": "arkadaslik",
+            "topic_id": "degerler",
+            "subtopic_id": "paylasma",
             "theme": "Paylaşmanın önemi ve dostluk",
             "age_group": "4-5",
-            "character": "Minik Tavşan Cici"
+            "character": "Minik Tavşan Cici",
+            "kazanim_based": True
         }
         
         print("\n🚨 CRITICAL TEST: AI Story Generation")
