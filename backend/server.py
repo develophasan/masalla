@@ -1104,12 +1104,18 @@ async def admin_get_stats(request: Request):
 # Include router
 app.include_router(api_router)
 
-# CORS middleware - use environment variable or allow all for flexibility
-cors_origins_env = os.environ.get('CORS_ORIGINS', '*')
-if cors_origins_env == '*':
-    ALLOWED_ORIGINS = ["*"]
-else:
-    ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(',')]
+# CORS middleware - specific origins required when credentials=True
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://storytimeai.preview.emergentagent.com",
+    "https://storytimeai.emergent.host",
+    "https://masal.space",
+    "http://masal.space",
+    "https://www.masal.space",
+    "http://www.masal.space"
+]
 
 app.add_middleware(
     CORSMiddleware,
