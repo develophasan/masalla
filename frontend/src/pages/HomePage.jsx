@@ -67,9 +67,24 @@ export default function HomePage() {
     }
     return [];
   });
-  const [popularStories, setPopularStories] = useState([]);
+  
+  const [popularStories, setPopularStories] = useState(() => {
+    // Load popular stories from cache
+    const cached = localStorage.getItem('masal_popular_cache');
+    if (cached) {
+      try {
+        const { data, timestamp } = JSON.parse(cached);
+        // Cache valid for 5 minutes
+        if (Date.now() - timestamp < 300000) {
+          return data;
+        }
+      } catch (e) {}
+    }
+    return [];
+  });
+  
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(topics.length === 0);
+  const [loading, setLoading] = useState(topics.length === 0 && popularStories.length === 0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,19 +93,52 @@ export default function HomePage() {
 
   const fetchData = async () => {
     try {
-      const [topicsRes, storiesRes] = await Promise.all([
-        axios.get(`${API}/topics`),
-        axios.get(`${API}/stories/popular?limit=6`),
-      ]);
+      // Check if we need to fetch
+      const topicsCached = localStorage.getItem('masal_topics_cache');
+      const storiesCached = localStorage.getItem('masal_popular_cache');
       
-      setTopics(topicsRes.data);
-      setPopularStories(storiesRes.data);
+      let needTopics = true;
+      let needStories = true;
       
-      // Cache topics for faster subsequent loads
-      localStorage.setItem('masal_topics_cache', JSON.stringify({
-        data: topicsRes.data,
-        timestamp: Date.now()
-      }));
+      if (topicsCached) {
+        const { timestamp } = JSON.parse(topicsCached);
+        if (Date.now() - timestamp < 3600000) needTopics = false;
+      }
+      
+      if (storiesCached) {
+        const { timestamp } = JSON.parse(storiesCached);
+        if (Date.now() - timestamp < 300000) needStories = false;
+      }
+      
+      // Only fetch what's needed
+      const requests = [];
+      if (needTopics) requests.push(axios.get(`${API}/topics`));
+      if (needStories) requests.push(axios.get(`${API}/stories/popular?limit=6`));
+      
+      if (requests.length === 0) {
+        setLoading(false);
+        return;
+      }
+      
+      const responses = await Promise.all(requests);
+      let idx = 0;
+      
+      if (needTopics) {
+        setTopics(responses[idx].data);
+        localStorage.setItem('masal_topics_cache', JSON.stringify({
+          data: responses[idx].data,
+          timestamp: Date.now()
+        }));
+        idx++;
+      }
+      
+      if (needStories) {
+        setPopularStories(responses[idx].data);
+        localStorage.setItem('masal_popular_cache', JSON.stringify({
+          data: responses[idx].data,
+          timestamp: Date.now()
+        }));
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
