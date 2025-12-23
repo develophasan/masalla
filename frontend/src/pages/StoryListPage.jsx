@@ -112,12 +112,18 @@ export default function StoryListPage() {
       const response = await axios.get(`${API}/stories?${params.toString()}`);
       setStories(response.data);
       
-      // Cache default view
+      // Cache default view (without audio to save space)
       if (isDefaultView) {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          data: response.data,
-          timestamp: Date.now()
-        }));
+        try {
+          const cacheData = response.data.map(s => ({...s, audio_base64: null}));
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            data: cacheData,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          // localStorage quota exceeded - ignore
+          console.warn('Cache quota exceeded, skipping cache');
+        }
       }
     } catch (error) {
       console.error("Error fetching stories:", error);
