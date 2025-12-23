@@ -14,6 +14,7 @@ import {
 import StoryCard from "@/components/StoryCard";
 import AdInterstitial from "@/components/AdInterstitial";
 import AdBanner from "@/components/AdBanner";
+import Navbar from "@/components/Navbar";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
