@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
