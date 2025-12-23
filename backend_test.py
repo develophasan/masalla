@@ -138,6 +138,8 @@ class MasalSepetiAPITester:
                 print("   ⚠ No subtopics found")
         
         return success
+
+    def test_get_stories(self):
         """Test GET /stories endpoint"""
         return self.run_test("Get All Stories", "GET", "stories", 200)
 
