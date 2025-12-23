@@ -302,7 +302,7 @@ export default function StoryDetailPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
             {story.title}
           </h1>
-          <div className="flex items-center justify-center gap-6 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-6 text-sm text-slate-500 flex-wrap">
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
               {story.duration ? `${Math.ceil(story.duration / 60)} dk` : "~5 dk"}
@@ -316,6 +316,25 @@ export default function StoryDetailPage() {
               {story.age_group}
             </span>
           </div>
+          
+          {/* Creator Info */}
+          {story.creator_name && (
+            <Link 
+              to={`/user/${story.creator_id}`}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-100 hover:border-violet-200 hover:shadow-md transition-all"
+            >
+              {story.creator_picture ? (
+                <img src={story.creator_picture} alt="" className="w-6 h-6 rounded-full" />
+              ) : (
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center">
+                  <User className="w-3 h-3 text-white" />
+                </div>
+              )}
+              <span className="text-sm text-slate-600 hover:text-violet-600 transition-colors">
+                {story.creator_name} tarafından oluşturuldu
+              </span>
+            </Link>
+          )}
         </div>
 
         {/* Kazanım Card */}
