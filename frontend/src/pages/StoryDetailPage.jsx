@@ -3,11 +3,13 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
+import Navbar from "@/components/Navbar";
+import { useAuth } from "@/contexts/AuthContext";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -15,6 +17,7 @@ export default function StoryDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const audioRef = useRef(null);
+  const { isAuthenticated } = useAuth();
   
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,10 +30,22 @@ export default function StoryDetailPage() {
   const [showText, setShowText] = useState(false);
   const [showDownloadAd, setShowDownloadAd] = useState(false);
   const [canDownload, setCanDownload] = useState(false);
+  const [isPopularStory, setIsPopularStory] = useState(false);
 
   useEffect(() => {
     fetchStory();
+    checkIfPopular();
   }, [id]);
+
+  const checkIfPopular = async () => {
+    try {
+      const response = await axios.get(`${API}/stories/popular?limit=10`);
+      const popularIds = response.data.map(s => s.id);
+      setIsPopularStory(popularIds.includes(id));
+    } catch (error) {
+      console.log("Could not check popular stories");
+    }
+  };
 
   const fetchStory = async () => {
     try {
