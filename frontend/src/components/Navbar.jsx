@@ -24,8 +24,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <BookOpen className="w-7 h-7 text-violet-500" />
-            <span className="text-xl font-bold text-violet-600 hidden sm:inline">Masal Sepeti</span>
+            <img 
+              src="/logo.svg" 
+              alt="Masal Sepeti" 
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Menu */}
