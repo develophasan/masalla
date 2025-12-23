@@ -95,6 +95,24 @@ export default function StoryCreatePage() {
       return;
     }
 
+    // Check credits before proceeding
+    if (user?.credits <= 0) {
+      toast.error(
+        <div className="flex flex-col gap-1">
+          <span className="font-bold">Krediniz bitti!</span>
+          <span className="text-sm">Profil sayfasından kredi talebi oluşturun.</span>
+        </div>,
+        {
+          duration: 5000,
+          action: {
+            label: "Profile Git",
+            onClick: () => navigate("/profile")
+          }
+        }
+      );
+      return;
+    }
+
     // Show interstitial ad before generating
     setShowAd(true);
     setPendingSubmit(true);
