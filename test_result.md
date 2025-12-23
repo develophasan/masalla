@@ -254,7 +254,17 @@ agent_communication:
       2. Cleaned up 2 legacy stories without proper topic_id
       3. Backend now returns 200 on all endpoints
       
+      Updated TTS to ElevenLabs:
+      1. Changed from OpenAI TTS (shimmer) to ElevenLabs (Rachel voice)
+      2. Using eleven_multilingual_v2 model for natural Turkish speech
+      3. ElevenLabs API key added to .env
+      
+      Added Google AdSense:
+      1. Homepage banner ads (above topics)
+      2. Interstitial ads on story creation
+      3. Interstitial ads on story search
+      
       Please test:
       - Backend APIs: /api/topics, /api/topics/{id}, /api/stories, /api/stories/popular
       - Frontend pages: Homepage topic grid, Topic detail page with subtopics
-      - Story creation flow: Select topic, subtopic, see kazanım, fill form
+      - Story creation flow with ElevenLabs Turkish TTS
