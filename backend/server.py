@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -6,69 +7,323 @@ import os
 import logging
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
+import io
+import base64
 
-
+# Load environment variables
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Emergent integrations
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+from emergentintegrations.llm.openai import OpenAITextToSpeech
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
+# Create the main app
 app = FastAPI()
 
-# Create a router with the /api prefix
+# Create a router with /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+# ============= MODELS =============
+
+class Story(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    title: str
+    content: str
+    topic: str
+    theme: str
+    age_group: str
+    character: Optional[str] = None
+    audio_base64: Optional[str] = None
+    duration: Optional[int] = None
+    play_count: int = 0
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class StoryCreate(BaseModel):
+    topic: str
+    theme: str
+    age_group: str
+    character: Optional[str] = None
 
-# Add your routes to the router instead of directly to app
+class StoryResponse(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    id: str
+    title: str
+    content: str
+    topic: str
+    theme: str
+    age_group: str
+    character: Optional[str] = None
+    audio_base64: Optional[str] = None
+    duration: Optional[int] = None
+    play_count: int
+    created_at: str
+
+class TopicInfo(BaseModel):
+    id: str
+    name: str
+    description: str
+    icon: str
+
+# ============= TOPICS DATA =============
+
+TOPICS = [
+    {"id": "organlar", "name": "Organlar", "description": "Vücudumuzdaki organları tanıyalım", "icon": "heart"},
+    {"id": "degerler", "name": "Değerler Eğitimi", "description": "Paylaşmak, yardımlaşmak ve dürüstlük", "icon": "star"},
+    {"id": "doga", "name": "Doğa", "description": "Ormanlar, hayvanlar ve çiçekler", "icon": "leaf"},
+    {"id": "duygular", "name": "Duygular", "description": "Mutluluk, üzüntü ve sevgi", "icon": "smile"},
+    {"id": "arkadaslik", "name": "Arkadaşlık", "description": "Dostluk ve birlikte oynama", "icon": "users"},
+    {"id": "saglik", "name": "Sağlık", "description": "Temizlik, beslenme ve spor", "icon": "activity"},
+]
+
+# ============= AI HELPERS =============
+
+async def generate_story_with_ai(topic: str, theme: str, age_group: str, character: Optional[str] = None) -> dict:
+    """Generate a fairy tale using OpenAI via Emergent integrations"""
+    
+    api_key = os.environ.get('EMERGENT_LLM_KEY')
+    if not api_key:
+        raise HTTPException(status_code=500, detail="AI API key not configured")
+    
+    # Create prompt for Turkish fairy tale
+    character_text = f"Ana karakter: {character}" if character else "Ana karakteri sen belirle"
+    
+    system_message = """Sen deneyimli bir çocuk masalı yazarısın. Türkçe olarak 4-8 yaş arası çocuklara uygun masallar yazarsın.
+    
+Kurallar:
+- Türkçe yaz
+- 5-10 dakikada okunabilecek uzunlukta (800-1200 kelime)
+- Korku ve şiddet içeriği ASLA olmasın
+- Pedagojik ve eğitici olsun
+- Seslendirmeye uygun, akıcı cümleler kur
+- Kısa ve anlaşılır cümleler kullan
+- Sıcak ve sevgi dolu bir anlatım tarzı kullan
+- Masal klasik "Bir varmış bir yokmuş" ile başlasın
+
+Çıktı formatı:
+Başlık: [Masalın başlığı]
+
+[Masal metni]
+
+Kazanım: [Bu masaldan çocuğun öğreneceği değer]"""
+
+    user_prompt = f"""Konu: {topic}
+Tema: {theme}
+Yaş Grubu: {age_group}
+{character_text}
+
+Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
+
+    try:
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=str(uuid.uuid4()),
+            system_message=system_message
+        ).with_model("openai", "gpt-4o")
+        
+        user_message = UserMessage(text=user_prompt)
+        response = await chat.send_message(user_message)
+        
+        # Parse response to extract title and content
+        lines = response.strip().split('\n')
+        title = "Sihirli Masal"
+        content = response
+        
+        for i, line in enumerate(lines):
+            if line.lower().startswith('başlık:'):
+                title = line.replace('Başlık:', '').replace('başlık:', '').strip()
+                content = '\n'.join(lines[i+1:]).strip()
+                break
+        
+        return {"title": title, "content": content}
+        
+    except Exception as e:
+        logger.error(f"AI story generation error: {e}")
+        raise HTTPException(status_code=500, detail=f"Masal üretilirken hata oluştu: {str(e)}")
+
+
+async def generate_audio_for_story(text: str) -> tuple[str, int]:
+    """Generate TTS audio using OpenAI via Emergent integrations"""
+    
+    api_key = os.environ.get('EMERGENT_LLM_KEY')
+    if not api_key:
+        raise HTTPException(status_code=500, detail="TTS API key not configured")
+    
+    try:
+        tts = OpenAITextToSpeech(api_key=api_key)
+        
+        # Use fable voice - storytelling style
+        # Limit text to 4096 chars for TTS API
+        text_chunk = text[:4000] if len(text) > 4000 else text
+        
+        audio_base64 = await tts.generate_speech_base64(
+            text=text_chunk,
+            model="tts-1",
+            voice="fable",  # Expressive, storytelling voice
+            speed=0.9  # Slightly slower for children
+        )
+        
+        # Estimate duration (roughly 150 words per minute for slow speech)
+        word_count = len(text.split())
+        duration = int((word_count / 150) * 60)  # in seconds
+        
+        return audio_base64, duration
+        
+    except Exception as e:
+        logger.error(f"TTS generation error: {e}")
+        raise HTTPException(status_code=500, detail=f"Ses üretilirken hata oluştu: {str(e)}")
+
+
+# ============= API ENDPOINTS =============
+
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Masal Sepeti API'sine Hoş Geldiniz!"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/topics", response_model=List[TopicInfo])
+async def get_topics():
+    """Get all available story topics"""
+    return TOPICS
 
-# Include the router in the main app
+
+@api_router.get("/stories", response_model=List[StoryResponse])
+async def get_stories(topic: Optional[str] = None, search: Optional[str] = None, limit: int = 20):
+    """Get all stories, optionally filtered by topic or search query"""
+    
+    query = {}
+    
+    if topic:
+        query["topic"] = topic
+    
+    if search:
+        query["$or"] = [
+            {"title": {"$regex": search, "$options": "i"}},
+            {"content": {"$regex": search, "$options": "i"}},
+            {"theme": {"$regex": search, "$options": "i"}}
+        ]
+    
+    stories = await db.stories.find(query, {"_id": 0}).sort("play_count", -1).limit(limit).to_list(limit)
+    return stories
+
+
+@api_router.get("/stories/popular", response_model=List[StoryResponse])
+async def get_popular_stories(limit: int = 6):
+    """Get most popular stories by play count"""
+    stories = await db.stories.find({}, {"_id": 0}).sort("play_count", -1).limit(limit).to_list(limit)
+    return stories
+
+
+@api_router.get("/stories/{story_id}", response_model=StoryResponse)
+async def get_story(story_id: str):
+    """Get a single story by ID"""
+    story = await db.stories.find_one({"id": story_id}, {"_id": 0})
+    
+    if not story:
+        raise HTTPException(status_code=404, detail="Masal bulunamadı")
+    
+    return story
+
+
+@api_router.post("/stories/generate", response_model=StoryResponse)
+async def generate_story(story_input: StoryCreate):
+    """Generate a new story using AI and TTS"""
+    
+    logger.info(f"Generating story: topic={story_input.topic}, theme={story_input.theme}")
+    
+    # Check for duplicate themes
+    existing = await db.stories.find_one({
+        "topic": story_input.topic,
+        "theme": story_input.theme,
+        "age_group": story_input.age_group
+    })
+    
+    if existing:
+        logger.info("Similar story exists, generating a unique variation")
+    
+    # Generate story with AI
+    story_data = await generate_story_with_ai(
+        topic=story_input.topic,
+        theme=story_input.theme,
+        age_group=story_input.age_group,
+        character=story_input.character
+    )
+    
+    # Generate audio
+    audio_base64, duration = await generate_audio_for_story(story_data["content"])
+    
+    # Create story object
+    story = Story(
+        title=story_data["title"],
+        content=story_data["content"],
+        topic=story_input.topic,
+        theme=story_input.theme,
+        age_group=story_input.age_group,
+        character=story_input.character,
+        audio_base64=audio_base64,
+        duration=duration
+    )
+    
+    # Save to database
+    story_dict = story.model_dump()
+    await db.stories.insert_one(story_dict)
+    
+    # Remove _id for response
+    story_dict.pop('_id', None)
+    
+    logger.info(f"Story created: {story.id}")
+    return story_dict
+
+
+@api_router.post("/stories/{story_id}/play")
+async def increment_play_count(story_id: str):
+    """Increment the play count for a story"""
+    
+    result = await db.stories.update_one(
+        {"id": story_id},
+        {"$inc": {"play_count": 1}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Masal bulunamadı")
+    
+    return {"success": True, "message": "Dinleme sayısı güncellendi"}
+
+
+@api_router.delete("/stories/{story_id}")
+async def delete_story(story_id: str):
+    """Delete a story"""
+    
+    result = await db.stories.delete_one({"id": story_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Masal bulunamadı")
+    
+    return {"success": True, "message": "Masal silindi"}
+
+
+# Include router
 app.include_router(api_router)
 
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -77,12 +332,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
