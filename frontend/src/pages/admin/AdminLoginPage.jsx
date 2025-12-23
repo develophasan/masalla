@@ -24,9 +24,12 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${API}/admin/login`, formData, {
-        withCredentials: true
-      });
+      const response = await axios.post(`${API}/admin/login`, formData);
+      
+      // Store token in localStorage
+      if (response.data.session_token) {
+        localStorage.setItem('session_token', response.data.session_token);
+      }
       
       // Update auth context with admin user
       if (response.data.user) {
@@ -35,10 +38,8 @@ export default function AdminLoginPage() {
       
       toast.success('Admin girişi başarılı!');
       
-      // Small delay to ensure state is updated
-      setTimeout(() => {
-        navigate('/admin', { replace: true });
-      }, 100);
+      // Force reload to ensure auth state is fresh
+      window.location.href = '/admin';
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Giriş başarısız');
     } finally {
