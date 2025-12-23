@@ -31,6 +31,8 @@ export default function StoryCreatePage() {
   const [topics, setTopics] = useState([]);
   const [subtopics, setSubtopics] = useState([]);
   const [selectedSubtopic, setSelectedSubtopic] = useState(null);
+  const [showAd, setShowAd] = useState(false);
+  const [pendingSubmit, setPendingSubmit] = useState(false);
   
   const [formData, setFormData] = useState({
     topic_id: searchParams.get("topic") || "",
