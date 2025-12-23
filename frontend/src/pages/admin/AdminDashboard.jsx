@@ -13,7 +13,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -22,12 +22,12 @@ export default function AdminDashboard() {
   const [creditRequests, setCreditRequests] = useState([]);
 
   useEffect(() => {
-    if (user?.role !== 'admin') {
-      navigate('/admin/login');
-      return;
-    }
+    // Wait for auth to load
+    if (authLoading) return;
+    
+    // If no user or not admin, try fetching stats anyway (cookie might be valid)
     fetchStats();
-  }, [user]);
+  }, [authLoading]);
 
   const fetchStats = async () => {
     try {
