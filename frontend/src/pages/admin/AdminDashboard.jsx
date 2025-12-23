@@ -30,7 +30,7 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API}/admin/stats`, { withCredentials: true });
+      const response = await authAxios.get(`${API}/admin/stats`, );
       setStats(response.data);
     } catch (error) {
       // If unauthorized, redirect to admin login
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${API}/admin/users`, { withCredentials: true });
+      const response = await authAxios.get(`${API}/admin/users`, );
       setUsers(response.data.users);
     } catch (error) {
       toast.error('Kullanıcılar yüklenemedi');
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
 
   const fetchStories = async () => {
     try {
-      const response = await axios.get(`${API}/admin/stories`, { withCredentials: true });
+      const response = await authAxios.get(`${API}/admin/stories`, );
       setStories(response.data.stories);
     } catch (error) {
       toast.error('Masallar yüklenemedi');
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
 
   const fetchCreditRequests = async () => {
     try {
-      const response = await axios.get(`${API}/admin/credit-requests`, { withCredentials: true });
+      const response = await authAxios.get(`${API}/admin/credit-requests`, );
       setCreditRequests(response.data);
     } catch (error) {
       toast.error('Talepler yüklenemedi');
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
 
   const handleUpdateCredits = async (userId, credits) => {
     try {
-      await axios.put(`${API}/admin/users/${userId}`, { credits: parseInt(credits) }, { withCredentials: true });
+      await authAxios.put(`${API}/admin/users/${userId}`, { credits: parseInt(credits) }, );
       toast.success('Kredi güncellendi');
       fetchUsers();
     } catch (error) {
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
   const handleDeleteUser = async (userId) => {
     if (!window.confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) return;
     try {
-      await axios.delete(`${API}/admin/users/${userId}`, { withCredentials: true });
+      await authAxios.delete(`${API}/admin/users/${userId}`, );
       toast.success('Kullanıcı silindi');
       fetchUsers();
     } catch (error) {
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
   const handleDeleteStory = async (storyId) => {
     if (!window.confirm('Bu masalı silmek istediğinizden emin misiniz?')) return;
     try {
-      await axios.delete(`${API}/admin/stories/${storyId}`, { withCredentials: true });
+      await authAxios.delete(`${API}/admin/stories/${storyId}`, );
       toast.success('Masal silindi');
       fetchStories();
     } catch (error) {
@@ -112,9 +112,9 @@ export default function AdminDashboard() {
 
   const handleApproveRequest = async (requestId, userId, credits) => {
     try {
-      await axios.put(`${API}/admin/credit-requests/${requestId}`, 
+      await authAxios.put(`${API}/admin/credit-requests/${requestId}`, 
         { status: 'approved', credits },
-        { withCredentials: true }
+        
       );
       toast.success('Talep onaylandı');
       fetchCreditRequests();
@@ -126,9 +126,9 @@ export default function AdminDashboard() {
 
   const handleRejectRequest = async (requestId) => {
     try {
-      await axios.put(`${API}/admin/credit-requests/${requestId}`, 
+      await authAxios.put(`${API}/admin/credit-requests/${requestId}`, 
         { status: 'rejected' },
-        { withCredentials: true }
+        
       );
       toast.success('Talep reddedildi');
       fetchCreditRequests();
