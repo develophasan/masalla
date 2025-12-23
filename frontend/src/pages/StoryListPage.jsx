@@ -116,28 +116,8 @@ export default function StoryListPage() {
         message="Masallar aranıyor..."
       />
 
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="back-button" data-testid="back-button">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="hidden sm:inline">Ana Sayfa</span>
-            </Link>
-            
-            <Link to="/" className="flex items-center gap-2" data-testid="logo-link">
-              <BookOpen className="w-6 h-6 text-violet-500" />
-              <span className="text-xl font-bold text-violet-600">Masal Sepeti</span>
-            </Link>
-            
-            <Link to="/create" data-testid="create-story-btn">
-              <Button className="bg-violet-500 hover:bg-violet-600 rounded-full">
-                Masal Ekle
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Navbar */}
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Title */}
