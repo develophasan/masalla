@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth, authAxios } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import { 
   User, Mail, Phone, Edit2, Save, X, Coins, Plus, 
