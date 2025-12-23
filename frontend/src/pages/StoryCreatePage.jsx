@@ -138,6 +138,32 @@ export default function StoryCreatePage() {
 
   const selectedTopic = topics.find(t => t.id === formData.topic_id);
 
+  // Redirect to login if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white">
+        <Navbar />
+        <div className="max-w-md mx-auto px-4 py-20 text-center">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center">
+            <Sparkles className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-800 mb-3">Üyelik Gerekli</h1>
+          <p className="text-slate-500 mb-6">
+            Masal oluşturmak için üye olmanız veya giriş yapmanız gerekmektedir.
+          </p>
+          <div className="flex gap-3 justify-center">
+            <Link to="/login">
+              <Button className="bg-violet-500 hover:bg-violet-600">Giriş Yap</Button>
+            </Link>
+            <Link to="/register">
+              <Button variant="outline">Kayıt Ol</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white">
       {/* Interstitial Ad */}
