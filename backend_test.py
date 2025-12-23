@@ -107,7 +107,37 @@ class MasalSepetiAPITester:
         
         return success
 
-    def test_get_stories(self):
+    def test_get_topic_detail(self):
+        """Test GET /topics/{topic_id} - Should return topic detail with subtopics and kazanım"""
+        # Test with a known topic ID
+        success, data = self.run_test("Get Topic Detail", "GET", "topics/degerler", 200)
+        
+        if success and data:
+            # Validate topic detail structure
+            required_fields = ['id', 'name', 'icon', 'color', 'description', 'image', 'subtopics']
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if missing_fields:
+                print(f"   ⚠ Missing fields in topic detail: {missing_fields}")
+            else:
+                print("   ✓ Topic detail structure correct")
+            
+            # Check subtopics
+            subtopics = data.get('subtopics', [])
+            if subtopics:
+                print(f"   ✓ Found {len(subtopics)} subtopics")
+                # Check first subtopic structure
+                if subtopics[0]:
+                    subtopic_fields = ['id', 'name', 'kazanim']
+                    missing_subtopic_fields = [field for field in subtopic_fields if field not in subtopics[0]]
+                    if missing_subtopic_fields:
+                        print(f"   ⚠ Missing fields in subtopic: {missing_subtopic_fields}")
+                    else:
+                        print("   ✓ Subtopic structure with kazanım correct")
+            else:
+                print("   ⚠ No subtopics found")
+        
+        return success
         """Test GET /stories endpoint"""
         return self.run_test("Get All Stories", "GET", "stories", 200)
 
