@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { useAuth } from '@/contexts/AuthContext';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
+  const { updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -25,8 +27,18 @@ export default function AdminLoginPage() {
       const response = await axios.post(`${API}/admin/login`, formData, {
         withCredentials: true
       });
+      
+      // Update auth context with admin user
+      if (response.data.user) {
+        updateUser(response.data.user);
+      }
+      
       toast.success('Admin girişi başarılı!');
-      navigate('/admin');
+      
+      // Small delay to ensure state is updated
+      setTimeout(() => {
+        navigate('/admin', { replace: true });
+      }, 100);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Giriş başarısız');
     } finally {
