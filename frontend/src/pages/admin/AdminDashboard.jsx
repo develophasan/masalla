@@ -24,9 +24,16 @@ export default function AdminDashboard() {
     // Wait for auth to load
     if (authLoading) return;
     
-    // If no user or not admin, try fetching stats anyway (cookie might be valid)
+    // Check if user exists and is admin - early redirect for better UX
+    if (user && user.role !== 'admin') {
+      toast.error('Admin yetkisi gerekli');
+      navigate('/admin/login');
+      return;
+    }
+    
+    // If no user, try fetching stats (token might be valid in localStorage)
     fetchStats();
-  }, [authLoading]);
+  }, [authLoading, user, navigate]);
 
   const fetchStats = async () => {
     try {
