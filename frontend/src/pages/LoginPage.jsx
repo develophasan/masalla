@@ -38,9 +38,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2">
-            <BookOpen className="w-10 h-10 text-violet-500" />
-            <span className="text-2xl font-bold text-violet-600">Masal Sepeti</span>
+          <Link to="/" className="inline-flex flex-col items-center gap-2">
+            <img src="/logo.svg" alt="Masal Sepeti" className="h-20 w-auto" />
+            <div className="flex items-center gap-1">
+              <span className="text-2xl font-black bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">
+                MASAL
+              </span>
+              <span className="text-2xl font-black bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 bg-clip-text text-transparent">
+                SEPETİ
+              </span>
+            </div>
           </Link>
           <h1 className="mt-6 text-2xl font-bold text-slate-800">Giriş Yap</h1>
           <p className="mt-2 text-slate-500">Hesabınıza giriş yapın</p>
