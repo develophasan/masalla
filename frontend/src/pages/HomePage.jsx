@@ -78,11 +78,14 @@ export default function HomePage() {
     if (cached) {
       try {
         const { data, timestamp } = JSON.parse(cached);
-        // Cache valid for 5 minutes
-        if (Date.now() - timestamp < 300000) {
+        // Cache valid for 5 minutes and data must be array
+        if (Date.now() - timestamp < 300000 && Array.isArray(data)) {
           return data;
         }
-      } catch (e) {}
+      } catch (e) {
+        // Invalid cache, clear it
+        localStorage.removeItem('masal_popular_cache');
+      }
     }
     return [];
   });
