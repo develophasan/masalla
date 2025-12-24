@@ -290,7 +290,7 @@ export default function StoryListPage() {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {stories.map((story, index) => (
+              {Array.isArray(stories) && stories.map((story, index) => (
                 <StoryCard
                   key={story.id}
                   story={story}
