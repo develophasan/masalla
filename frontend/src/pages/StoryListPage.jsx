@@ -102,7 +102,9 @@ export default function StoryListPage() {
             setLoading(false);
             return;
           }
-        } catch (e) {}
+        } catch (e) {
+          // Invalid cache, ignore
+        }
       }
     }
     
