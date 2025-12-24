@@ -10,8 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from '@/config/api';
 
 export default function ProfilePage() {
   const { user, updateUser, refreshUser, isAuthenticated } = useAuth();

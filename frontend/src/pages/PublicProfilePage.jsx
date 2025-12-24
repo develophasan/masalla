@@ -3,8 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { User, BookOpen, Clock, Play, Calendar, Loader2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from '@/config/api';
 
 export default function PublicProfilePage() {
   const { userId } = useParams();

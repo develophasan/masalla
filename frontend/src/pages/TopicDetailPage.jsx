@@ -4,8 +4,7 @@ import axios from "axios";
 import { ArrowLeft, BookOpen, ChevronRight, Sparkles, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from "@/config/api";
 
 export default function TopicDetailPage() {
   const { topicId } = useParams();
