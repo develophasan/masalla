@@ -5,7 +5,7 @@ nixPkgs = ["nodejs_20", "yarn"]
 cmds = ["yarn install"]
 
 [phases.build]
-cmds = ["CI=false yarn build"]
+cmds = ["CI=false REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL yarn build"]
 
 [start]
 cmd = "npx serve -s build -l ${PORT:-3000}"
