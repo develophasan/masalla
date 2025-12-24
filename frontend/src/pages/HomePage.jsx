@@ -131,30 +131,44 @@ export default function HomePage() {
       let idx = 0;
       
       if (needTopics) {
-        setTopics(responses[idx].data);
-        try {
-          localStorage.setItem('masal_topics_cache', JSON.stringify({
-            data: responses[idx].data,
-            timestamp: Date.now()
-          }));
-        } catch (e) {
-          console.warn('Cache quota exceeded, skipping cache');
+        const topicsData = responses[idx].data;
+        // Validate that data is an array
+        if (Array.isArray(topicsData)) {
+          setTopics(topicsData);
+          try {
+            localStorage.setItem('masal_topics_cache', JSON.stringify({
+              data: topicsData,
+              timestamp: Date.now()
+            }));
+          } catch (e) {
+            console.warn('Cache quota exceeded, skipping cache');
+          }
+        } else {
+          console.error('Topics API did not return an array:', topicsData);
+          setTopics([]);
         }
         idx++;
       }
       
       if (needStories) {
-        setPopularStories(responses[idx].data);
-        // Cache without audio_base64 to save space
-        try {
-          const cacheData = responses[idx].data.map(s => ({...s, audio_base64: null}));
-          localStorage.setItem('masal_popular_cache', JSON.stringify({
-            data: cacheData,
-            timestamp: Date.now()
-          }));
-        } catch (e) {
-          // localStorage quota exceeded - ignore
-          console.warn('Cache quota exceeded, skipping cache');
+        const storiesData = responses[idx].data;
+        // Validate that data is an array
+        if (Array.isArray(storiesData)) {
+          setPopularStories(storiesData);
+          // Cache without audio_base64 to save space
+          try {
+            const cacheData = storiesData.map(s => ({...s, audio_base64: null}));
+            localStorage.setItem('masal_popular_cache', JSON.stringify({
+              data: cacheData,
+              timestamp: Date.now()
+            }));
+          } catch (e) {
+            // localStorage quota exceeded - ignore
+            console.warn('Cache quota exceeded, skipping cache');
+          }
+        } else {
+          console.error('Stories API did not return an array:', storiesData);
+          setPopularStories([]);
         }
       }
     } catch (error) {
