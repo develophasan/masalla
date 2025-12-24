@@ -279,6 +279,20 @@ async def require_admin(request: Request) -> dict:
         raise HTTPException(status_code=403, detail="Admin yetkisi gerekli")
     return user
 
+
+# ============= HEALTH CHECK =============
+
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for Railway"""
+    try:
+        # Check MongoDB connection
+        await db.command("ping")
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return {"status": "unhealthy", "database": str(e)}
+
+
 # ============= AI HELPERS =============
 
 async def generate_story_with_ai(
