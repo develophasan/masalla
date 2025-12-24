@@ -81,3 +81,7 @@ android-sdk/
 
 # Note: .env files are managed by Emergent deployment system
 # Do not block them in gitignore for deployment to work
+-e 
+# Environment files
+*.env
+*.env.*
