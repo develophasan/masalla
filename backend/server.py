@@ -303,9 +303,9 @@ async def generate_story_with_ai(
     character: Optional[str] = None,
     kazanim: Optional[str] = None
 ) -> dict:
-    """Generate a fairy tale using OpenAI via Emergent integrations"""
+    """Generate a fairy tale using OpenAI"""
     
-    api_key = os.environ.get('EMERGENT_LLM_KEY')
+    api_key = os.environ.get('OPENAI_API_KEY') or os.environ.get('EMERGENT_LLM_KEY')
     if not api_key:
         raise HTTPException(status_code=500, detail="AI API key not configured")
     
@@ -345,19 +345,24 @@ Yaş Grubu: {age_group}
 Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
     try:
-        chat = LlmChat(
-            api_key=api_key,
-            session_id=str(uuid.uuid4()),
-            system_message=system_message
-        ).with_model("openai", "gpt-4o")
+        client = AsyncOpenAI(api_key=api_key)
         
-        user_message = UserMessage(text=user_prompt)
-        response = await chat.send_message(user_message)
+        response = await client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.8,
+            max_tokens=2000
+        )
+        
+        result = response.choices[0].message.content
         
         # Parse response to extract title and content
-        lines = response.strip().split('\n')
+        lines = result.strip().split('\n')
         title = "Sihirli Masal"
-        content = response
+        content = result
         
         for i, line in enumerate(lines):
             if line.lower().startswith('başlık:'):
