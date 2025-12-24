@@ -10,8 +10,7 @@ import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/contexts/AuthContext";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from "@/config/api";
 
 export default function StoryDetailPage() {
   const { id } = useParams();

@@ -17,8 +17,7 @@ import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
 import Navbar from "@/components/Navbar";
 import { useAuth, authAxios } from "@/contexts/AuthContext";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from "@/config/api";
 
 const AGE_GROUPS = [
   { id: "4-5", name: "4-5 yaş" },
