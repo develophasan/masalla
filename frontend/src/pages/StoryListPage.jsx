@@ -37,12 +37,14 @@ export default function StoryListPage() {
     if (cached) {
       try {
         const { data, timestamp, params } = JSON.parse(cached);
-        // Only use cache for default view (no filters)
+        // Only use cache for default view (no filters) and data must be array
         if (!searchParams.get("topic_id") && !searchParams.get("search") && 
-            Date.now() - timestamp < CACHE_DURATION) {
+            Date.now() - timestamp < CACHE_DURATION && Array.isArray(data)) {
           return data;
         }
-      } catch (e) {}
+      } catch (e) {
+        localStorage.removeItem(CACHE_KEY);
+      }
     }
     return [];
   });
