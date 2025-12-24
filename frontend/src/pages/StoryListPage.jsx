@@ -238,7 +238,7 @@ export default function StoryListPage() {
             </SelectTrigger>
             <SelectContent className="max-h-80">
               <SelectItem value="all">Tüm Konular</SelectItem>
-              {topics.map((topic) => (
+              {Array.isArray(topics) && topics.map((topic) => (
                 <SelectItem key={topic.id} value={topic.id}>
                   {topic.name}
                 </SelectItem>
