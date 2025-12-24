@@ -1254,9 +1254,11 @@ ALLOWED_ORIGINS = [
     "http://masal.space",
     "https://www.masal.space",
     "http://www.masal.space",
-    # Railway domains - update these after deployment
+    # Railway domains
     "https://masalsepeti-frontend.up.railway.app",
     "https://masalsepeti-backend.up.railway.app",
+    "https://boevh8zj.up.railway.app",
+    "https://capable-solace.up.railway.app",
 ]
 
 # Also allow origins from environment variable
