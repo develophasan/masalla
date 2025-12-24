@@ -16,8 +16,7 @@ import AdInterstitial from "@/components/AdInterstitial";
 import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+import { API } from "@/config/api";
 
 const SORT_OPTIONS = [
   { id: "popular", name: "En Popüler" },
