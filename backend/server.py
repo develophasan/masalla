@@ -19,7 +19,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Emergent integrations for text generation
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+from openai import AsyncOpenAI
 
 # ElevenLabs for Turkish TTS
 from elevenlabs import ElevenLabs
