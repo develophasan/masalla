@@ -71,13 +71,15 @@ export default function StoryListPage() {
       const cached = localStorage.getItem('masal_topics_cache');
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_DURATION) {
+        if (Date.now() - timestamp < CACHE_DURATION && Array.isArray(data)) {
           setTopics(data);
           return;
         }
       }
       const response = await axios.get(`${API}/topics`);
-      setTopics(response.data);
+      if (Array.isArray(response.data)) {
+        setTopics(response.data);
+      }
     } catch (error) {
       console.error("Error fetching topics:", error);
     }
