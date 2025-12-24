@@ -114,10 +114,11 @@ export default function StoryListPage() {
       params.append("sort_by", sort);
       
       const response = await axios.get(`${API}/stories?${params.toString()}`);
-      setStories(response.data);
+      const storiesData = Array.isArray(response.data) ? response.data : [];
+      setStories(storiesData);
       
       // Cache default view (without audio to save space)
-      if (isDefaultView) {
+      if (isDefaultView && storiesData.length > 0) {
         try {
           const cacheData = response.data.map(s => ({...s, audio_base64: null}));
           localStorage.setItem(CACHE_KEY, JSON.stringify({
