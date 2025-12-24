@@ -120,7 +120,7 @@ export default function StoryListPage() {
       // Cache default view (without audio to save space)
       if (isDefaultView && storiesData.length > 0) {
         try {
-          const cacheData = response.data.map(s => ({...s, audio_base64: null}));
+          const cacheData = storiesData.map(s => ({...s, audio_base64: null}));
           localStorage.setItem(CACHE_KEY, JSON.stringify({
             data: cacheData,
             timestamp: Date.now()
