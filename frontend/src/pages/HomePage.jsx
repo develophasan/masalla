@@ -60,11 +60,14 @@ export default function HomePage() {
     if (cached) {
       try {
         const { data, timestamp } = JSON.parse(cached);
-        // Cache valid for 1 hour
-        if (Date.now() - timestamp < 3600000) {
+        // Cache valid for 1 hour and data must be array
+        if (Date.now() - timestamp < 3600000 && Array.isArray(data)) {
           return data;
         }
-      } catch (e) {}
+      } catch (e) {
+        // Invalid cache, clear it
+        localStorage.removeItem('masal_topics_cache');
+      }
     }
     return [];
   });
