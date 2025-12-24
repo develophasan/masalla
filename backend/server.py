@@ -1234,8 +1234,16 @@ ALLOWED_ORIGINS = [
     "https://masal.space",
     "http://masal.space",
     "https://www.masal.space",
-    "http://www.masal.space"
+    "http://www.masal.space",
+    # Railway domains - update these after deployment
+    "https://masalsepeti-frontend.up.railway.app",
+    "https://masalsepeti-backend.up.railway.app",
 ]
+
+# Also allow origins from environment variable
+import os
+extra_origins = os.environ.get("CORS_ORIGINS", "").split(",")
+ALLOWED_ORIGINS.extend([o.strip() for o in extra_origins if o.strip()])
 
 app.add_middleware(
     CORSMiddleware,
