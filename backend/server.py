@@ -1255,8 +1255,8 @@ ALLOWED_ORIGINS = [
     "https://www.masal.space",
     "http://www.masal.space",
     # Railway domains
-    "https://masalsepeti-frontend.up.railway.app",
-    "https://masalsepeti-backend.up.railway.app",
+    "https://masalla-production.up.railway.app",
+    "https://capable-solace-production.up.railway.app",
     "https://boevh8zj.up.railway.app",
     "https://capable-solace.up.railway.app",
 ]
