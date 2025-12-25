@@ -380,8 +380,21 @@ async def generate_story_with_ai(
 ) -> dict:
     """Generate a fairy tale using OpenAI"""
     
-    api_key = os.environ.get('OPENAI_API_KEY') or os.environ.get('EMERGENT_LLM_KEY')
-    if not api_key:
+    # Check for Emergent LLM key first, then OpenAI
+    emergent_key = os.environ.get('EMERGENT_LLM_KEY')
+    openai_key = os.environ.get('OPENAI_API_KEY')
+    
+    if emergent_key:
+        # Use Emergent LLM integration
+        client = AsyncOpenAI(
+            api_key=emergent_key,
+            base_url="https://api.emergentmethods.ai/v1"
+        )
+        api_key = emergent_key
+    elif openai_key:
+        client = AsyncOpenAI(api_key=openai_key)
+        api_key = openai_key
+    else:
         raise HTTPException(status_code=500, detail="AI API key not configured")
     
     # Create prompt for Turkish fairy tale
