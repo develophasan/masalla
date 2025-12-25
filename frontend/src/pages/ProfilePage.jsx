@@ -249,58 +249,116 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* User Stories */}
+        {/* Tabs for Stories and Favorites */}
         <div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-800">Masallarım</h2>
-            <Link to="/create">
-              <Button variant="outline" size="sm">
-                <Plus className="w-4 h-4 mr-2" />
-                Yeni Masal
-              </Button>
-            </Link>
+          <div className="flex items-center gap-4 mb-6 border-b border-slate-200">
+            <button
+              onClick={() => setActiveTab('stories')}
+              className={`pb-3 px-2 font-medium transition-colors ${
+                activeTab === 'stories' 
+                  ? 'text-violet-600 border-b-2 border-violet-600' 
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <BookOpen className="w-4 h-4 inline mr-2" />
+              Masallarım ({stories.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('favorites')}
+              className={`pb-3 px-2 font-medium transition-colors ${
+                activeTab === 'favorites' 
+                  ? 'text-red-500 border-b-2 border-red-500' 
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Heart className="w-4 h-4 inline mr-2" />
+              Favorilerim ({favorites.length})
+            </button>
+            <div className="flex-1" />
+            {activeTab === 'stories' && (
+              <Link to="/create">
+                <Button variant="outline" size="sm">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Yeni Masal
+                </Button>
+              </Link>
+            )}
           </div>
 
-          {loadingStories ? (
-            <div className="text-center py-8">
-              <Loader2 className="w-8 h-8 text-violet-500 animate-spin mx-auto" />
-            </div>
-          ) : stories.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
-              <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-500">Henüz masal oluşturmadınız</p>
-              <Link to="/create" className="text-violet-600 hover:text-violet-700 font-medium text-sm">
-                İlk masalınızı oluşturun
-              </Link>
-            </div>
-          ) : (
-            <div className="grid gap-4">
-              {stories.map((story) => (
-                <div key={story.id} className="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
-                  <Link to={`/stories/${story.id}`} className="flex-1">
-                    <h3 className="font-medium text-slate-800 hover:text-violet-600">{story.title}</h3>
-                    <div className="flex items-center gap-4 mt-1 text-sm text-slate-500">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {story.duration ? `${Math.ceil(story.duration / 60)} dk` : '~5 dk'}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Play className="w-4 h-4" />
-                        {story.play_count} dinleme
-                      </span>
-                    </div>
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-400 hover:text-red-600 hover:bg-red-50"
-                    onClick={() => handleDeleteStory(story.id)}
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </Button>
+          {/* Stories Tab */}
+          {activeTab === 'stories' && (
+            <>
+              {loadingStories ? (
+                <div className="text-center py-8">
+                  <Loader2 className="w-8 h-8 text-violet-500 animate-spin mx-auto" />
                 </div>
-              ))}
-            </div>
+              ) : stories.length === 0 ? (
+                <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
+                  <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500">Henüz masal oluşturmadınız</p>
+                  <Link to="/create" className="text-violet-600 hover:text-violet-700 font-medium text-sm">
+                    İlk masalınızı oluşturun
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {stories.map((story) => (
+                    <div key={story.id} className="bg-white rounded-xl p-4 border border-slate-100 flex items-center justify-between">
+                      <Link to={`/stories/${story.id}`} className="flex-1">
+                        <h3 className="font-medium text-slate-800 hover:text-violet-600">{story.title}</h3>
+                        <div className="flex items-center gap-4 mt-1 text-sm text-slate-500">
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {story.duration ? `${Math.ceil(story.duration / 60)} dk` : '~5 dk'}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Play className="w-4 h-4" />
+                            {story.play_count} dinleme
+                          </span>
+                        </div>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-red-400 hover:text-red-600 hover:bg-red-50"
+                        onClick={() => handleDeleteStory(story.id)}
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Favorites Tab */}
+          {activeTab === 'favorites' && (
+            <>
+              {loadingFavorites ? (
+                <div className="text-center py-8">
+                  <Loader2 className="w-8 h-8 text-red-500 animate-spin mx-auto" />
+                </div>
+              ) : favorites.length === 0 ? (
+                <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
+                  <Heart className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500">Henüz favori masalınız yok</p>
+                  <Link to="/stories" className="text-violet-600 hover:text-violet-700 font-medium text-sm">
+                    Masalları keşfedin
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {favorites.map((story) => (
+                    <StoryCard 
+                      key={story.id} 
+                      story={story} 
+                      showFavorite={false}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>
