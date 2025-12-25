@@ -720,8 +720,19 @@ async def generate_story(story_input: StoryCreate, request: Request):
         kazanim=kazanim
     )
     
-    # Generate audio
-    audio_base64, duration = await generate_audio_for_story(story_data["content"])
+    # Generate audio (with fallback if quota exceeded)
+    audio_base64 = None
+    duration = None
+    audio_error = None
+    
+    try:
+        audio_base64, duration = await generate_audio_for_story(story_data["content"])
+    except HTTPException as e:
+        if e.status_code == 503:  # Quota exceeded
+            audio_error = "Ses kotası doldu. Masal sessiz kaydedildi."
+            logger.warning(f"Audio quota exceeded, saving story without audio")
+        else:
+            raise e
     
     # Create story object
     story = Story(
@@ -759,6 +770,10 @@ async def generate_story(story_input: StoryCreate, request: Request):
     
     # Remove _id for response
     story_dict.pop('_id', None)
+    
+    # Add warning if audio failed
+    if audio_error:
+        story_dict["warning"] = audio_error
     
     logger.info(f"Story created: {story.id}")
     return story_dict
