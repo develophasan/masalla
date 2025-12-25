@@ -433,8 +433,6 @@ Yaş Grubu: {age_group}
 Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
     try:
-        client = AsyncOpenAI(api_key=api_key)
-        
         response = await client.chat.completions.create(
             model="gpt-4o",
             messages=[
