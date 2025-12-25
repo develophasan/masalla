@@ -1418,6 +1418,15 @@ async def admin_get_stats(request: Request):
     # Recent users
     recent_users = await db.users.find(
         {"role": "user"},
+        {"_id": 0, "password_hash": 0}
+    ).sort("created_at", -1).limit(5).to_list(5)
+    
+    return {
+        "total_users": total_users,
+        "total_stories": total_stories,
+        "pending_requests": pending_requests,
+        "recent_users": recent_users
+    }
 
 
 @api_router.post("/admin/migrate-slugs")
@@ -1446,15 +1455,6 @@ async def admin_migrate_slugs(request: Request):
         "success": True, 
         "message": f"{updated_count} masal için slug oluşturuldu",
         "updated_count": updated_count
-    }
-        {"_id": 0, "password_hash": 0}
-    ).sort("created_at", -1).limit(5).to_list(5)
-    
-    return {
-        "total_users": total_users,
-        "total_stories": total_stories,
-        "pending_requests": pending_requests,
-        "recent_users": recent_users
     }
 
 
