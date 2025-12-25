@@ -1505,6 +1505,16 @@ async def admin_migrate_slugs(request: Request):
     }
 
 
+# ============= ADS.TXT REDIRECT FOR EZOIC =============
+@app.get("/ads.txt")
+async def ads_txt_redirect():
+    """Redirect ads.txt to Ezoic's ads.txt manager"""
+    return RedirectResponse(
+        url="https://srv.adstxtmanager.com/19390/masal.space",
+        status_code=301
+    )
+
+
 # Include router
 app.include_router(api_router)
 
