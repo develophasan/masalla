@@ -658,6 +658,11 @@ export default function StoryDetailPage() {
           </div>
         )}
 
+        {/* Ad Banner after story content */}
+        <div className="my-8">
+          <AdBanner placeholderId="102" className="rounded-xl overflow-hidden" />
+        </div>
+
         {/* Story Info */}
         <div className="mt-8 p-6 bg-gradient-to-br from-violet-50 to-pink-50 rounded-2xl border border-violet-100 animate-slide-up stagger-3">
           <h3 className="font-bold text-slate-800 mb-4">Masal Bilgileri</h3>
