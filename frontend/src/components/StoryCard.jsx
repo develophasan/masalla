@@ -74,9 +74,12 @@ export const StoryCard = ({ story, className, style, showFavorite = true }) => {
     }
   };
 
+  // Use slug-based URL if available, fallback to id
+  const storyUrl = story.slug ? `/masal/${story.slug}` : `/stories/${story.id}`;
+
   return (
     <Link
-      to={`/stories/${story.id}`}
+      to={storyUrl}
       className={cn("story-card group block relative", className)}
       style={style}
       data-testid={`story-card-${story.id}`}
