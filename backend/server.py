@@ -805,14 +805,20 @@ async def google_session(request: Request, response: Response):
     existing_user = await db.users.find_one({"email": google_data["email"]}, {"_id": 0})
     
     if existing_user:
-        # Update existing user
+        # Update existing user - preserve user-edited fields
+        update_data = {
+            "last_login": datetime.now(timezone.utc).isoformat()
+        }
+        # Only update picture from Google (usually user wants latest profile pic)
+        if google_data.get("picture"):
+            update_data["picture"] = google_data.get("picture")
+        # Only update name if user hasn't edited it (still matches Google name or is empty)
+        if not existing_user.get("name") or existing_user.get("name") == google_data.get("name"):
+            update_data["name"] = google_data.get("name", existing_user.get("name"))
+        
         await db.users.update_one(
             {"email": google_data["email"]},
-            {"$set": {
-                "name": google_data.get("name", existing_user.get("name")),
-                "picture": google_data.get("picture"),
-                "last_login": datetime.now(timezone.utc).isoformat()
-            }}
+            {"$set": update_data}
         )
         user_id = existing_user["user_id"]
     else:
