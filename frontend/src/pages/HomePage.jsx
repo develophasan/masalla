@@ -191,6 +191,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen pb-20 sm:pb-0">
+      {/* Welcome Modal for First Time Visitors */}
+      <WelcomeModal />
+      
       {/* Navbar */}
       <Navbar />
 
