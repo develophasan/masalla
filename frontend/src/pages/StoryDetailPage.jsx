@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
+import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
 import { useAuth, authAxios } from "@/contexts/AuthContext";
 import { API } from "@/config/api";
