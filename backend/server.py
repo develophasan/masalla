@@ -62,6 +62,7 @@ class Story(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    slug: Optional[str] = None  # SEO-friendly URL slug
     title: str
     content: str
     topic_id: str
