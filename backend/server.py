@@ -378,14 +378,13 @@ async def generate_story_with_ai(
     character: Optional[str] = None,
     kazanim: Optional[str] = None
 ) -> dict:
-    """Generate a fairy tale using OpenAI or Emergent LLM"""
+    """Generate a fairy tale using OpenAI API"""
     
-    # Check for API keys - OpenAI first, then Emergent
+    # Check for OpenAI API key
     openai_key = os.environ.get('OPENAI_API_KEY')
-    emergent_key = os.environ.get('EMERGENT_LLM_KEY')
     
-    if not openai_key and not emergent_key:
-        raise HTTPException(status_code=500, detail="AI API key not configured")
+    if not openai_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY yapılandırılmamış")
     
     # Create prompt for Turkish fairy tale
     character_text = f"Ana karakter: {character}" if character else "Ana karakteri sen belirle (çocuk dostu bir karakter)"
@@ -423,31 +422,19 @@ Yaş Grubu: {age_group}
 Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
     try:
-        if openai_key:
-            # Use direct OpenAI API
-            from openai import AsyncOpenAI
-            client = AsyncOpenAI(api_key=openai_key)
-            
-            response = await client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=0.8,
-                max_tokens=2000
-            )
-            result = response.choices[0].message.content
-        else:
-            # Use Emergent LLM integration
-            chat = LlmChat(
-                api_key=emergent_key,
-                session_id=str(uuid.uuid4()),
-                system_message=system_message
-            ).with_model("openai", "gpt-4o")
-            
-            user_message = UserMessage(text=user_prompt)
-            result = await chat.send_message(user_message)
+        # Use direct OpenAI API
+        client = AsyncOpenAI(api_key=openai_key)
+        
+        response = await client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.8,
+            max_tokens=2000
+        )
+        result = response.choices[0].message.content
         
         # Parse response to extract title and content
         lines = result.strip().split('\n')
