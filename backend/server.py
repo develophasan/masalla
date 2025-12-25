@@ -21,8 +21,8 @@ import secrets
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# Emergent integrations for text generation
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# OpenAI for text generation
+from openai import AsyncOpenAI
 
 # Google Cloud TTS for Turkish voice
 from google.cloud import texttospeech
