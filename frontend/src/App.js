@@ -59,14 +59,16 @@ function AppRouter() {
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRouter />
-        </AuthProvider>
-      </BrowserRouter>
-      <Toaster position="top-center" richColors />
-    </div>
+    <HelmetProvider>
+      <div className="min-h-screen flex flex-col">
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
+        </BrowserRouter>
+        <Toaster position="top-center" richColors />
+      </div>
+    </HelmetProvider>
   );
 }
 
