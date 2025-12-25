@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Play, Clock, Heart, GraduationCap, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth, authAxios } from "@/contexts/AuthContext";
+import { API } from "@/config/api";
 
 const TOPIC_COLORS = {
   vucudumuz: "from-rose-400 to-pink-500",
@@ -20,8 +23,48 @@ const TOPIC_COLORS = {
   ozel: "from-slate-400 to-gray-500",
 };
 
-export const StoryCard = ({ story, className, style }) => {
+export const StoryCard = ({ story, className, style, showFavorite = true }) => {
+  const { isAuthenticated } = useAuth();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
   const topicColor = TOPIC_COLORS[story.topic_id] || "from-violet-400 to-pink-500";
+
+  useEffect(() => {
+    if (isAuthenticated && showFavorite) {
+      checkFavorite();
+    }
+  }, [isAuthenticated, story.id]);
+
+  const checkFavorite = async () => {
+    try {
+      const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
+      setIsFavorite(response.data.is_favorite);
+    } catch (error) {
+      // Ignore errors
+    }
+  };
+
+  const toggleFavorite = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!isAuthenticated || favoriteLoading) return;
+    
+    setFavoriteLoading(true);
+    try {
+      if (isFavorite) {
+        await authAxios.delete(`${API}/favorites/${story.id}`);
+        setIsFavorite(false);
+      } else {
+        await authAxios.post(`${API}/favorites/${story.id}`);
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error("Favorite toggle error:", error);
+    } finally {
+      setFavoriteLoading(false);
+    }
+  };
 
   const handleCreatorClick = (e) => {
     e.preventDefault();
@@ -34,10 +77,29 @@ export const StoryCard = ({ story, className, style }) => {
   return (
     <Link
       to={`/stories/${story.id}`}
-      className={cn("story-card group block", className)}
+      className={cn("story-card group block relative", className)}
       style={style}
       data-testid={`story-card-${story.id}`}
     >
+      {/* Favorite Button */}
+      {showFavorite && isAuthenticated && (
+        <button
+          onClick={toggleFavorite}
+          className={cn(
+            "absolute top-2 right-2 z-10 p-2 rounded-full transition-all",
+            isFavorite 
+              ? "bg-red-100 text-red-500" 
+              : "bg-white/80 text-slate-400 hover:text-red-500 hover:bg-red-50"
+          )}
+          disabled={favoriteLoading}
+        >
+          <Heart 
+            className={cn("w-5 h-5 transition-transform", favoriteLoading && "animate-pulse")} 
+            fill={isFavorite ? "currentColor" : "none"}
+          />
+        </button>
+      )}
+
       {/* Top Section with Gradient */}
       <div className={cn("h-3 rounded-t-xl bg-gradient-to-r -mx-6 -mt-6 mb-4", topicColor)} />
 
@@ -83,7 +145,7 @@ export const StoryCard = ({ story, className, style }) => {
               {story.duration ? `${Math.ceil(story.duration / 60)} dk` : "~5 dk"}
             </span>
             <span className="flex items-center gap-1">
-              <Heart className="w-3 h-3" />
+              <Play className="w-3 h-3" />
               {story.play_count}
             </span>
           </div>
