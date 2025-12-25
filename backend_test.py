@@ -645,6 +645,16 @@ class MasalSepetiAPITester:
             self.test_get_story_by_id,
             self.test_increment_play_count,
             self.test_nonexistent_story,
+            
+            # Favorites tests
+            self.test_get_favorites_empty,
+            self.test_check_favorite_nonexistent,
+            self.test_add_favorite,
+            self.test_check_favorite_exists,
+            self.test_get_favorites_with_items,
+            self.test_remove_favorite,
+            self.test_check_favorite_removed,
+            self.test_add_favorite_nonexistent_story,
         ]
         
         for test_func in tests:
