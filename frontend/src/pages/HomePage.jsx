@@ -14,6 +14,7 @@ import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
 import HowToCreateStory from "@/components/HowToCreateStory";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import WelcomeModal from "@/components/WelcomeModal";
 import { API } from "@/config/api";
 
 const TOPIC_ICONS = {
