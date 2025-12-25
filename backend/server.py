@@ -1049,6 +1049,87 @@ async def delete_user_story(story_id: str, request: Request):
     return {"success": True, "message": "Masal silindi"}
 
 
+# ============= FAVORITES ENDPOINTS =============
+
+@api_router.get("/favorites")
+async def get_favorites(request: Request):
+    """Get current user's favorite stories"""
+    user = await require_auth(request)
+    
+    favorites = user.get("favorites", [])
+    if not favorites:
+        return []
+    
+    # Get story details for favorites
+    stories = await db.stories.find(
+        {"id": {"$in": favorites}},
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Enrich with creator info
+    user_ids = list(set(s.get("user_id") for s in stories if s.get("user_id")))
+    if user_ids:
+        users = await db.users.find(
+            {"user_id": {"$in": user_ids}}, 
+            {"_id": 0, "user_id": 1, "name": 1, "surname": 1, "picture": 1}
+        ).to_list(len(user_ids))
+        user_map = {u["user_id"]: u for u in users}
+        
+        for story in stories:
+            if story.get("user_id") and story["user_id"] in user_map:
+                u = user_map[story["user_id"]]
+                story["creator_name"] = f"{u.get('name', '')} {u.get('surname', '')}".strip()
+                story["creator_id"] = story["user_id"]
+                story["creator_picture"] = u.get("picture")
+    
+    return stories
+
+
+@api_router.post("/favorites/{story_id}")
+async def add_favorite(story_id: str, request: Request):
+    """Add a story to favorites"""
+    user = await require_auth(request)
+    
+    # Check if story exists
+    story = await db.stories.find_one({"id": story_id}, {"_id": 0, "id": 1})
+    if not story:
+        raise HTTPException(status_code=404, detail="Masal bulunamadı")
+    
+    # Add to favorites (avoid duplicates)
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$addToSet": {"favorites": story_id}}
+    )
+    
+    return {"success": True, "message": "Favorilere eklendi"}
+
+
+@api_router.delete("/favorites/{story_id}")
+async def remove_favorite(story_id: str, request: Request):
+    """Remove a story from favorites"""
+    user = await require_auth(request)
+    
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$pull": {"favorites": story_id}}
+    )
+    
+    return {"success": True, "message": "Favorilerden çıkarıldı"}
+
+
+@api_router.get("/favorites/check/{story_id}")
+async def check_favorite(story_id: str, request: Request):
+    """Check if a story is in user's favorites"""
+    user = await get_current_user(request)
+    if not user:
+        return {"is_favorite": False}
+    
+    favorites = user.get("favorites", [])
+    return {"is_favorite": story_id in favorites}
+
+
+
+
 # ============= CREDIT ENDPOINTS =============
 
 @api_router.get("/credits/balance")
