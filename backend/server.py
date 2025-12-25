@@ -706,6 +706,10 @@ async def generate_story(story_input: StoryCreate, request: Request):
         duration=duration
     )
     
+    # Generate SEO-friendly slug
+    base_slug = generate_slug(story_data["title"], story_input.age_group)
+    story.slug = await ensure_unique_slug(base_slug, story.id)
+    
     # Save to database
     story_dict = story.model_dump()
     
