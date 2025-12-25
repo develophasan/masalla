@@ -30,16 +30,59 @@ export default function StoryDetailPage() {
   const [showDownloadAd, setShowDownloadAd] = useState(false);
   const [canDownload, setCanDownload] = useState(false);
   const [isPopularStory, setIsPopularStory] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   useEffect(() => {
     fetchStory();
     checkIfPopular();
   }, [id]);
 
+  useEffect(() => {
+    if (isAuthenticated && id) {
+      checkFavorite();
+    }
+  }, [isAuthenticated, id]);
+
+  const checkFavorite = async () => {
+    try {
+      const response = await authAxios.get(`${API}/favorites/check/${id}`);
+      setIsFavorite(response.data.is_favorite);
+    } catch (error) {
+      // Ignore
+    }
+  };
+
+  const toggleFavorite = async () => {
+    if (!isAuthenticated || favoriteLoading) {
+      if (!isAuthenticated) {
+        toast.error("Favorilere eklemek için giriş yapmalısınız");
+      }
+      return;
+    }
+    
+    setFavoriteLoading(true);
+    try {
+      if (isFavorite) {
+        await authAxios.delete(`${API}/favorites/${id}`);
+        setIsFavorite(false);
+        toast.success("Favorilerden çıkarıldı");
+      } else {
+        await authAxios.post(`${API}/favorites/${id}`);
+        setIsFavorite(true);
+        toast.success("Favorilere eklendi");
+      }
+    } catch (error) {
+      toast.error("Bir hata oluştu");
+    } finally {
+      setFavoriteLoading(false);
+    }
+  };
+
   const checkIfPopular = async () => {
     try {
       const response = await axios.get(`${API}/stories/popular?limit=10`);
-      const popularIds = response.data.map(s => s.id);
+      const popularIds = Array.isArray(response.data) ? response.data.map(s => s.id) : [];
       setIsPopularStory(popularIds.includes(id));
     } catch (error) {
       console.log("Could not check popular stories");
