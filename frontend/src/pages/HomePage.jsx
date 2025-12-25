@@ -301,6 +301,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Ad Banner Section */}
+      <section className="py-8 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <AdBanner placeholderId="101" className="rounded-xl overflow-hidden" />
+        </div>
+      </section>
+
       {/* Popular Stories Section */}
       {popularStories.length > 0 && (
         <section className="py-12 md:py-20 px-4 bg-gradient-to-b from-white to-violet-50">
