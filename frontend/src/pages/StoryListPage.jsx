@@ -200,7 +200,7 @@ export default function StoryListPage() {
         isOpen={showSearchAd} 
         onClose={handleSearchAdClose}
         message="Masallar aranıyor..."
-        placeholderId="104"
+        
       />
 
       {/* Navbar */}
@@ -288,7 +288,7 @@ export default function StoryListPage() {
             {/* Ad Banner in results */}
             <div className="mb-8 flex justify-center">
               <div className="w-full max-w-3xl bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
-                <AdBanner placeholderId="103" className="rounded-xl overflow-hidden" />
+                <AdBanner className="rounded-xl overflow-hidden" />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

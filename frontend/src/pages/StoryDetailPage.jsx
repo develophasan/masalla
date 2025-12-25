@@ -392,7 +392,7 @@ export default function StoryDetailPage() {
         onClose={handleDownloadAdClose}
         message="İndirme hazırlanıyor..."
         autoCloseDelay={5000}
-        placeholderId="106"
+        
       />
 
       {/* Hidden Audio Element */}
@@ -660,7 +660,7 @@ export default function StoryDetailPage() {
 
         {/* Ad Banner after story content */}
         <div className="my-8">
-          <AdBanner placeholderId="102" className="rounded-xl overflow-hidden" />
+          <AdBanner className="rounded-xl overflow-hidden" />
         </div>
 
         {/* Story Info */}

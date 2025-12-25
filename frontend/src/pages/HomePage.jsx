@@ -304,7 +304,7 @@ export default function HomePage() {
       {/* Ad Banner Section */}
       <section className="py-8 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <AdBanner placeholderId="101" className="rounded-xl overflow-hidden" />
+          <AdBanner className="rounded-xl overflow-hidden" />
         </div>
       </section>
 

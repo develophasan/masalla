@@ -1,5 +1,0 @@
-# Ezoic ads.txt
-# This file will be automatically updated by Ezoic
-# For the latest version, visit: https://srv.adstxtmanager.com/19390/masal.space
-
-google.com, pub-1131412625965023, DIRECT, f08c47fec0942fa0
