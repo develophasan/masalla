@@ -37,6 +37,9 @@ function AppRouter() {
         <Route path="/" element={<HomePage />} />
         <Route path="/topics/:topicId" element={<TopicDetailPage />} />
         <Route path="/stories" element={<StoryListPage />} />
+        {/* New SEO-friendly URL */}
+        <Route path="/masal/:slug" element={<StoryDetailPage />} />
+        {/* Legacy URL - redirect to new format */}
         <Route path="/stories/:id" element={<StoryDetailPage />} />
         <Route path="/create" element={<StoryCreatePage />} />
         <Route path="/login" element={<LoginPage />} />
