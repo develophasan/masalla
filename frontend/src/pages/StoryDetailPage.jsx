@@ -96,7 +96,7 @@ export default function StoryDetailPage() {
     try {
       const response = await axios.get(`${API}/stories/popular?limit=10`);
       const popularIds = Array.isArray(response.data) ? response.data.map(s => s.id) : [];
-      setIsPopularStory(popularIds.includes(id));
+      setIsPopularStory(popularIds.includes(storyIdentifier));
     } catch (error) {
       console.log("Could not check popular stories");
     }
@@ -104,7 +104,11 @@ export default function StoryDetailPage() {
 
   const fetchStory = async () => {
     try {
-      const response = await axios.get(`${API}/stories/${id}`);
+      // Try slug-based API first if on new route, else use story ID
+      const endpoint = isNewRoute 
+        ? `${API}/masal/${storyIdentifier}`
+        : `${API}/stories/${storyIdentifier}`;
+      const response = await axios.get(endpoint);
       setStory(response.data);
     } catch (error) {
       console.error("Error fetching story:", error);
@@ -116,8 +120,9 @@ export default function StoryDetailPage() {
   };
 
   const incrementPlayCount = async () => {
+    if (!story?.id) return;
     try {
-      await axios.post(`${API}/stories/${id}/play`);
+      await axios.post(`${API}/stories/${story.id}/play`);
     } catch (error) {
       console.error("Error incrementing play count:", error);
     }
