@@ -622,10 +622,34 @@ async def get_popular_stories(limit: int = 6):
     return stories
 
 
+@api_router.get("/masal/{slug}", response_model=StoryResponse)
+async def get_story_by_slug(slug: str):
+    """Get a single story by SEO-friendly slug"""
+    story = await db.stories.find_one({"slug": slug}, {"_id": 0})
+    
+    if not story:
+        raise HTTPException(status_code=404, detail="Masal bulunamadı")
+    
+    # Enrich with creator info
+    if story.get("user_id"):
+        user = await db.users.find_one({"user_id": story["user_id"]}, {"_id": 0, "name": 1, "surname": 1, "picture": 1})
+        if user:
+            story["creator_name"] = f"{user.get('name', '')} {user.get('surname', '')}".strip()
+            story["creator_id"] = story["user_id"]
+            story["creator_picture"] = user.get("picture")
+    
+    return story
+
+
 @api_router.get("/stories/{story_id}", response_model=StoryResponse)
 async def get_story(story_id: str):
-    """Get a single story by ID"""
+    """Get a single story by ID (legacy support)"""
+    # First try to find by ID
     story = await db.stories.find_one({"id": story_id}, {"_id": 0})
+    
+    # If not found by ID, try by slug (backward compatibility)
+    if not story:
+        story = await db.stories.find_one({"slug": story_id}, {"_id": 0})
     
     if not story:
         raise HTTPException(status_code=404, detail="Masal bulunamadı")
