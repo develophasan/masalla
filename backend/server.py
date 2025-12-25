@@ -7,6 +7,7 @@ import os
 import logging
 import re
 import unicodedata
+import base64
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
@@ -23,9 +24,8 @@ load_dotenv(ROOT_DIR / '.env')
 # Emergent integrations for text generation
 from openai import AsyncOpenAI
 
-# ElevenLabs for Turkish TTS
-from elevenlabs import ElevenLabs
-from elevenlabs.types import VoiceSettings
+# Google Cloud TTS for Turkish voice
+from google.cloud import texttospeech
 
 # Topics database
 from topics_database import (
