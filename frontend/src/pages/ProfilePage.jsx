@@ -133,38 +133,40 @@ export default function ProfilePage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-slate-100">
-          <div className="flex items-start justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
               {user?.picture ? (
-                <img src={user.picture} alt="" className="w-20 h-20 rounded-full" />
+                <img src={user.picture} alt="" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full" />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center">
-                  <User className="w-10 h-10 text-white" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center">
+                  <User className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
               )}
               <div>
-                <h1 className="text-2xl font-bold text-slate-800">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
                   {user?.name} {user?.surname}
                 </h1>
-                <p className="text-slate-500">{user?.email}</p>
+                <p className="text-sm sm:text-base text-slate-500">{user?.email}</p>
               </div>
             </div>
-            {!editing ? (
-              <Button variant="outline" onClick={() => setEditing(true)}>
-                <Edit2 className="w-4 h-4 mr-2" />
-                Düzenle
-              </Button>
-            ) : (
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setEditing(false)}>
-                  <X className="w-4 h-4" />
+            <div className="flex gap-2 w-full sm:w-auto">
+              {!editing ? (
+                <Button variant="outline" onClick={() => setEditing(true)} className="flex-1 sm:flex-none">
+                  <Edit2 className="w-4 h-4 mr-2" />
+                  Düzenle
                 </Button>
-                <Button onClick={handleSaveProfile} disabled={savingProfile}>
-                  {savingProfile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                  Kaydet
-                </Button>
-              </div>
-            )}
+              ) : (
+                <>
+                  <Button variant="outline" onClick={() => setEditing(false)} size="icon">
+                    <X className="w-4 h-4" />
+                  </Button>
+                  <Button onClick={handleSaveProfile} disabled={savingProfile} className="flex-1 sm:flex-none">
+                    {savingProfile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                    Kaydet
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
 
           {editing ? (
