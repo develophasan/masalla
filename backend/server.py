@@ -453,53 +453,74 @@ Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
 
 async def generate_audio_for_story(text: str) -> tuple[str, int]:
-    """Generate TTS audio using ElevenLabs for natural Turkish speech"""
-    import base64
+    """Generate TTS audio using Google Cloud TTS for natural Turkish speech"""
     
-    api_key = os.environ.get('ELEVENLABS_API_KEY')
-    if not api_key:
-        raise HTTPException(status_code=500, detail="ElevenLabs API key not configured")
+    # Check for Google Cloud credentials
+    google_creds = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+    google_api_key = os.environ.get('GOOGLE_TTS_API_KEY')
+    
+    if not google_creds and not google_api_key:
+        raise HTTPException(status_code=500, detail="Google Cloud TTS credentials not configured")
     
     try:
-        client = ElevenLabs(api_key=api_key)
-        
-        # Limit text for API (ElevenLabs has limits)
-        text_chunk = text[:5000] if len(text) > 5000 else text
-        
-        # Use eleven_multilingual_v2 model for Turkish
-        # Voice: İlknur Önal - Clear, Warm and Young (Turkish female voice)
-        audio_generator = client.text_to_speech.convert(
-            text=text_chunk,
-            voice_id="xFsOR54lR471QiCvQ5re",  # İlknur Önal - Turkish female voice
-            model_id="eleven_multilingual_v2",  # Best for Turkish
-            voice_settings=VoiceSettings(
-                stability=0.5,
-                similarity_boost=0.75,
-                style=0.3,  # Some expressiveness for storytelling
-                use_speaker_boost=True
+        # Initialize the Google Cloud TTS client
+        if google_api_key:
+            # Use API key authentication
+            from google.cloud import texttospeech_v1
+            from google.api_core import client_options
+            
+            client = texttospeech.TextToSpeechClient(
+                client_options=client_options.ClientOptions(
+                    api_key=google_api_key
+                )
             )
+        else:
+            # Use service account credentials
+            client = texttospeech.TextToSpeechClient()
+        
+        # Limit text for API (Google Cloud has 5000 byte limit)
+        text_chunk = text[:4500] if len(text) > 4500 else text
+        
+        # Set the text input
+        synthesis_input = texttospeech.SynthesisInput(text=text_chunk)
+        
+        # Build the voice request - Turkish female Neural2 voice for children's stories
+        voice = texttospeech.VoiceSelectionParams(
+            language_code="tr-TR",
+            name="tr-TR-Wavenet-E",  # Turkish female WaveNet voice (high quality)
+            ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
         )
         
-        # Collect audio data
-        audio_data = b""
-        for chunk in audio_generator:
-            audio_data += chunk
+        # Select the audio file type and speaking rate
+        audio_config = texttospeech.AudioConfig(
+            audio_encoding=texttospeech.AudioEncoding.MP3,
+            speaking_rate=0.9,  # Slightly slower for children
+            pitch=1.0  # Normal pitch
+        )
+        
+        # Perform the text-to-speech request
+        response = client.synthesize_speech(
+            input=synthesis_input,
+            voice=voice,
+            audio_config=audio_config
+        )
         
         # Convert to base64
-        audio_base64 = base64.b64encode(audio_data).decode()
+        audio_base64 = base64.b64encode(response.audio_content).decode()
         
-        # Estimate duration (roughly 150 words per minute)
+        # Estimate duration (roughly 150 words per minute at 0.9x speed)
         word_count = len(text.split())
-        duration = int((word_count / 150) * 60)  # in seconds
+        duration = int((word_count / 135) * 60)  # in seconds, adjusted for slower rate
         
+        logger.info(f"Successfully generated audio: {len(response.audio_content)} bytes")
         return audio_base64, duration
         
     except Exception as e:
         error_msg = str(e)
-        logger.error(f"ElevenLabs TTS error: {error_msg}")
+        logger.error(f"Google Cloud TTS error: {error_msg}")
         
         # Check for quota exceeded error
-        if "quota" in error_msg.lower() or "credits" in error_msg.lower():
+        if "quota" in error_msg.lower() or "limit" in error_msg.lower() or "exceeded" in error_msg.lower():
             raise HTTPException(
                 status_code=503, 
                 detail="Ses üretim kotası doldu. Masal metin olarak kaydedildi ancak ses eklenemedi. Lütfen daha sonra tekrar deneyin."
