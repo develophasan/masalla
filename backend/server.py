@@ -156,6 +156,7 @@ class UserResponse(BaseModel):
     role: str = "user"
     is_verified: bool = False
     created_at: Optional[str] = None
+    favorites: List[str] = []
 
 class CreditRequest(BaseModel):
     model_config = ConfigDict(extra="ignore")
