@@ -42,17 +42,24 @@ export default function StoryDetailPage() {
   useEffect(() => {
     fetchStory();
     checkIfPopular();
-  }, [id]);
+  }, [storyIdentifier]);
 
   useEffect(() => {
-    if (isAuthenticated && id) {
+    if (isAuthenticated && story?.id) {
       checkFavorite();
     }
-  }, [isAuthenticated, id]);
+  }, [isAuthenticated, story?.id]);
+
+  // Redirect old URL to new SEO URL if story has slug
+  useEffect(() => {
+    if (story?.slug && !isNewRoute && story.slug !== storyIdentifier) {
+      navigate(`/masal/${story.slug}`, { replace: true });
+    }
+  }, [story?.slug, isNewRoute, storyIdentifier, navigate]);
 
   const checkFavorite = async () => {
     try {
-      const response = await authAxios.get(`${API}/favorites/check/${id}`);
+      const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
       setIsFavorite(response.data.is_favorite);
     } catch (error) {
       // Ignore
@@ -70,11 +77,11 @@ export default function StoryDetailPage() {
     setFavoriteLoading(true);
     try {
       if (isFavorite) {
-        await authAxios.delete(`${API}/favorites/${id}`);
+        await authAxios.delete(`${API}/favorites/${story.id}`);
         setIsFavorite(false);
         toast.success("Favorilerden çıkarıldı");
       } else {
-        await authAxios.post(`${API}/favorites/${id}`);
+        await authAxios.post(`${API}/favorites/${story.id}`);
         setIsFavorite(true);
         toast.success("Favorilere eklendi");
       }
