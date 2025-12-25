@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth, authAxios } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
+import StoryCard from '@/components/StoryCard';
 import { 
   User, Mail, Phone, Edit2, Save, X, Coins, Plus, 
-  BookOpen, Trash2, Clock, Play, Loader2 
+  BookOpen, Trash2, Clock, Play, Loader2, Heart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,10 @@ export default function ProfilePage() {
   const { user, updateUser, refreshUser, isAuthenticated } = useAuth();
   const [editing, setEditing] = useState(false);
   const [stories, setStories] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [loadingStories, setLoadingStories] = useState(true);
+  const [loadingFavorites, setLoadingFavorites] = useState(true);
+  const [activeTab, setActiveTab] = useState('stories'); // 'stories' or 'favorites'
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -34,6 +38,7 @@ export default function ProfilePage() {
         phone: user.phone || ''
       });
       fetchUserStories();
+      fetchFavorites();
     }
   }, [user]);
 
@@ -42,11 +47,22 @@ export default function ProfilePage() {
       const response = await authAxios.get(`${API}/users/stories`, {
         
       });
-      setStories(response.data);
+      setStories(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching stories:', error);
     } finally {
       setLoadingStories(false);
+    }
+  };
+
+  const fetchFavorites = async () => {
+    try {
+      const response = await authAxios.get(`${API}/favorites`);
+      setFavorites(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    } finally {
+      setLoadingFavorites(false);
     }
   };
 
