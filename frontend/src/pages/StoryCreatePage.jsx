@@ -186,7 +186,7 @@ export default function StoryCreatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white pb-20 sm:pb-0">
       {/* Interstitial Ad */}
       <AdInterstitial 
         isOpen={showAd} 
