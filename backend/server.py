@@ -495,8 +495,17 @@ async def generate_audio_for_story(text: str) -> tuple[str, int]:
         return audio_base64, duration
         
     except Exception as e:
-        logger.error(f"ElevenLabs TTS error: {e}")
-        raise HTTPException(status_code=500, detail=f"Ses üretilirken hata oluştu: {str(e)}")
+        error_msg = str(e)
+        logger.error(f"ElevenLabs TTS error: {error_msg}")
+        
+        # Check for quota exceeded error
+        if "quota" in error_msg.lower() or "credits" in error_msg.lower():
+            raise HTTPException(
+                status_code=503, 
+                detail="Ses üretim kotası doldu. Masal metin olarak kaydedildi ancak ses eklenemedi. Lütfen daha sonra tekrar deneyin."
+            )
+        
+        raise HTTPException(status_code=500, detail=f"Ses üretilirken hata oluştu: {error_msg}")
 
 
 # ============= API ENDPOINTS =============
