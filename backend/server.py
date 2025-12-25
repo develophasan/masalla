@@ -1418,6 +1418,35 @@ async def admin_get_stats(request: Request):
     # Recent users
     recent_users = await db.users.find(
         {"role": "user"},
+
+
+@api_router.post("/admin/migrate-slugs")
+async def admin_migrate_slugs(request: Request):
+    """Generate slugs for all stories that don't have one (admin only)"""
+    await require_admin(request)
+    
+    # Find stories without slugs
+    stories = await db.stories.find(
+        {"$or": [{"slug": None}, {"slug": {"$exists": False}}, {"slug": ""}]},
+        {"_id": 0, "id": 1, "title": 1, "age_group": 1}
+    ).to_list(1000)
+    
+    updated_count = 0
+    for story in stories:
+        base_slug = generate_slug(story["title"], story.get("age_group"))
+        unique_slug = await ensure_unique_slug(base_slug, story["id"])
+        
+        await db.stories.update_one(
+            {"id": story["id"]},
+            {"$set": {"slug": unique_slug}}
+        )
+        updated_count += 1
+    
+    return {
+        "success": True, 
+        "message": f"{updated_count} masal için slug oluşturuldu",
+        "updated_count": updated_count
+    }
         {"_id": 0, "password_hash": 0}
     ).sort("created_at", -1).limit(5).to_list(5)
     
