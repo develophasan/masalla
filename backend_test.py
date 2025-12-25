@@ -439,6 +439,173 @@ class MasalSepetiAPITester:
             404
         )
 
+    def test_get_favorites_empty(self):
+        """Test GET /favorites - Should return empty list initially"""
+        if not self.user_token:
+            print("❌ Cannot test favorites - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Get Favorites (Empty)",
+            "GET",
+            "favorites",
+            200
+        )
+        
+        if success and isinstance(response, list):
+            print(f"   ✓ Favorites list returned: {len(response)} items")
+            return True
+        return False
+
+    def test_check_favorite_nonexistent(self):
+        """Test GET /favorites/check/{story_id} - Check favorite status for nonexistent story"""
+        if not self.user_token:
+            print("❌ Cannot test favorite check - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Check Favorite (Nonexistent)",
+            "GET",
+            "favorites/check/nonexistent-story-id",
+            200
+        )
+        
+        if success and 'is_favorite' in response:
+            print(f"   ✓ Favorite status: {response.get('is_favorite')}")
+            return True
+        return False
+
+    def test_add_favorite(self):
+        """Test POST /favorites/{story_id} - Add story to favorites"""
+        if not self.user_token:
+            print("❌ Cannot test add favorite - no user token")
+            return False
+        
+        # Use the first story from the stories list
+        stories_success, stories_data = self.run_test(
+            "Get Stories for Favorites Test",
+            "GET",
+            "stories?limit=1",
+            200
+        )
+        
+        if not stories_success or not stories_data or len(stories_data) == 0:
+            print("❌ Cannot test favorites - no stories available")
+            return False
+        
+        story_id = stories_data[0]['id']
+        print(f"   Using story ID: {story_id}")
+        
+        success, response = self.run_test(
+            "Add to Favorites",
+            "POST",
+            f"favorites/{story_id}",
+            200
+        )
+        
+        if success and response.get('success'):
+            print(f"   ✓ Story added to favorites successfully")
+            # Store story ID for other favorite tests
+            self.favorite_story_id = story_id
+            return True
+        return False
+
+    def test_check_favorite_exists(self):
+        """Test GET /favorites/check/{story_id} - Check favorite status for existing favorite"""
+        if not self.user_token or not hasattr(self, 'favorite_story_id'):
+            print("❌ Cannot test favorite check - no user token or favorite story")
+            return False
+            
+        success, response = self.run_test(
+            "Check Favorite (Exists)",
+            "GET",
+            f"favorites/check/{self.favorite_story_id}",
+            200
+        )
+        
+        if success and response.get('is_favorite') == True:
+            print(f"   ✓ Favorite status correctly shows as favorite")
+            return True
+        return False
+
+    def test_get_favorites_with_items(self):
+        """Test GET /favorites - Should return list with added favorite"""
+        if not self.user_token:
+            print("❌ Cannot test favorites - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Get Favorites (With Items)",
+            "GET",
+            "favorites",
+            200
+        )
+        
+        if success and isinstance(response, list):
+            print(f"   ✓ Favorites list returned: {len(response)} items")
+            if len(response) > 0:
+                # Check structure of first favorite
+                first_favorite = response[0]
+                required_fields = ['id', 'title', 'content']
+                missing_fields = [field for field in required_fields if field not in first_favorite]
+                if missing_fields:
+                    print(f"   ⚠ Missing fields in favorite story: {missing_fields}")
+                else:
+                    print("   ✓ Favorite story structure correct")
+            return True
+        return False
+
+    def test_remove_favorite(self):
+        """Test DELETE /favorites/{story_id} - Remove story from favorites"""
+        if not self.user_token or not hasattr(self, 'favorite_story_id'):
+            print("❌ Cannot test remove favorite - no user token or favorite story")
+            return False
+            
+        success, response = self.run_test(
+            "Remove from Favorites",
+            "DELETE",
+            f"favorites/{self.favorite_story_id}",
+            200
+        )
+        
+        if success and response.get('success'):
+            print(f"   ✓ Story removed from favorites successfully")
+            return True
+        return False
+
+    def test_check_favorite_removed(self):
+        """Test GET /favorites/check/{story_id} - Check favorite status after removal"""
+        if not self.user_token or not hasattr(self, 'favorite_story_id'):
+            print("❌ Cannot test favorite check - no user token or favorite story")
+            return False
+            
+        success, response = self.run_test(
+            "Check Favorite (Removed)",
+            "GET",
+            f"favorites/check/{self.favorite_story_id}",
+            200
+        )
+        
+        if success and response.get('is_favorite') == False:
+            print(f"   ✓ Favorite status correctly shows as not favorite")
+            return True
+        return False
+
+    def test_add_favorite_nonexistent_story(self):
+        """Test POST /favorites/{story_id} - Add nonexistent story to favorites (should fail)"""
+        if not self.user_token:
+            print("❌ Cannot test add favorite - no user token")
+            return False
+            
+        success, response = self.run_test(
+            "Add Nonexistent Story to Favorites (should fail)",
+            "POST",
+            "favorites/nonexistent-story-id",
+            404
+        )
+        
+        return success  # Success means we got the expected 404
+
     def run_all_tests(self):
         """Run all API tests"""
         print("=" * 60)
