@@ -192,6 +192,7 @@ export default function StoryCreatePage() {
         isOpen={showAd} 
         onClose={handleAdClose}
         message="Masalınız hazırlanıyor..."
+        placeholderId="105"
       />
 
       {/* Navbar */}
