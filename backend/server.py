@@ -199,6 +199,76 @@ def verify_password(password: str, stored_hash: str) -> bool:
     except:
         return False
 
+# ============= SLUG HELPERS =============
+
+# Turkish character mapping
+TURKISH_CHARS = {
+    'ç': 'c', 'Ç': 'c',
+    'ğ': 'g', 'Ğ': 'g',
+    'ı': 'i', 'I': 'i', 'İ': 'i',
+    'ö': 'o', 'Ö': 'o',
+    'ş': 's', 'Ş': 's',
+    'ü': 'u', 'Ü': 'u',
+}
+
+def generate_slug(title: str, age_group: str = None) -> str:
+    """
+    Generate SEO-friendly slug from title
+    Example: "Cesur Tavşan'ın Maceraları" -> "cesur-tavsanin-maceralari"
+    With age: "3 Yaş İçin Cesur Tavşan" -> "3-yas-cesur-tavsan"
+    """
+    # Combine age group with title if provided
+    if age_group and age_group not in title.lower():
+        text = f"{age_group} {title}"
+    else:
+        text = title
+    
+    # Convert Turkish characters
+    for turkish, latin in TURKISH_CHARS.items():
+        text = text.replace(turkish, latin)
+    
+    # Normalize unicode characters
+    text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII')
+    
+    # Convert to lowercase
+    text = text.lower()
+    
+    # Replace spaces and special chars with hyphens
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+    
+    # Remove leading/trailing hyphens
+    text = text.strip('-')
+    
+    # Limit to first 6 words (for cleaner URLs)
+    words = text.split('-')
+    if len(words) > 6:
+        text = '-'.join(words[:6])
+    
+    return text
+
+async def ensure_unique_slug(base_slug: str, story_id: str = None) -> str:
+    """Ensure slug is unique in database, append number if needed"""
+    slug = base_slug
+    counter = 1
+    
+    while True:
+        # Check if slug exists (excluding current story if updating)
+        query = {"slug": slug}
+        if story_id:
+            query["id"] = {"$ne": story_id}
+        
+        existing = await db.stories.find_one(query, {"_id": 0, "id": 1})
+        if not existing:
+            return slug
+        
+        # Append counter
+        slug = f"{base_slug}-{counter}"
+        counter += 1
+        
+        if counter > 100:  # Safety limit
+            slug = f"{base_slug}-{secrets.token_hex(4)}"
+            return slug
+
 # ============= AUTH HELPERS =============
 
 async def get_current_user(request: Request) -> Optional[dict]:
