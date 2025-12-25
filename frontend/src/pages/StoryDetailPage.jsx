@@ -304,8 +304,87 @@ export default function StoryDetailPage() {
     );
   }
 
+  // Generate canonical URL
+  const canonicalUrl = story.slug 
+    ? `https://www.masal.space/masal/${story.slug}`
+    : `https://www.masal.space/stories/${story.id}`;
+
+  // Generate SEO description
+  const seoDescription = `${story.age_group || ''} çocuklar için ${story.topic_name || ''} konulu eğitici masal. ${story.title}. ${story.kazanim ? `Kazanım: ${story.kazanim}` : ''}`.trim();
+
+  // Schema.org JSON-LD for Article
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": story.title,
+    "description": seoDescription,
+    "datePublished": story.created_at,
+    "author": {
+      "@type": "Person",
+      "name": story.creator_name || "Masal Sepeti"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Masal Sepeti",
+      "url": "https://www.masal.space"
+    },
+    "mainEntityOfPage": canonicalUrl
+  };
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Ana Sayfa",
+        "item": "https://www.masal.space"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": story.topic_name || "Masallar",
+        "item": `https://www.masal.space/stories?topic_id=${story.topic_id}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": story.title,
+        "item": canonicalUrl
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white pb-20 sm:pb-0">
+      {/* SEO Meta Tags */}
+      <Helmet>
+        <title>{story.title} | Masal Sepeti</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={`${story.title} | Masal Sepeti`} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={story.title} />
+        <meta name="twitter:description" content={seoDescription} />
+        
+        {/* Schema.org JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(breadcrumbSchema)}
+        </script>
+      </Helmet>
+
       {/* Download Ad Interstitial */}
       <AdInterstitial 
         isOpen={showDownloadAd} 
@@ -327,6 +406,27 @@ export default function StoryDetailPage() {
 
       {/* Navbar */}
       <Navbar />
+
+      {/* Breadcrumb Navigation */}
+      <div className="max-w-4xl mx-auto px-4 pt-4">
+        <nav className="flex items-center gap-2 text-sm text-slate-500 flex-wrap">
+          <Link to="/" className="flex items-center gap-1 hover:text-violet-600 transition-colors">
+            <Home className="w-4 h-4" />
+            <span>Ana Sayfa</span>
+          </Link>
+          <ChevronRight className="w-4 h-4" />
+          <Link 
+            to={`/stories?topic_id=${story.topic_id}`} 
+            className="hover:text-violet-600 transition-colors"
+          >
+            {story.topic_name}
+          </Link>
+          <ChevronRight className="w-4 h-4" />
+          <span className="text-slate-700 font-medium truncate max-w-[200px]">
+            {story.title}
+          </span>
+        </nav>
+      </div>
 
       {/* Membership Required Banner for non-popular stories */}
       {!isAuthenticated && !isPopularStory && (
