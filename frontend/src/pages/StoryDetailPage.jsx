@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User, ChevronRight, Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -13,10 +14,15 @@ import { useAuth, authAxios } from "@/contexts/AuthContext";
 import { API } from "@/config/api";
 
 export default function StoryDetailPage() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const audioRef = useRef(null);
   const { isAuthenticated } = useAuth();
+  
+  // Determine if we're on new /masal/:slug or old /stories/:id route
+  const isNewRoute = location.pathname.startsWith('/masal/');
+  const storyIdentifier = slug || id;
   
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
