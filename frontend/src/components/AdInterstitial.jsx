@@ -26,17 +26,21 @@ export const AdInterstitial = ({
         if (!isInitialized.current && window.ezstandalone) {
           isInitialized.current = true;
           
-          window.ezstandalone.cmd.push(function() {
-            if (window.ezstandalone.define) {
-              window.ezstandalone.define(parseInt(placeholderId));
-            }
-            if (window.ezstandalone.enable) {
-              window.ezstandalone.enable();
-            }
-            if (window.ezstandalone.display) {
-              window.ezstandalone.display();
-            }
-          });
+          try {
+            window.ezstandalone.cmd.push(function() {
+              if (window.ezstandalone.define) {
+                window.ezstandalone.define(parseInt(placeholderId));
+              }
+              if (window.ezstandalone.enable) {
+                window.ezstandalone.enable();
+              }
+              if (window.ezstandalone.display) {
+                window.ezstandalone.display();
+              }
+            });
+          } catch (e) {
+            console.log('Ezoic not available:', e);
+          }
         }
       }, 100);
 

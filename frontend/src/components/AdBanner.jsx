@@ -6,22 +6,34 @@ export const AdBanner = ({ placeholderId = "101", className = "" }) => {
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!isInitialized.current && window.ezstandalone) {
-      isInitialized.current = true;
-      
-      // Initialize Ezoic ads
-      window.ezstandalone.cmd.push(function() {
-        if (window.ezstandalone.define) {
-          window.ezstandalone.define(parseInt(placeholderId));
+    // Only run Ezoic in production
+    if (typeof window === 'undefined') return;
+    
+    const initEzoic = () => {
+      if (!isInitialized.current && window.ezstandalone) {
+        isInitialized.current = true;
+        
+        try {
+          window.ezstandalone.cmd.push(function() {
+            if (window.ezstandalone.define) {
+              window.ezstandalone.define(parseInt(placeholderId));
+            }
+            if (window.ezstandalone.enable) {
+              window.ezstandalone.enable();
+            }
+            if (window.ezstandalone.display) {
+              window.ezstandalone.display();
+            }
+          });
+        } catch (e) {
+          console.log('Ezoic not available:', e);
         }
-        if (window.ezstandalone.enable) {
-          window.ezstandalone.enable();
-        }
-        if (window.ezstandalone.display) {
-          window.ezstandalone.display();
-        }
-      });
-    }
+      }
+    };
+
+    // Small delay to ensure scripts are loaded
+    const timer = setTimeout(initEzoic, 500);
+    return () => clearTimeout(timer);
   }, [placeholderId]);
 
   return (
