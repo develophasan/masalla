@@ -2,39 +2,47 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Full screen interstitial ad
+// Ezoic Interstitial Ad Component
 export const AdInterstitial = ({ 
   isOpen, 
   onClose, 
   autoCloseDelay = 5000,
-  message = "Masalınız hazırlanıyor..."
+  message = "Masalınız hazırlanıyor...",
+  placeholderId = "102"
 }) => {
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(false);
   const adRef = useRef(null);
-  const isLoaded = useRef(false);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
       setCountdown(5);
       setCanClose(false);
-      isLoaded.current = false;
+      isInitialized.current = false;
       
-      // Load ad when modal opens
+      // Initialize Ezoic ad when modal opens
       const timer = setTimeout(() => {
-        if (adRef.current && !isLoaded.current) {
-          try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            isLoaded.current = true;
-          } catch (e) {
-            console.log('AdSense error:', e);
-          }
+        if (!isInitialized.current && window.ezstandalone) {
+          isInitialized.current = true;
+          
+          window.ezstandalone.cmd.push(function() {
+            if (window.ezstandalone.define) {
+              window.ezstandalone.define(parseInt(placeholderId));
+            }
+            if (window.ezstandalone.enable) {
+              window.ezstandalone.enable();
+            }
+            if (window.ezstandalone.display) {
+              window.ezstandalone.display();
+            }
+          });
         }
       }, 100);
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, placeholderId]);
 
   useEffect(() => {
     if (!isOpen || canClose) return;
@@ -83,13 +91,10 @@ export const AdInterstitial = ({
         {/* Ad Content */}
         <div className="p-6">
           <div className="bg-slate-50 rounded-2xl p-4 min-h-[280px] flex items-center justify-center">
-            <ins
+            <div 
               ref={adRef}
-              className="adsbygoogle"
-              style={{ display: 'block', width: '100%', height: '250px' }}
-              data-ad-client="ca-pub-1131412625965023"
-              data-ad-slot="auto"
-              data-ad-format="rectangle"
+              id={`ezoic-pub-ad-placeholder-${placeholderId}`}
+              style={{ width: '100%', minHeight: '250px' }}
             />
           </div>
           

@@ -1,31 +1,35 @@
 import { useEffect, useRef } from 'react';
 
-// Horizontal banner ad for homepage
-export const AdBanner = ({ slot = "auto", className = "" }) => {
+// Ezoic Banner Ad Component
+export const AdBanner = ({ placeholderId = "101", className = "" }) => {
   const adRef = useRef(null);
-  const isLoaded = useRef(false);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (adRef.current && !isLoaded.current) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        isLoaded.current = true;
-      } catch (e) {
-        console.log('AdSense error:', e);
-      }
+    if (!isInitialized.current && window.ezstandalone) {
+      isInitialized.current = true;
+      
+      // Initialize Ezoic ads
+      window.ezstandalone.cmd.push(function() {
+        if (window.ezstandalone.define) {
+          window.ezstandalone.define(parseInt(placeholderId));
+        }
+        if (window.ezstandalone.enable) {
+          window.ezstandalone.enable();
+        }
+        if (window.ezstandalone.display) {
+          window.ezstandalone.display();
+        }
+      });
     }
-  }, []);
+  }, [placeholderId]);
 
   return (
     <div className={`ad-container ${className}`}>
-      <ins
+      <div 
         ref={adRef}
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client="ca-pub-1131412625965023"
-        data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        id={`ezoic-pub-ad-placeholder-${placeholderId}`}
+        style={{ minHeight: '90px', width: '100%' }}
       />
     </div>
   );
