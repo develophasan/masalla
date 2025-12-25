@@ -377,6 +377,22 @@ export default function StoryDetailPage() {
               </span>
             </Link>
           )}
+
+          {/* Favorite Button */}
+          <div className="mt-4">
+            <Button
+              onClick={toggleFavorite}
+              disabled={favoriteLoading}
+              variant={isFavorite ? "default" : "outline"}
+              className={`rounded-full ${isFavorite ? "bg-red-500 hover:bg-red-600 text-white" : "border-red-200 text-red-500 hover:bg-red-50"}`}
+            >
+              <Heart 
+                className={`w-5 h-5 mr-2 ${favoriteLoading ? "animate-pulse" : ""}`} 
+                fill={isFavorite ? "currentColor" : "none"}
+              />
+              {isFavorite ? "Favorilerimde" : "Favorilere Ekle"}
+            </Button>
+          </div>
         </div>
 
         {/* Kazanım Card */}
