@@ -391,6 +391,7 @@ export default function StoryDetailPage() {
         onClose={handleDownloadAdClose}
         message="İndirme hazırlanıyor..."
         autoCloseDelay={5000}
+        placeholderId="106"
       />
 
       {/* Hidden Audio Element */}
