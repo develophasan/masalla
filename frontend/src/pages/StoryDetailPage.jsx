@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
 import Navbar from "@/components/Navbar";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, authAxios } from "@/contexts/AuthContext";
 import { API } from "@/config/api";
 
 export default function StoryDetailPage() {
