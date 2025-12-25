@@ -200,6 +200,7 @@ export default function StoryListPage() {
         isOpen={showSearchAd} 
         onClose={handleSearchAdClose}
         message="Masallar aranıyor..."
+        placeholderId="104"
       />
 
       {/* Navbar */}
