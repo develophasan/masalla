@@ -90,6 +90,7 @@ class StoryResponse(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
     id: str
+    slug: Optional[str] = None  # SEO-friendly URL slug
     title: str
     content: str
     topic_id: Optional[str] = None  # Made optional for legacy stories
