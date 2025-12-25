@@ -252,33 +252,37 @@ export default function ProfilePage() {
         </div>
 
         {/* Tabs for Stories and Favorites */}
-        <div>
-          <div className="flex items-center gap-4 mb-6 border-b border-slate-200">
+        <div className="pb-20 sm:pb-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-6 border-b border-slate-200">
             <button
               onClick={() => setActiveTab('stories')}
-              className={`pb-3 px-2 font-medium transition-colors ${
+              className={`pb-3 px-2 text-sm sm:text-base font-medium transition-colors ${
                 activeTab === 'stories' 
                   ? 'text-violet-600 border-b-2 border-violet-600' 
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              <BookOpen className="w-4 h-4 inline mr-2" />
-              Masallarım ({stories.length})
+              <BookOpen className="w-4 h-4 inline mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Masallarım</span>
+              <span className="sm:hidden">Masallar</span>
+              ({stories.length})
             </button>
             <button
               onClick={() => setActiveTab('favorites')}
-              className={`pb-3 px-2 font-medium transition-colors ${
+              className={`pb-3 px-2 text-sm sm:text-base font-medium transition-colors ${
                 activeTab === 'favorites' 
                   ? 'text-red-500 border-b-2 border-red-500' 
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              <Heart className="w-4 h-4 inline mr-2" />
-              Favorilerim ({favorites.length})
+              <Heart className="w-4 h-4 inline mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Favorilerim</span>
+              <span className="sm:hidden">Favoriler</span>
+              ({favorites.length})
             </button>
-            <div className="flex-1" />
+            <div className="hidden sm:flex flex-1" />
             {activeTab === 'stories' && (
-              <Link to="/create">
+              <Link to="/create" className="hidden sm:block">
                 <Button variant="outline" size="sm">
                   <Plus className="w-4 h-4 mr-2" />
                   Yeni Masal
