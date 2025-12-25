@@ -1,47 +1,31 @@
 import { useEffect, useRef } from 'react';
 
-// Ezoic Banner Ad Component
-export const AdBanner = ({ placeholderId = "101", className = "" }) => {
+// Google AdSense Banner Ad Component
+export const AdBanner = ({ slot = "auto", className = "" }) => {
   const adRef = useRef(null);
-  const isInitialized = useRef(false);
+  const isLoaded = useRef(false);
 
   useEffect(() => {
-    // Only run Ezoic in production
-    if (typeof window === 'undefined') return;
-    
-    const initEzoic = () => {
-      if (!isInitialized.current && window.ezstandalone) {
-        isInitialized.current = true;
-        
-        try {
-          window.ezstandalone.cmd.push(function() {
-            if (window.ezstandalone.define) {
-              window.ezstandalone.define(parseInt(placeholderId));
-            }
-            if (window.ezstandalone.enable) {
-              window.ezstandalone.enable();
-            }
-            if (window.ezstandalone.display) {
-              window.ezstandalone.display();
-            }
-          });
-        } catch (e) {
-          console.log('Ezoic not available:', e);
-        }
+    if (adRef.current && !isLoaded.current) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        isLoaded.current = true;
+      } catch (e) {
+        console.log('AdSense error:', e);
       }
-    };
-
-    // Small delay to ensure scripts are loaded
-    const timer = setTimeout(initEzoic, 500);
-    return () => clearTimeout(timer);
-  }, [placeholderId]);
+    }
+  }, []);
 
   return (
     <div className={`ad-container ${className}`}>
-      <div 
+      <ins
         ref={adRef}
-        id={`ezoic-pub-ad-placeholder-${placeholderId}`}
-        style={{ minHeight: '90px', width: '100%' }}
+        className="adsbygoogle"
+        style={{ display: 'block' }}
+        data-ad-client="ca-pub-1131412625965023"
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
       />
     </div>
   );

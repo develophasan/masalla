@@ -2,51 +2,39 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Ezoic Interstitial Ad Component
+// Google AdSense Interstitial Ad Component
 export const AdInterstitial = ({ 
   isOpen, 
   onClose, 
   autoCloseDelay = 5000,
-  message = "Masalınız hazırlanıyor...",
-  placeholderId = "102"
+  message = "Masalınız hazırlanıyor..."
 }) => {
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(false);
   const adRef = useRef(null);
-  const isInitialized = useRef(false);
+  const isLoaded = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
       setCountdown(5);
       setCanClose(false);
-      isInitialized.current = false;
+      isLoaded.current = false;
       
-      // Initialize Ezoic ad when modal opens
+      // Load ad when modal opens
       const timer = setTimeout(() => {
-        if (!isInitialized.current && window.ezstandalone) {
-          isInitialized.current = true;
-          
+        if (adRef.current && !isLoaded.current) {
           try {
-            window.ezstandalone.cmd.push(function() {
-              if (window.ezstandalone.define) {
-                window.ezstandalone.define(parseInt(placeholderId));
-              }
-              if (window.ezstandalone.enable) {
-                window.ezstandalone.enable();
-              }
-              if (window.ezstandalone.display) {
-                window.ezstandalone.display();
-              }
-            });
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            isLoaded.current = true;
           } catch (e) {
-            console.log('Ezoic not available:', e);
+            console.log('AdSense error:', e);
           }
         }
       }, 100);
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen, placeholderId]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen || canClose) return;
@@ -95,10 +83,13 @@ export const AdInterstitial = ({
         {/* Ad Content */}
         <div className="p-6">
           <div className="bg-slate-50 rounded-2xl p-4 min-h-[280px] flex items-center justify-center">
-            <div 
+            <ins
               ref={adRef}
-              id={`ezoic-pub-ad-placeholder-${placeholderId}`}
-              style={{ width: '100%', minHeight: '250px' }}
+              className="adsbygoogle"
+              style={{ display: 'block', width: '100%', height: '250px' }}
+              data-ad-client="ca-pub-1131412625965023"
+              data-ad-slot="auto"
+              data-ad-format="rectangle"
             />
           </div>
           
