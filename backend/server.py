@@ -925,29 +925,58 @@ async def login_user(login_data: UserLogin, response: Response):
 
 @api_router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
-    """Process Google OAuth session_id"""
+    """Process Google OAuth authorization code"""
     
     body = await request.json()
-    session_id = body.get("session_id")
+    code = body.get("code")
+    redirect_uri = body.get("redirect_uri")
     
-    if not session_id:
-        raise HTTPException(status_code=400, detail="session_id gerekli")
+    if not code:
+        raise HTTPException(status_code=400, detail="Authorization code gerekli")
     
-    # REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    # Get user data from Emergent Auth
+    # Get Google OAuth credentials from environment
+    client_id = os.environ.get("GOOGLE_CLIENT_ID")
+    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
+    
+    if not client_id or not client_secret:
+        raise HTTPException(status_code=500, detail="Google OAuth yapılandırılmamış")
+    
+    # Exchange authorization code for tokens
     async with httpx.AsyncClient() as client:
         try:
-            auth_response = await client.get(
-                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
-                headers={"X-Session-ID": session_id},
+            # Get tokens from Google
+            token_response = await client.post(
+                "https://oauth2.googleapis.com/token",
+                data={
+                    "code": code,
+                    "client_id": client_id,
+                    "client_secret": client_secret,
+                    "redirect_uri": redirect_uri,
+                    "grant_type": "authorization_code"
+                },
                 timeout=10.0
             )
             
-            if auth_response.status_code != 200:
-                raise HTTPException(status_code=401, detail="Geçersiz oturum")
+            if token_response.status_code != 200:
+                logger.error(f"Google token error: {token_response.text}")
+                raise HTTPException(status_code=401, detail="Google doğrulama hatası")
             
-            google_data = auth_response.json()
-        except Exception as e:
+            tokens = token_response.json()
+            access_token = tokens.get("access_token")
+            
+            # Get user info from Google
+            user_info_response = await client.get(
+                "https://www.googleapis.com/oauth2/v2/userinfo",
+                headers={"Authorization": f"Bearer {access_token}"},
+                timeout=10.0
+            )
+            
+            if user_info_response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Kullanıcı bilgileri alınamadı")
+            
+            google_data = user_info_response.json()
+            
+        except httpx.RequestError as e:
             logger.error(f"Google auth error: {e}")
             raise HTTPException(status_code=500, detail="Google giriş hatası")
     
