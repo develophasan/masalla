@@ -18,18 +18,25 @@ export default function AuthCallback() {
 
     const processAuth = async () => {
       try {
-        // Get session_id from URL fragment
-        const hash = location.hash;
-        const params = new URLSearchParams(hash.replace('#', ''));
-        const sessionId = params.get('session_id');
+        // Get authorization code from URL query params
+        const searchParams = new URLSearchParams(location.search);
+        const code = searchParams.get('code');
+        const error = searchParams.get('error');
 
-        if (!sessionId) {
-          toast.error('Giriş başarısız');
+        if (error) {
+          console.error('Google OAuth error:', error);
+          toast.error('Google girişi iptal edildi');
           navigate('/login');
           return;
         }
 
-        await processGoogleCallback(sessionId);
+        if (!code) {
+          toast.error('Giriş başarısız - kod bulunamadı');
+          navigate('/login');
+          return;
+        }
+
+        await processGoogleCallback(code);
         setStatus('success');
         toast.success('Google ile giriş başarılı!');
         
