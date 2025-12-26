@@ -5,7 +5,7 @@ import { API } from '@/config/api';
 const AuthContext = createContext(null);
 
 // Google OAuth Client ID
-const GOOGLE_CLIENT_ID = '382378341254-uuk351iupk6nm7rb80pih0li9fuup1d2.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '382378341254-uuk351iupk6nm7rb80pih0ii9fuup1d2.apps.googleusercontent.com';
 
 // Create axios instance with auth interceptor
 const authAxios = axios.create();
