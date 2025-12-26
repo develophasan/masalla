@@ -82,7 +82,24 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">7. Sorumluluk Reddi</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">7. İçerik Güvenliği ve Filtreleme</h2>
+              <p className="text-slate-600 mb-4">
+                Masal Sepeti, çocukların güvenliği için gelişmiş içerik filtreleme sistemleri kullanmaktadır:
+              </p>
+              <ul className="list-disc list-inside text-slate-600 space-y-2 ml-4">
+                <li><strong>Otomatik İçerik Filtreleme:</strong> Tüm masal oluşturma istekleri, küfür, uygunsuz kelime ve zararlı içerik açısından otomatik olarak taranır</li>
+                <li><strong>Yapay Zeka Moderasyonu:</strong> OpenAI Moderation API ile cinsel içerik, nefret söylemi, şiddet ve taciz içeriği tespit edilir</li>
+                <li><strong>Çift Katmanlı Koruma:</strong> Hem kullanıcı girişleri hem de yapay zeka tarafından üretilen içerikler kontrol edilir</li>
+                <li><strong>Türkçe Dil Desteği:</strong> Türkçe küfür ve uygunsuz kelimeler için özel filtre uygulanır</li>
+              </ul>
+              <p className="text-slate-600 mt-4">
+                Uygunsuz içerik tespit edildiğinde masal oluşturulmaz ve kullanıcıya bilgi verilir. 
+                Bu sistem, platformumuzun çocuklar için güvenli kalmasını sağlar.
+              </p>
+            </section>
+
+            <section className="mb-8">
+              <h2 className="text-xl font-bold text-slate-800 mb-4">8. Sorumluluk Reddi</h2>
               <p className="text-slate-600 mb-4">
                 Masal Sepeti, içeriklerin doğruluğu veya uygunluğu konusunda garanti vermez. 
                 Platform "olduğu gibi" sunulmaktadır. Şunlardan sorumlu değiliz:
