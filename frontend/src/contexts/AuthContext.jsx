@@ -4,6 +4,9 @@ import { API } from '@/config/api';
 
 const AuthContext = createContext(null);
 
+// Google OAuth Client ID
+const GOOGLE_CLIENT_ID = '382378341254-uuk351iupk6nm7rb80pih0ii9fuup1d2.apps.googleusercontent.com';
+
 // Create axios instance with auth interceptor
 const authAxios = axios.create();
 
@@ -62,14 +65,28 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = () => {
-    const redirectUrl = window.location.origin + '/auth/callback';
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+    // Build Google OAuth URL
+    const redirectUri = window.location.origin + '/auth/callback';
+    const scope = 'email profile openid';
+    
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${encodeURIComponent(GOOGLE_CLIENT_ID)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=code` +
+      `&scope=${encodeURIComponent(scope)}` +
+      `&access_type=offline` +
+      `&prompt=consent`;
+    
+    window.location.href = googleAuthUrl;
   };
 
-  const processGoogleCallback = async (sessionId) => {
-    const response = await axios.post(`${API}/auth/google/session`,
-      { session_id: sessionId }
-    );
+  const processGoogleCallback = async (code) => {
+    const redirectUri = window.location.origin + '/auth/callback';
+    
+    const response = await axios.post(`${API}/auth/google/session`, {
+      code: code,
+      redirect_uri: redirectUri
+    });
     
     // Store token in localStorage
     if (response.data.session_token) {
