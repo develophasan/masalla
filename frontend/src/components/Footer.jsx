@@ -93,11 +93,24 @@ export default function Footer() {
             <p className="text-slate-500 text-sm text-center sm:text-left">
               © {currentYear} Masal Sepeti. Tüm hakları saklıdır.
             </p>
-            <p className="flex items-center gap-1 text-slate-500 text-sm">
-              <span>Sevgiyle yapıldı</span>
-              <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-              <span>Türkiye'den</span>
-            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <p className="flex items-center gap-1 text-slate-500 text-sm">
+                <span>Geliştirici:</span>
+                <a 
+                  href="https://github.com/develophasan" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-violet-600 hover:text-violet-700 font-medium transition-colors"
+                >
+                  Hasan Özdemir
+                </a>
+              </p>
+              <p className="flex items-center gap-1 text-slate-500 text-sm">
+                <span>Sevgiyle yapıldı</span>
+                <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+                <span>Türkiye'den</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
