@@ -927,9 +927,16 @@ async def login_user(login_data: UserLogin, response: Response):
 async def google_session(request: Request, response: Response):
     """Process Google OAuth authorization code"""
     
-    body = await request.json()
+    try:
+        body = await request.json()
+    except Exception as e:
+        logger.error(f"Failed to parse request body: {e}")
+        raise HTTPException(status_code=400, detail="Geçersiz istek")
+    
     code = body.get("code")
     redirect_uri = body.get("redirect_uri")
+    
+    logger.info(f"Google auth attempt - redirect_uri: {redirect_uri}")
     
     if not code:
         raise HTTPException(status_code=400, detail="Authorization code gerekli")
@@ -939,7 +946,8 @@ async def google_session(request: Request, response: Response):
     client_secret = os.environ.get("GOOGLE_CLIENT_SECRET")
     
     if not client_id or not client_secret:
-        raise HTTPException(status_code=500, detail="Google OAuth yapılandırılmamış")
+        logger.error(f"Google OAuth not configured - client_id: {bool(client_id)}, client_secret: {bool(client_secret)}")
+        raise HTTPException(status_code=500, detail="Google OAuth yapılandırılmamış. GOOGLE_CLIENT_ID ve GOOGLE_CLIENT_SECRET environment variable'larını kontrol edin.")
     
     # Exchange authorization code for tokens
     async with httpx.AsyncClient() as client:
@@ -958,11 +966,16 @@ async def google_session(request: Request, response: Response):
             )
             
             if token_response.status_code != 200:
-                logger.error(f"Google token error: {token_response.text}")
-                raise HTTPException(status_code=401, detail="Google doğrulama hatası")
+                error_detail = token_response.text
+                logger.error(f"Google token error ({token_response.status_code}): {error_detail}")
+                raise HTTPException(status_code=401, detail=f"Google doğrulama hatası: {error_detail[:200]}")
             
             tokens = token_response.json()
             access_token = tokens.get("access_token")
+            
+            if not access_token:
+                logger.error(f"No access token in response: {tokens}")
+                raise HTTPException(status_code=401, detail="Access token alınamadı")
             
             # Get user info from Google
             user_info_response = await client.get(
@@ -972,12 +985,14 @@ async def google_session(request: Request, response: Response):
             )
             
             if user_info_response.status_code != 200:
+                logger.error(f"Failed to get user info: {user_info_response.text}")
                 raise HTTPException(status_code=401, detail="Kullanıcı bilgileri alınamadı")
             
             google_data = user_info_response.json()
+            logger.info(f"Google user authenticated: {google_data.get('email')}")
             
         except httpx.RequestError as e:
-            logger.error(f"Google auth error: {e}")
+            logger.error(f"Google auth network error: {e}")
             raise HTTPException(status_code=500, detail="Google giriş hatası")
     
     # Check if user exists
