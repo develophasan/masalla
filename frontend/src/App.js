@@ -48,6 +48,7 @@ function AppRouter() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/auth/google/callback" element={<AuthCallback />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/user/:userId" element={<PublicProfilePage />} />
         <Route path="/about" element={<AboutPage />} />
