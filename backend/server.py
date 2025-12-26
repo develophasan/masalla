@@ -874,6 +874,24 @@ async def generate_story(story_input: StoryCreate, request: Request):
             if story_input.kazanim_based:
                 kazanim = subtopic["kazanim"]
     
+    # ============= CONTENT MODERATION CHECK =============
+    # Validate all input fields for inappropriate content before generation
+    is_valid, validation_error = await validate_story_request(
+        topic_name=topic_name,
+        subtopic_name=subtopic_name,
+        theme=story_input.theme,
+        character=story_input.character,
+        kazanim=kazanim
+    )
+    
+    if not is_valid:
+        logger.warning(f"Content moderation blocked story creation: {validation_error}")
+        raise HTTPException(
+            status_code=400, 
+            detail=validation_error
+        )
+    # ===================================================
+    
     logger.info(f"Generating story: topic={topic_name}, subtopic={subtopic_name}, theme={story_input.theme}")
     
     # Generate story with AI
@@ -885,6 +903,19 @@ async def generate_story(story_input: StoryCreate, request: Request):
         character=story_input.character,
         kazanim=kazanim
     )
+    
+    # ============= CHECK GENERATED CONTENT =============
+    # Also validate the AI-generated content
+    generated_text = f"{story_data['title']} {story_data['content']}"
+    is_output_valid, output_error = contains_bad_content(generated_text)
+    
+    if is_output_valid:  # Note: is_output_valid=True means BAD content
+        logger.error(f"AI generated inappropriate content, blocking")
+        raise HTTPException(
+            status_code=500,
+            detail="Üretilen içerik uygunluk kontrolünden geçemedi. Lütfen farklı bir tema veya karakter deneyin."
+        )
+    # ===================================================
     
     # Generate audio (with fallback if quota exceeded)
     audio_base64 = None
