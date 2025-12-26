@@ -360,6 +360,16 @@ export default function HomePage() {
                   Masal Oluştur
                 </Button>
               </Link>
+              {/* Privacy & Terms Links - Required for Google OAuth */}
+              <div className="mt-6 flex items-center gap-4 text-white/70 text-sm">
+                <Link to="/privacy" className="hover:text-white underline transition-colors">
+                  Gizlilik Politikası
+                </Link>
+                <span>•</span>
+                <Link to="/terms" className="hover:text-white underline transition-colors">
+                  Kullanım Koşulları
+                </Link>
+              </div>
             </div>
           </div>
         </div>
