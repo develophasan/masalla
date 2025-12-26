@@ -107,17 +107,6 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 text-slate-500 text-sm">
-          <p>© 2025 masal.space - Masal Sepeti. Tüm hakları saklıdır.</p>
-          <p className="mt-2">
-            Designed by{' '}
-            <a href="https://github.com/develophasan" target="_blank" rel="noopener noreferrer" className="text-violet-600 hover:text-violet-700">
-              Hasan Özdemir
-            </a>
-          </p>
-        </div>
       </main>
     </div>
   );
