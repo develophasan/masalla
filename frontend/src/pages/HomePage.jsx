@@ -364,33 +364,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="footer">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <BookOpen className="w-6 h-6 text-violet-500" />
-            <span className="text-xl font-bold text-violet-600">Masal Sepeti</span>
-          </div>
-          <p className="text-slate-500 text-sm">
-            Çocuklar için yapay zeka destekli, kazanım temelli eğitici masal platformu
-          </p>
-          <p className="text-slate-400 text-xs mt-4">
-            © 2025 masal.space - Masal Sepeti. Tüm hakları saklıdır.
-          </p>
-          <p className="text-slate-400 text-xs mt-2">
-            Designed by{" "}
-            <a 
-              href="https://github.com/develophasan" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-violet-500 hover:text-violet-600 font-medium transition-colors"
-            >
-              Hasan Özdemir
-            </a>
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
