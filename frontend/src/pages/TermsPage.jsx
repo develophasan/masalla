@@ -136,7 +136,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-slate-800 mb-4">11. İletişim</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">12. İletişim</h2>
               <p className="text-slate-600 mb-4">
                 Kullanım koşulları hakkında sorularınız için:
               </p>
