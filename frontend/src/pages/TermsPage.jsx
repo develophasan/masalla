@@ -121,7 +121,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">9. Değişiklikler</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">10. Değişiklikler</h2>
               <p className="text-slate-600 mb-4">
                 Bu kullanım koşullarını önceden haber vermeksizin değiştirme hakkını saklı tutarız. 
                 Önemli değişiklikler e-posta ile bildirilecektir.
