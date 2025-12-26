@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
+import Footer from "@/components/Footer";
 import HomePage from "@/pages/HomePage";
 import StoryDetailPage from "@/pages/StoryDetailPage";
 import StoryCreatePage from "@/pages/StoryCreatePage";
@@ -32,47 +33,56 @@ function AppRouter() {
   const hideBottomNav = location.pathname.startsWith('/admin') || 
                         location.pathname === '/login' || 
                         location.pathname === '/register' ||
-                        location.pathname === '/auth/callback';
+                        location.pathname === '/auth/callback' ||
+                        location.pathname === '/auth/google/callback';
+
+  // Hide footer on admin pages and auth pages
+  const hideFooter = location.pathname.startsWith('/admin') || 
+                     location.pathname === '/login' || 
+                     location.pathname === '/register' ||
+                     location.pathname === '/auth/callback' ||
+                     location.pathname === '/auth/google/callback';
   
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/topics/:topicId" element={<TopicDetailPage />} />
-        <Route path="/stories" element={<StoryListPage />} />
-        {/* New SEO-friendly URL */}
-        <Route path="/masal/:slug" element={<StoryDetailPage />} />
-        {/* Legacy URL - redirect to new format */}
-        <Route path="/stories/:id" element={<StoryDetailPage />} />
-        <Route path="/create" element={<StoryCreatePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/auth/google/callback" element={<AuthCallback />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/user/:userId" element={<PublicProfilePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/topics/:topicId" element={<TopicDetailPage />} />
+          <Route path="/stories" element={<StoryListPage />} />
+          {/* New SEO-friendly URL */}
+          <Route path="/masal/:slug" element={<StoryDetailPage />} />
+          {/* Legacy URL - redirect to new format */}
+          <Route path="/stories/:id" element={<StoryDetailPage />} />
+          <Route path="/create" element={<StoryCreatePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/auth/google/callback" element={<AuthCallback />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/user/:userId" element={<PublicProfilePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </div>
+      {!hideFooter && <Footer />}
       {!hideBottomNav && <BottomNav />}
-    </>
+    </div>
   );
 }
 
 function App() {
   return (
     <HelmetProvider>
-      <div className="min-h-screen flex flex-col">
-        <BrowserRouter>
-          <AuthProvider>
-            <AppRouter />
-          </AuthProvider>
-        </BrowserRouter>
-        <Toaster position="top-center" richColors />
-      </div>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRouter />
+        </AuthProvider>
+      </BrowserRouter>
+      <Toaster position="top-center" richColors />
     </HelmetProvider>
   );
 }
