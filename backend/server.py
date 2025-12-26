@@ -57,6 +57,148 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ============= CONTENT MODERATION =============
+
+# Turkish bad words list (common profanity and inappropriate terms)
+TURKISH_BAD_WORDS = [
+    # Küfürler
+    "amk", "aq", "amına", "amını", "orospu", "oç", "piç", "sikik", "siktir", 
+    "yarrak", "yarak", "göt", "götün", "taşak", "taşşak", "meme", "kaltak",
+    "fahişe", "pezevenk", "ibne", "götveren", "puşt", "kahpe", "şerefsiz",
+    "dangalak", "gerizekalı", "salak", "aptal", "mal", "hıyar", "dalyarak",
+    # Şiddet içeren
+    "öldür", "gebertir", "boğazını", "kafasını kes", "parçala",
+    # Cinsel içerik
+    "seks", "porno", "erotik", "çıplak",
+    # Irkçılık / nefret
+    "gavur", "zenci", "çingene",
+    # Diğer uygunsuz
+    "bok", "boktan", "pislik", "lanet", "cehennem",
+]
+
+# Initialize profanity filter with English + custom Turkish words
+profanity.load_censor_words()
+profanity.add_censor_words(TURKISH_BAD_WORDS)
+
+def normalize_text(text: str) -> str:
+    """Normalize text for better matching (handle Turkish chars, numbers as letters)"""
+    if not text:
+        return ""
+    
+    text = text.lower()
+    
+    # Common letter substitutions used to bypass filters
+    substitutions = {
+        '0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', 
+        '7': 't', '8': 'b', '@': 'a', '$': 's', '!': 'i',
+        'ı': 'i', 'ğ': 'g', 'ü': 'u', 'ş': 's', 'ö': 'o', 'ç': 'c'
+    }
+    
+    for old, new in substitutions.items():
+        text = text.replace(old, new)
+    
+    # Remove special characters but keep spaces
+    text = re.sub(r'[^a-z0-9\s]', '', text)
+    
+    return text
+
+def contains_bad_content(text: str) -> tuple[bool, str]:
+    """Check if text contains inappropriate content. Returns (is_bad, reason)"""
+    if not text:
+        return False, ""
+    
+    # Normalize text
+    normalized = normalize_text(text)
+    original_lower = text.lower()
+    
+    # Check with profanity library
+    if profanity.contains_profanity(text) or profanity.contains_profanity(normalized):
+        return True, "Uygunsuz kelime tespit edildi"
+    
+    # Check Turkish bad words directly (handles spacing tricks like "a m k")
+    for bad_word in TURKISH_BAD_WORDS:
+        # Check normal
+        if bad_word in original_lower or bad_word in normalized:
+            return True, f"Uygunsuz içerik tespit edildi"
+        
+        # Check with spaces removed
+        if bad_word in original_lower.replace(" ", "") or bad_word in normalized.replace(" ", ""):
+            return True, f"Uygunsuz içerik tespit edildi"
+    
+    return False, ""
+
+async def check_content_with_openai(text: str) -> tuple[bool, str]:
+    """Use OpenAI Moderation API to check content (free API)"""
+    openai_key = os.environ.get('OPENAI_API_KEY')
+    if not openai_key:
+        return False, ""  # Skip if no API key
+    
+    try:
+        client = AsyncOpenAI(api_key=openai_key)
+        response = await client.moderations.create(input=text)
+        
+        result = response.results[0]
+        
+        if result.flagged:
+            # Get the categories that were flagged
+            categories = result.categories
+            reasons = []
+            
+            if categories.sexual:
+                reasons.append("cinsel içerik")
+            if categories.hate:
+                reasons.append("nefret söylemi")
+            if categories.violence:
+                reasons.append("şiddet içeriği")
+            if categories.self_harm:
+                reasons.append("zararlı içerik")
+            if categories.harassment:
+                reasons.append("taciz içeriği")
+            
+            return True, f"Uygunsuz içerik: {', '.join(reasons)}" if reasons else "Uygunsuz içerik tespit edildi"
+        
+        return False, ""
+    
+    except Exception as e:
+        logger.error(f"OpenAI moderation error: {e}")
+        return False, ""  # Don't block on API errors
+
+async def validate_story_request(
+    topic_name: str,
+    subtopic_name: Optional[str],
+    theme: str,
+    character: Optional[str],
+    kazanim: Optional[str]
+) -> tuple[bool, str]:
+    """Validate all story request fields for inappropriate content"""
+    
+    # Check all text fields
+    fields_to_check = [
+        (topic_name, "Konu"),
+        (subtopic_name, "Alt konu"),
+        (theme, "Tema"),
+        (character, "Karakter"),
+        (kazanim, "Kazanım"),
+    ]
+    
+    # First pass: Local Turkish filter (fast)
+    for field_value, field_name in fields_to_check:
+        if field_value:
+            is_bad, reason = contains_bad_content(field_value)
+            if is_bad:
+                logger.warning(f"Bad content detected in {field_name}: {field_value[:50]}...")
+                return False, f"{field_name} alanında uygunsuz içerik tespit edildi. Lütfen uygun bir içerik girin."
+    
+    # Second pass: OpenAI Moderation API (comprehensive)
+    all_text = " ".join(filter(None, [topic_name, subtopic_name, theme, character, kazanim]))
+    is_flagged, openai_reason = await check_content_with_openai(all_text)
+    
+    if is_flagged:
+        logger.warning(f"OpenAI flagged content: {all_text[:100]}...")
+        return False, f"İçerik uygunluk kontrolünden geçemedi: {openai_reason}. Lütfen çocuklara uygun içerik girin."
+    
+    return True, ""
+
 # ============= MODELS =============
 
 class Story(BaseModel):
