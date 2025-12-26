@@ -51,6 +51,8 @@ function AppRouter() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/user/:userId" element={<PublicProfilePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
