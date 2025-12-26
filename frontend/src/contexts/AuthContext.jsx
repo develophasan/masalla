@@ -66,7 +66,7 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = () => {
     // Build Google OAuth URL
-    const redirectUri = window.location.origin + '/auth/callback';
+    const redirectUri = window.location.origin + '/auth/google/callback';
     const scope = 'email profile openid';
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -81,7 +81,7 @@ export function AuthProvider({ children }) {
   };
 
   const processGoogleCallback = async (code) => {
-    const redirectUri = window.location.origin + '/auth/callback';
+    const redirectUri = window.location.origin + '/auth/google/callback';
     
     const response = await axios.post(`${API}/auth/google/session`, {
       code: code,
