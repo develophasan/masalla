@@ -129,7 +129,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">10. Uygulanacak Hukuk</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">11. Uygulanacak Hukuk</h2>
               <p className="text-slate-600 mb-4">
                 Bu koşullar Türkiye Cumhuriyeti yasalarına tabidir. Uyuşmazlıklar Türkiye mahkemelerinde çözülecektir.
               </p>
