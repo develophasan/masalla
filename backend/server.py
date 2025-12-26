@@ -16,6 +16,7 @@ from datetime import datetime, timezone, timedelta
 import httpx
 import hashlib
 import secrets
+from better_profanity import profanity
 
 # Load environment variables
 ROOT_DIR = Path(__file__).parent
