@@ -113,7 +113,7 @@ export default function TermsPage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-xl font-bold text-slate-800 mb-4">8. Hesap Sonlandırma</h2>
+              <h2 className="text-xl font-bold text-slate-800 mb-4">9. Hesap Sonlandırma</h2>
               <p className="text-slate-600 mb-4">
                 Kullanım koşullarını ihlal etmeniz durumunda hesabınızı askıya alabilir veya 
                 sonlandırabiliriz. Hesabınızı istediğiniz zaman silebilirsiniz.
