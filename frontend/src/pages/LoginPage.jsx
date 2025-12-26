@@ -35,6 +35,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white flex items-center justify-center px-4 py-12">
+      {/* Home Button - Top Left */}
+      <Link 
+        to="/" 
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-200 transition-all"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm font-medium">Anasayfa</span>
+      </Link>
+
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
