@@ -59,76 +59,39 @@ logger = logging.getLogger(__name__)
 
 # ============= CONTENT MODERATION =============
 
-# Turkish bad words list (common profanity and inappropriate terms)
+# Turkish bad words list - ONLY serious profanity (not common words)
 TURKISH_BAD_WORDS = [
-    # Küfürler
+    # Ağır küfürler (sadece bunlar engellenecek)
     "amk", "aq", "amına", "amını", "orospu", "oç", "piç", "sikik", "siktir", 
-    "yarrak", "yarak", "göt", "götün", "taşak", "taşşak", "meme", "kaltak",
-    "fahişe", "pezevenk", "ibne", "götveren", "puşt", "kahpe", "şerefsiz",
-    "dangalak", "gerizekalı", "salak", "aptal", "mal", "hıyar", "dalyarak",
-    # Şiddet içeren
-    "öldür", "gebertir", "boğazını", "kafasını kes", "parçala",
+    "yarrak", "yarak", "taşak", "taşşak", "kaltak", "fahişe", "pezevenk", 
+    "ibne", "götveren", "puşt", "dalyarak",
     # Cinsel içerik
-    "seks", "porno", "erotik", "çıplak",
-    # Irkçılık / nefret
-    "gavur", "zenci", "çingene",
-    # Diğer uygunsuz
-    "bok", "boktan", "pislik", "lanet", "cehennem",
+    "porno", "erotik",
 ]
 
-# Initialize profanity filter with English + custom Turkish words
+# Initialize profanity filter - BUT we'll use a simpler approach
 profanity.load_censor_words()
 profanity.add_censor_words(TURKISH_BAD_WORDS)
-
-def normalize_text(text: str) -> str:
-    """Normalize text for better matching (handle Turkish chars, numbers as letters)"""
-    if not text:
-        return ""
-    
-    text = text.lower()
-    
-    # Common letter substitutions used to bypass filters
-    substitutions = {
-        '0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', 
-        '7': 't', '8': 'b', '@': 'a', '$': 's', '!': 'i',
-        'ı': 'i', 'ğ': 'g', 'ü': 'u', 'ş': 's', 'ö': 'o', 'ç': 'c'
-    }
-    
-    for old, new in substitutions.items():
-        text = text.replace(old, new)
-    
-    # Remove special characters but keep spaces
-    text = re.sub(r'[^a-z0-9\s]', '', text)
-    
-    return text
 
 def contains_bad_content(text: str) -> tuple[bool, str]:
     """Check if text contains inappropriate content. Returns (is_bad, reason)"""
     if not text:
         return False, ""
     
-    # Normalize text
-    normalized = normalize_text(text)
     original_lower = text.lower()
     
-    # Check with profanity library
-    if profanity.contains_profanity(text) or profanity.contains_profanity(normalized):
-        return True, "Uygunsuz kelime tespit edildi"
-    
-    # Check Turkish bad words directly (handles spacing tricks like "a m k")
+    # Only check our specific Turkish bad words (exact match or within text)
     for bad_word in TURKISH_BAD_WORDS:
-        # Check normal
-        if bad_word in original_lower or bad_word in normalized:
-            return True, f"Uygunsuz içerik tespit edildi"
-        
-        # Check with spaces removed
-        if bad_word in original_lower.replace(" ", "") or bad_word in normalized.replace(" ", ""):
-            return True, f"Uygunsuz içerik tespit edildi"
+        if bad_word in original_lower:
+            return True, "Uygunsuz kelime tespit edildi"
+        # Check with spaces removed (for tricks like "a m k")
+        if len(bad_word) <= 4 and bad_word in original_lower.replace(" ", ""):
+            return True, "Uygunsuz içerik tespit edildi"
     
     return False, ""
 
 async def check_content_with_openai(text: str) -> tuple[bool, str]:
-    """Use OpenAI Moderation API to check content (free API)"""
+    """Use OpenAI Moderation API to check content - only for severe content"""
     openai_key = os.environ.get('OPENAI_API_KEY')
     if not openai_key:
         return False, ""  # Skip if no API key
@@ -140,16 +103,28 @@ async def check_content_with_openai(text: str) -> tuple[bool, str]:
         result = response.results[0]
         
         if result.flagged:
-            # Get the categories that were flagged
+            # Only block for serious categories with high scores
             categories = result.categories
+            scores = result.category_scores
             reasons = []
             
-            if categories.sexual:
+            # Only block if score is very high (> 0.8) for serious categories
+            if categories.sexual and scores.sexual > 0.8:
                 reasons.append("cinsel içerik")
-            if categories.hate:
+            if categories.hate and scores.hate > 0.8:
                 reasons.append("nefret söylemi")
-            if categories.violence:
+            if categories.violence and scores.violence > 0.9:  # Even higher threshold for violence (stories may have mild conflict)
                 reasons.append("şiddet içeriği")
+            
+            # Only return flagged if we have actual serious reasons
+            if reasons:
+                return True, f"Uygunsuz içerik: {', '.join(reasons)}"
+        
+        return False, ""
+    
+    except Exception as e:
+        logger.error(f"OpenAI moderation error: {e}")
+        return False, ""  # Don't block on API errors
             if categories.self_harm:
                 reasons.append("zararlı içerik")
             if categories.harassment:
