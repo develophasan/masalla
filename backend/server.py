@@ -125,18 +125,6 @@ async def check_content_with_openai(text: str) -> tuple[bool, str]:
     except Exception as e:
         logger.error(f"OpenAI moderation error: {e}")
         return False, ""  # Don't block on API errors
-            if categories.self_harm:
-                reasons.append("zararlı içerik")
-            if categories.harassment:
-                reasons.append("taciz içeriği")
-            
-            return True, f"Uygunsuz içerik: {', '.join(reasons)}" if reasons else "Uygunsuz içerik tespit edildi"
-        
-        return False, ""
-    
-    except Exception as e:
-        logger.error(f"OpenAI moderation error: {e}")
-        return False, ""  # Don't block on API errors
 
 async def validate_story_request(
     topic_name: str,
