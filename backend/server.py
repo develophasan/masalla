@@ -810,19 +810,6 @@ async def generate_story(story_input: StoryCreate, request: Request):
         kazanim=kazanim
     )
     
-    # ============= CHECK GENERATED CONTENT =============
-    # Also validate the AI-generated content
-    generated_text = f"{story_data['title']} {story_data['content']}"
-    is_output_valid, output_error = contains_bad_content(generated_text)
-    
-    if is_output_valid:  # Note: is_output_valid=True means BAD content
-        logger.error(f"AI generated inappropriate content, blocking")
-        raise HTTPException(
-            status_code=500,
-            detail="Üretilen içerik uygunluk kontrolünden geçemedi. Lütfen farklı bir tema veya karakter deneyin."
-        )
-    # ===================================================
-    
     # Generate audio (with fallback if quota exceeded)
     audio_base64 = None
     duration = None
