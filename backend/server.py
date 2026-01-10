@@ -85,9 +85,9 @@ async def validate_story_request(
     character: Optional[str],
     kazanim: Optional[str]
 ) -> tuple[bool, str]:
-    """Validate all story request fields for inappropriate content"""
+    """Validate all story request fields - only check for serious profanity"""
     
-    # Check all text fields
+    # Check all text fields for serious profanity only
     fields_to_check = [
         (topic_name, "Konu"),
         (subtopic_name, "Alt konu"),
@@ -96,21 +96,12 @@ async def validate_story_request(
         (kazanim, "Kazanım"),
     ]
     
-    # First pass: Local Turkish filter (fast)
     for field_value, field_name in fields_to_check:
         if field_value:
             is_bad, reason = contains_bad_content(field_value)
             if is_bad:
                 logger.warning(f"Bad content detected in {field_name}: {field_value[:50]}...")
-                return False, f"{field_name} alanında uygunsuz içerik tespit edildi. Lütfen uygun bir içerik girin."
-    
-    # Second pass: OpenAI Moderation API (comprehensive)
-    all_text = " ".join(filter(None, [topic_name, subtopic_name, theme, character, kazanim]))
-    is_flagged, openai_reason = await check_content_with_openai(all_text)
-    
-    if is_flagged:
-        logger.warning(f"OpenAI flagged content: {all_text[:100]}...")
-        return False, f"İçerik uygunluk kontrolünden geçemedi: {openai_reason}. Lütfen çocuklara uygun içerik girin."
+                return False, f"{field_name} alanında uygunsuz içerik tespit edildi."
     
     return True, ""
 
