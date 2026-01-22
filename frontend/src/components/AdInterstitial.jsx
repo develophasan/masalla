@@ -87,7 +87,7 @@ export const AdInterstitial = ({
               ref={adRef}
               className="adsbygoogle"
               style={{ display: 'block', width: '100%', height: '250px' }}
-              data-ad-client="ca-pub-4203191127938139"
+              data-ad-client="ca-pub-7470017453637950"
               data-ad-slot="auto"
               data-ad-format="rectangle"
             />
