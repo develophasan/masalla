@@ -35,14 +35,16 @@ function AppRouter() {
                         location.pathname === '/login' || 
                         location.pathname === '/register' ||
                         location.pathname === '/auth/callback' ||
-                        location.pathname === '/auth/google/callback';
+                        location.pathname === '/auth/google/callback' ||
+                        location.pathname === '/dev/api';
 
   // Hide footer on admin pages and auth pages
   const hideFooter = location.pathname.startsWith('/admin') || 
                      location.pathname === '/login' || 
                      location.pathname === '/register' ||
                      location.pathname === '/auth/callback' ||
-                     location.pathname === '/auth/google/callback';
+                     location.pathname === '/auth/google/callback' ||
+                     location.pathname === '/dev/api';
   
   return (
     <div className="min-h-screen flex flex-col">
