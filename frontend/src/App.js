@@ -18,6 +18,7 @@ import PublicProfilePage from "@/pages/PublicProfilePage";
 import AboutPage from "@/pages/AboutPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
+import ApiDocsPage from "@/pages/ApiDocsPage";
 import AdminLoginPage from "@/pages/admin/AdminLoginPage";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
