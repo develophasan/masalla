@@ -149,6 +149,90 @@ export default function ApiDocsPage() {
           </div>
         </div>
 
+        {/* Authentication Section */}
+        <div className="bg-slate-800 rounded-xl p-6 border border-slate-700 mb-8">
+          <h2 className="text-xl font-bold text-white mb-4">🔑 Session Token Nasıl Alınır?</h2>
+          <p className="text-slate-300 mb-4">
+            Korumalı API endpoint'lerine erişmek için <code className="text-green-400 bg-slate-900 px-1 rounded">session_token</code> gereklidir. 
+            Token'ı aşağıdaki yöntemlerden biriyle alabilirsiniz:
+          </p>
+          
+          {/* Method 1: Email/Password Login */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-violet-400 mb-3">1️⃣ E-posta/Şifre ile Giriş</h3>
+            <pre className="bg-slate-900 rounded-lg p-4 overflow-x-auto text-sm mb-2">
+              <code className="text-green-400">{`POST ${API_BASE}/auth/login
+Content-Type: application/json
+
+{
+  "email": "kullanici@email.com",
+  "password": "sifre123"
+}`}</code>
+            </pre>
+            <p className="text-slate-400 text-sm mb-2">✅ Başarılı Yanıt:</p>
+            <pre className="bg-slate-900 rounded-lg p-4 overflow-x-auto text-sm">
+              <code className="text-amber-400">{`{
+  "user": {
+    "id": "user_id",
+    "name": "Kullanıcı Adı",
+    "email": "kullanici@email.com",
+    "credits": 5
+  },
+  "session_token": "eyJhbGciOiJIUzI1NiIs..."
+}`}</code>
+            </pre>
+          </div>
+
+          {/* Method 2: Google OAuth */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-violet-400 mb-3">2️⃣ Google OAuth ile Giriş</h3>
+            <p className="text-slate-300 mb-3">Google OAuth akışı için iki adımlı bir süreç gereklidir:</p>
+            
+            <div className="space-y-4">
+              <div>
+                <p className="text-slate-400 text-sm mb-2"><strong>Adım 1:</strong> Authorization URL al</p>
+                <pre className="bg-slate-900 rounded-lg p-4 overflow-x-auto text-sm">
+                  <code className="text-green-400">{`POST ${API_BASE}/auth/google/login
+Content-Type: application/json
+
+{
+  "redirect_uri": "https://your-app.com/callback"
+}`}</code>
+                </pre>
+              </div>
+              
+              <div>
+                <p className="text-slate-400 text-sm mb-2"><strong>Adım 2:</strong> Auth code ile session token al</p>
+                <pre className="bg-slate-900 rounded-lg p-4 overflow-x-auto text-sm">
+                  <code className="text-green-400">{`POST ${API_BASE}/auth/google/session
+Content-Type: application/json
+
+{
+  "code": "google_auth_code",
+  "redirect_uri": "https://your-app.com/callback"
+}`}</code>
+                </pre>
+              </div>
+            </div>
+          </div>
+
+          {/* Using the Token */}
+          <div className="bg-slate-900 rounded-lg p-4 border border-violet-500/30">
+            <h3 className="text-lg font-semibold text-green-400 mb-3">📌 Token Kullanımı</h3>
+            <p className="text-slate-300 mb-3">
+              Aldığınız <code className="text-green-400 bg-slate-800 px-1 rounded">session_token</code>'ı korumalı endpoint'lere şu şekilde ekleyin:
+            </p>
+            <pre className="bg-slate-950 rounded-lg p-4 overflow-x-auto text-sm">
+              <code className="text-cyan-400">{`GET ${API_BASE}/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+Content-Type: application/json`}</code>
+            </pre>
+            <p className="text-amber-400 text-sm mt-3">
+              ⚠️ Token'ı güvenli bir şekilde saklayın (Android: EncryptedSharedPreferences)
+            </p>
+          </div>
+        </div>
+
         {/* Android Example */}
         <div className="bg-slate-800 rounded-xl p-6 border border-slate-700 mb-8">
           <h2 className="text-xl font-bold text-white mb-4">📱 Android Retrofit Örneği</h2>
