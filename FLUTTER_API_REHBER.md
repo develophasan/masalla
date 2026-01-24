@@ -799,21 +799,21 @@ class AudioPlayerService {
 
 ```bash
 # Health check
-curl https://masal.space/api/health
+curl https://masalla-production.up.railway.app/api/health
 
 # Konuları listele
-curl https://masal.space/api/topics
+curl https://masalla-production.up.railway.app/api/topics
 
 # Masalları listele
-curl https://masal.space/api/stories?limit=5
+curl "https://masalla-production.up.railway.app/api/stories?limit=5"
 
 # Giriş yap ve token al
-curl -X POST https://masal.space/api/auth/login \
+curl -X POST https://masalla-production.up.railway.app/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@test.com","password":"123456"}'
 
 # Token ile profil al
-curl https://masal.space/api/users/profile \
+curl https://masalla-production.up.railway.app/api/users/profile \
   -H "Authorization: Bearer YOUR_TOKEN_HERE"
 ```
 
