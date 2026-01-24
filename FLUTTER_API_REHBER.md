@@ -3,14 +3,17 @@
 ## 📌 ÖNEMLİ: Base URL ve Yapılandırma
 
 ```dart
-// ✅ DOĞRU BASE URL
-const String BASE_URL = "https://masal.space/api";
+// ✅ DOĞRU BASE URL - Railway Backend
+const String BASE_URL = "https://masalla-production.up.railway.app/api";
 
-// ❌ YANLIŞ - HTML döndürür
-// const String BASE_URL = "https://masal.space";
+// ❌ YANLIŞ - HTML döndürür (sadece frontend)
+// const String BASE_URL = "https://masal.space/api";
 ```
 
-> **⚠️ DİKKAT:** Tüm API endpoint'leri `/api` prefix'i ile başlamalıdır!
+> **⚠️ DİKKAT:** 
+> - `masal.space` sadece frontend'e yönlendirilmiş
+> - API için `masalla-production.up.railway.app` kullanın
+> - Tüm endpoint'ler `/api` prefix'i ile başlar
 
 ---
 
