@@ -25,7 +25,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = "https://masal.space/api";
+  static const String baseUrl = "https://masalla-production.up.railway.app/api";
   String? _sessionToken;
 
   // Token'ı SharedPreferences'tan yükle
