@@ -54,8 +54,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white flex items-center justify-center px-4 py-12">
-      {/* Home Button - Top Left */}
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white flex items-center justify-center px-4 py-12" style={{ paddingTop: 'max(3rem, env(safe-area-inset-top))' }}>
+      {/* Home Button - Top Left with safe area */}
       <Link 
         to="/" 
         className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-200 transition-all"
