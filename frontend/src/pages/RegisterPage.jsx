@@ -58,7 +58,8 @@ export default function RegisterPage() {
       {/* Home Button - Top Left with safe area */}
       <Link 
         to="/" 
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-200 transition-all"
+        className="fixed left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg border border-slate-200 text-slate-600 hover:text-violet-600 hover:border-violet-200 transition-all"
+        style={{ top: 'max(1rem, calc(env(safe-area-inset-top) + 0.5rem))' }}
       >
         <ArrowLeft className="w-4 h-4" />
         <span className="text-sm font-medium">Anasayfa</span>
