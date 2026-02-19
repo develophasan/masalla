@@ -50,6 +50,7 @@ function AppRouter() {
   
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
