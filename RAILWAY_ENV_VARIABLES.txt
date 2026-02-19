@@ -1,0 +1,27 @@
+# ========================================
+# RAILWAY ENVIRONMENT VARIABLES
+# ========================================
+# Bu değişkenleri Railway Dashboard > Backend Service > Variables bölümüne ekleyin
+
+# Gemini API Key (OpenAI yerine)
+GEMINI_API_KEY=AIzaSyBly39KguEXdKPDWPjOp_pp3hS25vhYHdI
+
+# Google Cloud TTS API Key (ses üretimi için)
+GOOGLE_TTS_API_KEY=AIzaSyC2SAYMrIvMkl1taSCgF2febXou1q30T4s
+
+# Google OAuth (sosyal giriş için)
+GOOGLE_CLIENT_ID=382378341254-uuk351iupk6nm7rb80pih0ii9fuup1d2.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+
+# Admin credentials
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=masallardiyariai
+
+# ========================================
+# ARTIK GEREKMİYOR (Kaldırılabilir)
+# ========================================
+# OPENAI_API_KEY - Artık Gemini kullanıyoruz
+
+# ========================================
+# NOT: MONGO_URL ve DB_NAME zaten Railway'de yapılandırılmış olmalı
+# ========================================
