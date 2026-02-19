@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authAxios } from '@/contexts/AuthContext';
+import { useAuth, authAxios } from '@/contexts/AuthContext';
 import { 
   Play, Square, Trash2, Plus, Loader2, Terminal, 
   ChevronLeft, Settings, Zap, CheckCircle, XCircle, AlertTriangle
@@ -25,6 +25,7 @@ const CHARACTERS = [
 
 export default function BulkGeneratePage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const logsEndRef = useRef(null);
   
   const [presets, setPresets] = useState([]);
