@@ -41,7 +41,13 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] "Back to Home" buttons on Login/Register pages
 - [x] Bulk Story Generation Page (`/admin/bulk-generate`)
 - [x] Migration from OpenAI to Gemini 2.5 Flash
-- [x] Softer TTS voice (tr-TR-Standard-A)
+- [x] Softer TTS voice (tr-TR-Standard-A - Turkish female)
+- [x] Story length optimization for TTS (400-500 words)
+- [x] PWA Support (manifest, service worker, icons, offline page)
+- [x] iOS safe-area/status bar support
+- [x] Flutter API documentation (`/app/FLUTTER_API_REHBER.md`)
+- [x] Security cleanup (API keys removed from codebase)
+- [x] Gemini API Key - Active ✓
 
 ## Required Environment Variables (Backend)
 ```
@@ -57,9 +63,18 @@ DB_NAME=your_database_name
 
 ## Upcoming Tasks
 - [ ] Rewarded Ad for Story Downloads
+- [ ] Update old stories with new female TTS voice
+- [ ] Push notifications for new stories
 
 ## Future/Backlog
-- Backend refactoring (deferred)
+- [ ] Backend refactoring (deferred by user)
+- [ ] Multi-language support
+- [ ] AI-generated story illustrations
+- [ ] Parental control panel
+- [ ] Offline story playback
+- [ ] Voice selection for TTS
+- [ ] Story series/continuation feature
+- [ ] Social sharing (WhatsApp, Instagram)
 
 ## Key Routes
 - `/dev/api` - Private API documentation (requires key)
