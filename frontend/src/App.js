@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import HomePage from "@/pages/HomePage";
 import StoryDetailPage from "@/pages/StoryDetailPage";
 import StoryCreatePage from "@/pages/StoryCreatePage";
