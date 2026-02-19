@@ -531,18 +531,18 @@ async def generate_audio_for_story(text: str) -> tuple[str, int]:
         # Set the text input
         synthesis_input = texttospeech.SynthesisInput(text=text_chunk)
         
-        # Build the voice request - Turkish female Neural2 voice for children's stories
+        # Build the voice request - Turkish female Studio voice for soft children's narration
         voice = texttospeech.VoiceSelectionParams(
             language_code="tr-TR",
-            name="tr-TR-Wavenet-E",  # Turkish female WaveNet voice (high quality)
+            name="tr-TR-Standard-A",  # Turkish female Standard voice (softer, warmer tone)
             ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
         )
         
         # Select the audio file type and speaking rate
         audio_config = texttospeech.AudioConfig(
             audio_encoding=texttospeech.AudioEncoding.MP3,
-            speaking_rate=0.9,  # Slightly slower for children
-            pitch=1.0  # Normal pitch
+            speaking_rate=0.85,  # Slower for children's stories
+            pitch=0.5  # Slightly higher pitch for warmer tone
         )
         
         # Perform the text-to-speech request
