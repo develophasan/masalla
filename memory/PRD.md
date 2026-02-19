@@ -7,24 +7,25 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - Full user membership with custom Google OAuth and local registration
 - Admin panel for administrative tasks
 - Credit system for story generation
-- AI story generation using OpenAI API (user's own key)
-- Text-to-speech audio generation using Google Cloud TTS
+- **AI story generation using Gemini 2.5 Flash** (updated from OpenAI)
+- Text-to-speech audio generation using Google Cloud TTS (softer Turkish female voice)
 - SEO-friendly story URLs (`/masal/{slug}`) with dynamic metadata
 - Profanity filter for content moderation
 - Favorites system for users to save stories
 - Responsive, mobile-friendly design
 - AdSense integration for monetization
-- **NEW: Bulk Story Generation** - Admin panel page for sequential bulk story creation
+- Bulk Story Generation admin page
 
 ## Tech Stack
 - **Frontend:** React + Vite + Tailwind CSS + Shadcn/UI
 - **Backend:** FastAPI (Python)
 - **Database:** MongoDB
-- **External APIs:** OpenAI, Google Cloud TTS, Google OAuth
+- **AI Model:** Google Gemini 2.5 Flash
+- **TTS:** Google Cloud Text-to-Speech (tr-TR-Standard-A)
 
 ## 3rd Party Integrations
-- **OpenAI GPT-4o** (Story Generation) — User API Key
-- **Google Cloud TTS** (Audio) — User API Key
+- **Google Gemini 2.5 Flash** (Story Generation) — User API Key (`GEMINI_API_KEY`)
+- **Google Cloud TTS** (Audio) — User API Key (`GOOGLE_TTS_API_KEY`)
 - **Custom Google OAuth** (Social Login) — User Keys
 - **Google AdSense** (Ads) — Publisher ID: ca-pub-7470017453637950
 
@@ -38,27 +39,19 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] API Documentation page (`/dev/api?key=masal2025dev`)
 - [x] Authentication documentation with session_token guide
 - [x] "Back to Home" buttons on Login/Register pages
-- [x] Fixed `requests-oauthlib` dependency
-- [x] Removed `emergentintegrations` from requirements.txt
-- [x] **Bulk Story Generation Page** (`/admin/bulk-generate`)
+- [x] Bulk Story Generation Page (`/admin/bulk-generate`)
+- [x] **Migration from OpenAI to Gemini 2.5 Flash**
+- [x] **Softer TTS voice (tr-TR-Standard-A)**
 
-## New: Bulk Story Generation Feature
-- **URL:** `/admin/bulk-generate`
-- **Features:**
-  - Topic and subtopic selection
-  - Theme, age group, character configuration
-  - Add single tasks or bulk (+5, +10)
-  - Terminal-like log display
-  - Start/Stop controls
-  - Progress bar
-  - Sequential processing (no overload)
-
-## Backend API Endpoints (New)
-- `GET /api/admin/generation-presets` - Get all topics for bulk generation
-- `GET /api/admin/bulk-generate/status` - Get current generation status
-- `POST /api/admin/bulk-generate/start` - Start bulk generation
-- `POST /api/admin/bulk-generate/stop` - Stop generation
-- `POST /api/admin/bulk-generate/clear-logs` - Clear logs
+## Railway Environment Variables
+```
+GEMINI_API_KEY=AIzaSyBly39KguEXdKPDWPjOp_pp3hS25vhYHdI
+GOOGLE_TTS_API_KEY=AIzaSyC2SAYMrIvMkl1taSCgF2febXou1q30T4s
+GOOGLE_CLIENT_ID=382378341254-uuk351iupk6nm7rb80pih0ii9fuup1d2.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=masallardiyariai
+```
 
 ## Upcoming Tasks
 - [ ] Rewarded Ad for Story Downloads (user request)
@@ -79,4 +72,4 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 ## Railway Deployment Notes
 - Frontend: `masal.space`
 - Backend: `masalla-production.up.railway.app`
-- Backend needs redeploy to include new bulk generation endpoints
+- **Important:** Add `GEMINI_API_KEY` environment variable to backend service
