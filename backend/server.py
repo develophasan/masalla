@@ -1616,6 +1616,229 @@ async def admin_migrate_slugs(request: Request):
     }
 
 
+# ============= BULK STORY GENERATION =============
+
+class BulkStoryTask(BaseModel):
+    topic_id: str
+    subtopic_id: Optional[str] = None
+    theme: str
+    age_group: str
+    character: Optional[str] = None
+
+class BulkGenerationRequest(BaseModel):
+    tasks: List[BulkStoryTask]
+
+# Global state for bulk generation
+bulk_generation_state = {
+    "is_running": False,
+    "should_stop": False,
+    "current_index": 0,
+    "total_tasks": 0,
+    "completed": 0,
+    "failed": 0,
+    "logs": [],
+    "current_task": None
+}
+
+def add_bulk_log(message: str, log_type: str = "info"):
+    """Add a log entry to bulk generation state"""
+    timestamp = datetime.now(timezone.utc).strftime("%H:%M:%S")
+    log_entry = {
+        "timestamp": timestamp,
+        "message": message,
+        "type": log_type  # info, success, error, warning
+    }
+    bulk_generation_state["logs"].append(log_entry)
+    # Keep only last 500 logs
+    if len(bulk_generation_state["logs"]) > 500:
+        bulk_generation_state["logs"] = bulk_generation_state["logs"][-500:]
+
+@api_router.get("/admin/bulk-generate/status")
+async def get_bulk_status(request: Request):
+    """Get current status of bulk generation"""
+    await require_admin(request)
+    return {
+        "is_running": bulk_generation_state["is_running"],
+        "should_stop": bulk_generation_state["should_stop"],
+        "current_index": bulk_generation_state["current_index"],
+        "total_tasks": bulk_generation_state["total_tasks"],
+        "completed": bulk_generation_state["completed"],
+        "failed": bulk_generation_state["failed"],
+        "logs": bulk_generation_state["logs"][-100:],  # Last 100 logs
+        "current_task": bulk_generation_state["current_task"]
+    }
+
+@api_router.post("/admin/bulk-generate/start")
+async def start_bulk_generation(bulk_request: BulkGenerationRequest, background_tasks: BackgroundTasks, request: Request):
+    """Start bulk story generation"""
+    await require_admin(request)
+    
+    if bulk_generation_state["is_running"]:
+        raise HTTPException(status_code=400, detail="Üretim zaten devam ediyor")
+    
+    # Reset state
+    bulk_generation_state["is_running"] = True
+    bulk_generation_state["should_stop"] = False
+    bulk_generation_state["current_index"] = 0
+    bulk_generation_state["total_tasks"] = len(bulk_request.tasks)
+    bulk_generation_state["completed"] = 0
+    bulk_generation_state["failed"] = 0
+    bulk_generation_state["logs"] = []
+    bulk_generation_state["current_task"] = None
+    
+    add_bulk_log(f"🚀 Toplu üretim başlatıldı. Toplam {len(bulk_request.tasks)} masal üretilecek.", "info")
+    
+    # Start background task
+    background_tasks.add_task(run_bulk_generation, bulk_request.tasks)
+    
+    return {"success": True, "message": "Toplu üretim başlatıldı"}
+
+async def run_bulk_generation(tasks: List[BulkStoryTask]):
+    """Background task for bulk story generation"""
+    try:
+        for i, task in enumerate(tasks):
+            # Check if should stop
+            if bulk_generation_state["should_stop"]:
+                add_bulk_log("⏹️ Üretim durduruldu.", "warning")
+                break
+            
+            bulk_generation_state["current_index"] = i + 1
+            
+            # Get topic info
+            topic = get_topic_detail(task.topic_id)
+            if not topic:
+                add_bulk_log(f"❌ [{i+1}/{len(tasks)}] Konu bulunamadı: {task.topic_id}", "error")
+                bulk_generation_state["failed"] += 1
+                continue
+            
+            topic_name = topic["name"]
+            subtopic_name = None
+            kazanim = None
+            
+            if task.subtopic_id:
+                subtopic = get_subtopic_by_id(task.topic_id, task.subtopic_id)
+                if subtopic:
+                    subtopic_name = subtopic["name"]
+                    kazanim = subtopic["kazanim"]
+            
+            bulk_generation_state["current_task"] = {
+                "topic": topic_name,
+                "subtopic": subtopic_name,
+                "theme": task.theme,
+                "age_group": task.age_group
+            }
+            
+            add_bulk_log(f"📝 [{i+1}/{len(tasks)}] Üretiliyor: {topic_name} - {task.theme} ({task.age_group})", "info")
+            
+            try:
+                # Generate story
+                story_data = await generate_story_with_ai(
+                    topic_name=topic_name,
+                    subtopic_name=subtopic_name,
+                    theme=task.theme,
+                    age_group=task.age_group,
+                    character=task.character,
+                    kazanim=kazanim
+                )
+                
+                add_bulk_log(f"✍️ [{i+1}/{len(tasks)}] Masal metni oluşturuldu: {story_data['title'][:50]}...", "info")
+                
+                # Generate audio
+                audio_base64 = None
+                duration = None
+                try:
+                    audio_base64, duration = await generate_audio_for_story(story_data["content"])
+                    add_bulk_log(f"🔊 [{i+1}/{len(tasks)}] Ses üretildi ({duration}sn)", "info")
+                except Exception as audio_err:
+                    add_bulk_log(f"⚠️ [{i+1}/{len(tasks)}] Ses üretilemedi: {str(audio_err)[:50]}", "warning")
+                
+                # Create story object
+                story = Story(
+                    title=story_data["title"],
+                    content=story_data["content"],
+                    topic_id=task.topic_id,
+                    topic_name=topic_name,
+                    subtopic_id=task.subtopic_id,
+                    subtopic_name=subtopic_name,
+                    kazanim=kazanim,
+                    theme=task.theme,
+                    age_group=task.age_group,
+                    character=task.character,
+                    audio_base64=audio_base64,
+                    duration=duration
+                )
+                
+                # Generate slug
+                base_slug = generate_slug(story_data["title"], task.age_group)
+                story.slug = await ensure_unique_slug(base_slug, story.id)
+                
+                # Save to database
+                story_dict = story.model_dump()
+                story_dict["user_id"] = "admin_master"  # Mark as admin generated
+                await db.stories.insert_one(story_dict)
+                
+                bulk_generation_state["completed"] += 1
+                add_bulk_log(f"✅ [{i+1}/{len(tasks)}] Kaydedildi: {story_data['title'][:40]}...", "success")
+                
+            except Exception as e:
+                bulk_generation_state["failed"] += 1
+                add_bulk_log(f"❌ [{i+1}/{len(tasks)}] Hata: {str(e)[:100]}", "error")
+            
+            # Small delay between generations to avoid rate limits
+            import asyncio
+            await asyncio.sleep(2)
+        
+        # Final summary
+        add_bulk_log(f"🏁 Tamamlandı! Başarılı: {bulk_generation_state['completed']}, Başarısız: {bulk_generation_state['failed']}", "info")
+        
+    except Exception as e:
+        add_bulk_log(f"💥 Kritik hata: {str(e)}", "error")
+    finally:
+        bulk_generation_state["is_running"] = False
+        bulk_generation_state["current_task"] = None
+
+@api_router.post("/admin/bulk-generate/stop")
+async def stop_bulk_generation(request: Request):
+    """Stop bulk story generation"""
+    await require_admin(request)
+    
+    if not bulk_generation_state["is_running"]:
+        raise HTTPException(status_code=400, detail="Çalışan bir üretim yok")
+    
+    bulk_generation_state["should_stop"] = True
+    add_bulk_log("⏸️ Durdurma isteği alındı...", "warning")
+    
+    return {"success": True, "message": "Durdurma isteği gönderildi"}
+
+@api_router.post("/admin/bulk-generate/clear-logs")
+async def clear_bulk_logs(request: Request):
+    """Clear bulk generation logs"""
+    await require_admin(request)
+    
+    bulk_generation_state["logs"] = []
+    
+    return {"success": True, "message": "Loglar temizlendi"}
+
+@api_router.get("/admin/generation-presets")
+async def get_generation_presets(request: Request):
+    """Get all topics and subtopics for bulk generation presets"""
+    await require_admin(request)
+    
+    all_topics = get_all_topics()
+    presets = []
+    
+    for topic in all_topics:
+        topic_detail = get_topic_detail(topic["id"])
+        if topic_detail:
+            presets.append({
+                "topic_id": topic["id"],
+                "topic_name": topic["name"],
+                "subtopics": topic_detail.get("subtopics", [])
+            })
+    
+    return presets
+
+
 # Include router
 app.include_router(api_router)
 
