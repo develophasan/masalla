@@ -52,9 +52,19 @@ export default function BulkGeneratePage() {
   });
 
   useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) return;
+    
+    // Check if user exists and is admin
+    if (!user || user.role !== 'admin') {
+      toast.error('Admin yetkisi gerekli');
+      navigate('/admin/login');
+      return;
+    }
+    
     fetchPresets();
     fetchStatus();
-  }, []);
+  }, [authLoading, user, navigate]);
 
   // Polling for status updates when running
   useEffect(() => {
