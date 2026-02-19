@@ -71,6 +71,7 @@ function AppRouter() {
           <Route path="/dev/api" element={<ApiDocsPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/bulk-generate" element={<BulkGeneratePage />} />
         </Routes>
       </div>
       {!hideFooter && <Footer />}
