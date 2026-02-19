@@ -476,7 +476,7 @@ Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
     try:
         # Use Gemini API directly
         model = genai.GenerativeModel(
-            model_name="gemini-2.5-flash-latest",
+            model_name="gemini-2.5-flash",
             system_instruction=system_instruction
         )
         
