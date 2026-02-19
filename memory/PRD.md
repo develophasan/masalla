@@ -14,6 +14,7 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - Favorites system for users to save stories
 - Responsive, mobile-friendly design
 - AdSense integration for monetization
+- **NEW: Bulk Story Generation** - Admin panel page for sequential bulk story creation
 
 ## Tech Stack
 - **Frontend:** React + Vite + Tailwind CSS + Shadcn/UI
@@ -38,6 +39,26 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] Authentication documentation with session_token guide
 - [x] "Back to Home" buttons on Login/Register pages
 - [x] Fixed `requests-oauthlib` dependency
+- [x] Removed `emergentintegrations` from requirements.txt
+- [x] **Bulk Story Generation Page** (`/admin/bulk-generate`)
+
+## New: Bulk Story Generation Feature
+- **URL:** `/admin/bulk-generate`
+- **Features:**
+  - Topic and subtopic selection
+  - Theme, age group, character configuration
+  - Add single tasks or bulk (+5, +10)
+  - Terminal-like log display
+  - Start/Stop controls
+  - Progress bar
+  - Sequential processing (no overload)
+
+## Backend API Endpoints (New)
+- `GET /api/admin/generation-presets` - Get all topics for bulk generation
+- `GET /api/admin/bulk-generate/status` - Get current generation status
+- `POST /api/admin/bulk-generate/start` - Start bulk generation
+- `POST /api/admin/bulk-generate/stop` - Stop generation
+- `POST /api/admin/bulk-generate/clear-logs` - Clear logs
 
 ## Upcoming Tasks
 - [ ] Rewarded Ad for Story Downloads (user request)
@@ -49,7 +70,13 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - `/dev/api?key=masal2025dev` - Private API documentation
 - `/privacy` - Privacy Policy
 - `/terms` - Terms of Service
+- `/admin/bulk-generate` - Bulk story generation (admin only)
 
 ## Credentials
 - **Admin:** username `admin`, password `masallardiyariai`
 - **API Docs Key:** `masal2025dev`
+
+## Railway Deployment Notes
+- Frontend: `masal.space`
+- Backend: `masalla-production.up.railway.app`
+- Backend needs redeploy to include new bulk generation endpoints
