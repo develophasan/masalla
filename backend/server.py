@@ -447,22 +447,23 @@ async def generate_story_with_ai(
 
 MUTLAKA UYULMASI GEREKEN KURALLAR:
 - Türkçe yaz
-- 5-10 dakikada okunabilecek uzunlukta (800-1200 kelime)
+- **ÖNEMLİ: Masal 400-500 kelime arasında olmalı (yaklaşık 3-4 dakika okunma süresi)**
+- **Masal metni 3500 karakteri ASLA geçmemeli**
 - Korku ve şiddet içeriği ASLA olmasın
 - Pedagojik ve eğitici olsun
-- Seslendirmeye uygun, akıcı cümleler kur
-- Kısa ve anlaşılır cümleler kullan
+- Seslendirmeye uygun, akıcı ve kısa cümleler kur
 - Sıcak ve sevgi dolu bir anlatım tarzı kullan
 - Masal klasik "Bir varmış bir yokmuş" ile başlasın
 - Masalın sonunda mutlaka olumlu bir mesaj ve sonuç olsun
 - Eğer kazanım belirtilmişse, masal bu kazanımı destekleyecek şekilde olsun
+- Gereksiz detaylardan kaçın, özlü ve etkili anlat
 
 Çıktı formatı:
 Başlık: [Masalın başlığı]
 
 [Masal metni]
 
-Kazanım: [Bu masaldan çocuğun öğreneceği değer]"""
+Kazanım: [Bu masaldan çocuğun öğreneceği değer - tek cümle]"""
 
     user_prompt = f"""Ana Konu: {topic_name}
 {subtopic_text}
