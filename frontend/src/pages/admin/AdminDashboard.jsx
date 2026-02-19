@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from '@/contexts/AuthContext';
 import { 
   Shield, Users, BookOpen, Coins, Bell, LogOut, 
-  Home, ChevronRight, Loader2, Mail, Phone, MessageSquare
+  Home, ChevronRight, Loader2, Mail, Phone, MessageSquare, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
