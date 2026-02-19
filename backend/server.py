@@ -21,8 +21,8 @@ import secrets
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# Gemini for text generation (via emergentintegrations)
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# Gemini for text generation
+import google.generativeai as genai
 
 # Google Cloud TTS for Turkish voice
 from google.cloud import texttospeech
