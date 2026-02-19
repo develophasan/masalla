@@ -427,13 +427,13 @@ async def generate_story_with_ai(
     character: Optional[str] = None,
     kazanim: Optional[str] = None
 ) -> dict:
-    """Generate a fairy tale using OpenAI API"""
+    """Generate a fairy tale using Gemini API"""
     
-    # Check for OpenAI API key
-    openai_key = os.environ.get('OPENAI_API_KEY')
+    # Check for Gemini API key
+    gemini_key = os.environ.get('GEMINI_API_KEY')
     
-    if not openai_key:
-        raise HTTPException(status_code=500, detail="OPENAI_API_KEY yapılandırılmamış")
+    if not gemini_key:
+        raise HTTPException(status_code=500, detail="GEMINI_API_KEY yapılandırılmamış")
     
     # Create prompt for Turkish fairy tale
     character_text = f"Ana karakter: {character}" if character else "Ana karakteri sen belirle (çocuk dostu bir karakter)"
@@ -471,19 +471,15 @@ Yaş Grubu: {age_group}
 Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
     try:
-        # Use direct OpenAI API
-        client = AsyncOpenAI(api_key=openai_key)
+        # Use Gemini via emergentintegrations
+        chat = LlmChat(
+            api_key=gemini_key,
+            session_id=f"story-{uuid.uuid4()}",
+            system_message=system_message
+        ).with_model("gemini", "gemini-3-flash-preview")
         
-        response = await client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=0.8,
-            max_tokens=2000
-        )
-        result = response.choices[0].message.content
+        user_message = UserMessage(text=user_prompt)
+        result = await chat.send_message(user_message)
         
         # Parse response to extract title and content
         lines = result.strip().split('\n')
