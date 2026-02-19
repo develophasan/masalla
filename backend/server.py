@@ -435,12 +435,15 @@ async def generate_story_with_ai(
     if not gemini_key:
         raise HTTPException(status_code=500, detail="GEMINI_API_KEY yapılandırılmamış")
     
+    # Configure Gemini
+    genai.configure(api_key=gemini_key)
+    
     # Create prompt for Turkish fairy tale
     character_text = f"Ana karakter: {character}" if character else "Ana karakteri sen belirle (çocuk dostu bir karakter)"
     subtopic_text = f"Alt Konu: {subtopic_name}" if subtopic_name else ""
     kazanim_text = f"\n\nHEDEF KAZANIM: {kazanim}\nMasal bu kazanımı destekleyecek şekilde yazılmalıdır." if kazanim else ""
     
-    system_message = """Sen deneyimli bir çocuk masalı yazarısın. Türkçe olarak 4-8 yaş arası çocuklara uygun masallar yazarsın.
+    system_instruction = """Sen deneyimli bir çocuk masalı yazarısın. Türkçe olarak 4-8 yaş arası çocuklara uygun masallar yazarsın.
 
 MUTLAKA UYULMASI GEREKEN KURALLAR:
 - Türkçe yaz
@@ -471,15 +474,14 @@ Yaş Grubu: {age_group}
 Bu bilgilere göre eğitici ve eğlenceli bir masal yaz."""
 
     try:
-        # Use Gemini via emergentintegrations
-        chat = LlmChat(
-            api_key=gemini_key,
-            session_id=f"story-{uuid.uuid4()}",
-            system_message=system_message
-        ).with_model("gemini", "gemini-3-flash-preview")
+        # Use Gemini API directly
+        model = genai.GenerativeModel(
+            model_name="gemini-2.0-flash",
+            system_instruction=system_instruction
+        )
         
-        user_message = UserMessage(text=user_prompt)
-        result = await chat.send_message(user_message)
+        response = await model.generate_content_async(user_prompt)
+        result = response.text
         
         # Parse response to extract title and content
         lines = result.strip().split('\n')
