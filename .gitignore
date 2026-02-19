@@ -58,3 +58,7 @@ yarn-error.log*
 *.zip
 *.tar.gz
 *.tar
+-e 
+# Environment files
+*.env
+*.env.*
