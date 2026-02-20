@@ -64,6 +64,7 @@ function AppRouter() {
           {/* Legacy URL - redirect to new format */}
           <Route path="/stories/:id" element={<StoryDetailPage />} />
           <Route path="/create" element={<StoryCreatePage />} />
+          <Route path="/magaza" element={<StorePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
