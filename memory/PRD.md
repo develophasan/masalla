@@ -13,11 +13,12 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - Profanity filter for content moderation
 - Favorites system for users to save stories
 - Responsive, mobile-friendly design
-- AdSense integration for monetization
+- Amazon Affiliate integration for monetization
 - Bulk Story Generation admin page
+- **React Query caching** for optimized data loading
 
 ## Tech Stack
-- **Frontend:** React + Vite + Tailwind CSS + Shadcn/UI
+- **Frontend:** React + Vite + Tailwind CSS + Shadcn/UI + **React Query (TanStack)**
 - **Backend:** FastAPI (Python)
 - **Database:** MongoDB
 - **AI Model:** Google Gemini 2.5 Flash
@@ -27,12 +28,12 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - **Google Gemini 2.5 Flash** (Story Generation) — Requires `GEMINI_API_KEY`
 - **Google Cloud TTS** (Audio) — Requires `GOOGLE_TTS_API_KEY`
 - **Custom Google OAuth** (Social Login) — Requires `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
-- **Google AdSense** (Ads)
+- **Amazon Associates** (Affiliate Ads)
 
 ## Completed Features (as of Jan 2025)
 - [x] Custom Google OAuth implementation
 - [x] Content moderation system (profanity filter)
-- [x] AdSense integration
+- [x] Amazon Affiliate integration (replaced AdSense)
 - [x] Privacy Policy page (`/privacy`)
 - [x] Terms of Service page (`/terms`)
 - [x] Site-wide Footer component
@@ -48,6 +49,8 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] Flutter API documentation (`/app/FLUTTER_API_REHBER.md`)
 - [x] Security cleanup (API keys removed from codebase)
 - [x] Gemini API Key - Active ✓
+- [x] Download/Share with 10-second Amazon ad display
+- [x] **React Query caching** - Automatic data caching for topics, stories, and pages
 
 ## Required Environment Variables (Backend)
 ```
