@@ -23,9 +23,6 @@ const SORT_OPTIONS = [
   { id: "oldest", name: "En Eski" },
 ];
 
-const CACHE_KEY = 'masal_stories_cache';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
 export default function StoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
