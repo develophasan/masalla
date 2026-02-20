@@ -55,6 +55,11 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] **Faz 1: Cloud Dancer Design System** - Yeni renk sistemi, glassmorphism, kategori bazlı dinamik temalar
 - [x] **Bento Grid Layout** - Ana sayfada featured + regular story kartları
 - [x] **Modern StoryCard** - Glassmorphism, hover efektleri, kategori bazlı renk aksanları
+- [x] **Faz 2: Tüm Komponentler Cloud Dancer'a Uyumlandı**
+  - TopicCard - Dinamik tema, hover efektleri
+  - StoryListPage - Glassmorphism filtreler
+  - StoryCreatePage - Cloud Dancer arka plan
+  - HowToCreateStory - Glass card, floating decorations
 
 ## Required Environment Variables (Backend)
 ```
