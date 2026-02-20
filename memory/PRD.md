@@ -86,3 +86,12 @@ DB_NAME=your_database_name
 - Frontend: Custom domain
 - Backend: Railway or similar PaaS
 - Database: MongoDB Atlas or Railway MongoDB
+
+**Latest Update (Session Continued)**
+- **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
+- Güncellenen dosyalar:
+  - `StoryDetailPage.jsx` - İndirme ve paylaşma reklamları
+  - `StoryCreatePage.jsx` - Masal oluşturma reklamı  
+  - `AdInterstitial.jsx` - Varsayılan süre ve dinamik geri sayım
+
+**Completed work in this session**
