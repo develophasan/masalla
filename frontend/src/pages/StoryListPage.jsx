@@ -28,114 +28,22 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export default function StoryListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  
-  // Initialize stories from cache for instant render
-  const [stories, setStories] = useState(() => {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) {
-      try {
-        const { data, timestamp, params } = JSON.parse(cached);
-        // Only use cache for default view (no filters) and data must be array
-        if (!searchParams.get("topic_id") && !searchParams.get("search") && 
-            Date.now() - timestamp < CACHE_DURATION && Array.isArray(data)) {
-          return data;
-        }
-      } catch (e) {
-        localStorage.removeItem(CACHE_KEY);
-      }
-    }
-    return [];
-  });
-  
-  const [topics, setTopics] = useState([]);
-  const [loading, setLoading] = useState(stories.length === 0);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedTopic, setSelectedTopic] = useState(searchParams.get("topic_id") || "");
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "popular");
   const [showSearchAd, setShowSearchAd] = useState(false);
   const [pendingSearch, setPendingSearch] = useState(null);
 
-  useEffect(() => {
-    fetchTopics();
-  }, []);
-
-  useEffect(() => {
-    fetchStories();
-  }, [searchParams]);
-
-  const fetchTopics = async () => {
-    try {
-      // Use cached topics
-      const cached = localStorage.getItem('masal_topics_cache');
-      if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < CACHE_DURATION && Array.isArray(data)) {
-          setTopics(data);
-          return;
-        }
-      }
-      const response = await axios.get(`${API}/topics`);
-      if (Array.isArray(response.data)) {
-        setTopics(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching topics:", error);
-    }
-  };
-
-  const fetchStories = async () => {
-    const topicId = searchParams.get("topic_id");
-    const search = searchParams.get("search");
-    const sort = searchParams.get("sort") || "popular";
-    
-    // Check cache for default view
-    const isDefaultView = !topicId && !search && sort === "popular";
-    if (isDefaultView) {
-      const cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        try {
-          const { data, timestamp } = JSON.parse(cached);
-          if (Date.now() - timestamp < CACHE_DURATION && data.length > 0) {
-            setStories(data);
-            setLoading(false);
-            return;
-          }
-        } catch (e) {
-          // Invalid cache, ignore
-        }
-      }
-    }
-    
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (topicId) params.append("topic_id", topicId);
-      if (search) params.append("search", search);
-      params.append("sort_by", sort);
-      
-      const response = await axios.get(`${API}/stories?${params.toString()}`);
-      const storiesData = Array.isArray(response.data) ? response.data : [];
-      setStories(storiesData);
-      
-      // Cache default view (without audio to save space)
-      if (isDefaultView && storiesData.length > 0) {
-        try {
-          const cacheData = storiesData.map(s => ({...s, audio_base64: null}));
-          localStorage.setItem(CACHE_KEY, JSON.stringify({
-            data: cacheData,
-            timestamp: Date.now()
-          }));
-        } catch (e) {
-          // localStorage quota exceeded - ignore
-          console.warn('Cache quota exceeded, skipping cache');
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching stories:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // React Query hooks
+  const { data: topics = [] } = useTopics();
+  
+  const filters = useMemo(() => ({
+    topicId: searchParams.get("topic_id"),
+    search: searchParams.get("search"),
+    sort: searchParams.get("sort") || "popular",
+  }), [searchParams]);
+  
+  const { data: stories = [], isLoading: loading } = useStories(filters);
 
   const handleSearch = (e) => {
     e.preventDefault();
