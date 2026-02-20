@@ -44,18 +44,19 @@ const FEATURED_PRODUCTS = [
 export const AdInterstitial = ({ 
   isOpen, 
   onClose, 
-  autoCloseDelay = 5000,
+  autoCloseDelay = 10000,
   message = "Masalınız hazırlanıyor..."
 }) => {
-  const [countdown, setCountdown] = useState(5);
+  const countdownSeconds = Math.floor(autoCloseDelay / 1000);
+  const [countdown, setCountdown] = useState(countdownSeconds);
   const [canClose, setCanClose] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setCountdown(5);
+      setCountdown(countdownSeconds);
       setCanClose(false);
     }
-  }, [isOpen]);
+  }, [isOpen, countdownSeconds]);
 
   useEffect(() => {
     if (!isOpen || canClose) return;
