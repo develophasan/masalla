@@ -32,6 +32,10 @@ export default function StoryDetailPage() {
   const isNewRoute = location.pathname.startsWith('/masal/');
   const storyIdentifier = slug || id;
   
+  // Scroll and parallax hooks - must be called unconditionally
+  const scrollProgress = useScrollProgress();
+  const mousePosition = useMouseParallax(0.02);
+  
   // React Query for story data
   const { data: story, isLoading: loading, isError } = useQuery({
     queryKey: ['story', storyIdentifier, isNewRoute],
@@ -49,6 +53,13 @@ export default function StoryDetailPage() {
   // Use cached popular stories to check if current story is popular
   const { data: popularStories = [] } = usePopularStories(10);
   const isPopularStory = popularStories.some(s => s.id === story?.id || s.slug === storyIdentifier);
+  
+  // Scrollytelling - paragraphs (will be empty array if no story)
+  const paragraphs = useScrollytelling(story?.content);
+  
+  // Get category theme colors
+  const theme = getCategoryTheme(story?.topic_id, story?.topic_name);
+  const colors = getThemeColors(theme);
   
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
