@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ArrowLeft, BookOpen, ChevronRight, Sparkles, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,28 +9,25 @@ import { API } from "@/config/api";
 export default function TopicDetailPage() {
   const { topicId } = useParams();
   const navigate = useNavigate();
-  const [topic, setTopic] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchTopicDetail();
-  }, [topicId]);
-
-  const fetchTopicDetail = async () => {
-    try {
+  
+  const { data: topic, isLoading: loading, isError } = useQuery({
+    queryKey: ['topic', topicId],
+    queryFn: async () => {
       const response = await axios.get(`${API}/topics/${topicId}`);
-      setTopic(response.data);
-    } catch (error) {
-      console.error("Error fetching topic:", error);
-      navigate("/");
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data;
+    },
+    enabled: !!topicId,
+    staleTime: 60 * 60 * 1000, // 1 hour - topics rarely change
+  });
 
   const handleSubtopicClick = (subtopic) => {
     navigate(`/create?topic=${topicId}&subtopic=${subtopic.id}`);
   };
+
+  if (isError) {
+    navigate("/");
+    return null;
+  }
 
   if (loading) {
     return (
