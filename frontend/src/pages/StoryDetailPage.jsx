@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import axios from "axios";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
   Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User, ChevronRight, Home, X, LogIn, UserPlus
@@ -14,6 +15,7 @@ import Navbar from "@/components/Navbar";
 import { AmazonStoryBanner } from "@/components/AmazonAffiliate";
 import { useAuth, authAxios } from "@/contexts/AuthContext";
 import { API } from "@/config/api";
+import { usePopularStories } from "@/hooks/useStories";
 
 export default function StoryDetailPage() {
   const { id, slug } = useParams();
