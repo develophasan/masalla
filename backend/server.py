@@ -1931,7 +1931,7 @@ ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://childrens-tales-12.preview.emergentagent.com",
+    "https://ai-tales-3.preview.emergentagent.com",
     "https://masalsepeti.emergent.host",
     "https://storytimeai.emergent.host",
     "https://masal.space",
