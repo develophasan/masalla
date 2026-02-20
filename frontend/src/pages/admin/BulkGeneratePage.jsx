@@ -55,8 +55,8 @@ export default function BulkGeneratePage() {
     try {
       const response = await authAxios.get(`${API}/admin/generation-presets`);
       setPresets(response.data);
-    } catch (error) {
-      if (error.response?.status === 401 || error.response?.status === 403) {
+    } catch (err) {
+      if (err.response?.status === 401 || err.response?.status === 403) {
         navigate('/admin/login');
         return;
       }
@@ -64,19 +64,48 @@ export default function BulkGeneratePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async () => {
     try {
       const response = await authAxios.get(`${API}/admin/bulk-generate/status`);
       setStatus(response.data);
       if (!response.data.is_running) {
         setPolling(false);
       }
-    } catch (error) {
-      console.error('Status fetch error:', error);
+    } catch (err) {
+      console.error('Status fetch error:', err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) return;
+    
+    // Check if user exists and is admin
+    if (!user || user.role !== 'admin') {
+      toast.error('Admin yetkisi gerekli');
+      navigate('/admin/login');
+      return;
+    }
+    
+    fetchPresets();
+    fetchStatus();
+  }, [authLoading, user, navigate, fetchPresets, fetchStatus]);
+
+  // Polling for status updates when running
+  useEffect(() => {
+    let interval;
+    if (status.is_running || polling) {
+      interval = setInterval(fetchStatus, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [status.is_running, polling, fetchStatus]);
+
+  // Auto-scroll logs
+  useEffect(() => {
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [status.logs]);
 
   const addTask = () => {
     if (!newTask.topic_id || !newTask.theme) {
