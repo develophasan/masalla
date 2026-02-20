@@ -52,6 +52,9 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] Download/Share with 10-second Amazon ad display
 - [x] **React Query caching** - Automatic data caching for topics, stories, and pages
 - [x] **Öneri Mağazası** (`/magaza`) - Amazon affiliate ürün kategorileri sayfası
+- [x] **Faz 1: Cloud Dancer Design System** - Yeni renk sistemi, glassmorphism, kategori bazlı dinamik temalar
+- [x] **Bento Grid Layout** - Ana sayfada featured + regular story kartları
+- [x] **Modern StoryCard** - Glassmorphism, hover efektleri, kategori bazlı renk aksanları
 
 ## Required Environment Variables (Backend)
 ```
