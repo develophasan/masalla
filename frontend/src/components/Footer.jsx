@@ -1,11 +1,29 @@
 import { Link } from 'react-router-dom';
-import { Heart, Mail, Shield, FileText, Info, BookOpen } from 'lucide-react';
+import { Heart, Mail, Shield, FileText, Info, BookOpen, ExternalLink } from 'lucide-react';
+import { AmazonCategoryGrid } from './AmazonAffiliate';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gradient-to-b from-slate-50 to-slate-100 border-t border-slate-200 mt-auto">
+      {/* Amazon Affiliate Section */}
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-b border-amber-200 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-lg">📚</span>
+            <h3 className="text-sm font-semibold text-slate-800">
+              Önerilen Çocuk Ürünleri
+            </h3>
+            <span className="text-xs text-slate-500 ml-auto flex items-center gap-1">
+              <ExternalLink className="w-3 h-3" />
+              Amazon iş ortağı
+            </span>
+          </div>
+          <AmazonCategoryGrid />
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
