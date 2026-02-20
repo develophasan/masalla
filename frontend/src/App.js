@@ -13,6 +13,7 @@ import StoryDetailPage from "@/pages/StoryDetailPage";
 import StoryCreatePage from "@/pages/StoryCreatePage";
 import StoryListPage from "@/pages/StoryListPage";
 import TopicDetailPage from "@/pages/TopicDetailPage";
+import StorePage from "@/pages/StorePage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
