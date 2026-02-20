@@ -82,94 +82,100 @@ export default function HowToCreateStory() {
   const StepIcon = step.icon;
 
   return (
-    <div className="bg-gradient-to-r from-violet-50 via-pink-50 to-amber-50 rounded-3xl p-6 md:p-8 border border-violet-100 shadow-lg">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
-          Nasıl Masal Oluşturulur?
-        </h3>
-        <p className="text-slate-500">5 kolay adımda kendi masalınızı oluşturun</p>
-      </div>
-
-      {/* Main Slide Area */}
+    <div className="glass-card-strong rounded-3xl p-6 md:p-8 overflow-hidden relative">
+      {/* Background decoration */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-400/10 to-pink-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-amber-400/10 to-orange-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      
       <div className="relative">
-        <div className="flex items-center gap-6 md:gap-10">
-          {/* Left Arrow */}
-          <button
-            onClick={goPrev}
-            className="hidden md:flex w-10 h-10 rounded-full bg-white shadow-md items-center justify-center text-slate-400 hover:text-violet-600 transition-colors"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+        <div className="text-center mb-6">
+          <h3 className="text-2xl md:text-3xl font-bold text-slate-800 mb-2">
+            Nasıl Masal Oluşturulur?
+          </h3>
+          <p className="text-slate-500">5 kolay adımda kendi masalınızı oluşturun</p>
+        </div>
 
-          {/* Step Content */}
-          <div className="flex-1 flex flex-col md:flex-row items-center gap-6">
-            {/* Icon/Image */}
-            <div className={`w-32 h-32 md:w-40 md:h-40 rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-xl transform transition-transform hover:scale-105`}>
-              <span className="text-6xl md:text-7xl">{step.image}</span>
-            </div>
+        {/* Main Slide Area */}
+        <div className="relative">
+          <div className="flex items-center gap-6 md:gap-10">
+            {/* Left Arrow */}
+            <button
+              onClick={goPrev}
+              className="hidden md:flex w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white transition-all"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
 
-            {/* Text */}
-            <div className="flex-1 text-center md:text-left">
-              <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full text-sm text-violet-600 font-medium mb-3 shadow-sm">
-                <span className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-bold">
-                  {step.id}
-                </span>
-                Adım {step.id}
+            {/* Step Content */}
+            <div className="flex-1 flex flex-col md:flex-row items-center gap-6">
+              {/* Icon/Image */}
+              <div className={`w-32 h-32 md:w-40 md:h-40 rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-xl transform transition-all duration-500 hover:scale-105 hover:rotate-3`}>
+                <span className="text-6xl md:text-7xl">{step.image}</span>
               </div>
-              <h4 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">{step.title}</h4>
-              <p className="text-slate-600 text-base md:text-lg">{step.description}</p>
+
+              {/* Text */}
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm text-violet-600 font-medium mb-3 shadow-sm">
+                  <span className="w-6 h-6 rounded-full bg-violet-100 flex items-center justify-center text-xs font-bold">
+                    {step.id}
+                  </span>
+                  Adım {step.id}
+                </div>
+                <h4 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">{step.title}</h4>
+                <p className="text-slate-600 text-base md:text-lg">{step.description}</p>
+              </div>
             </div>
+
+            {/* Right Arrow */}
+            <button
+              onClick={goNext}
+              className="hidden md:flex w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md items-center justify-center text-slate-400 hover:text-violet-600 hover:bg-white transition-all"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
           </div>
 
-          {/* Right Arrow */}
-          <button
-            onClick={goNext}
-            className="hidden md:flex w-10 h-10 rounded-full bg-white shadow-md items-center justify-center text-slate-400 hover:text-violet-600 transition-colors"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {/* Mobile Arrows */}
+          <div className="flex md:hidden justify-center gap-4 mt-4">
+            <button
+              onClick={goPrev}
+              className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md flex items-center justify-center text-slate-400"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={goNext}
+              className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm shadow-md flex items-center justify-center text-slate-400"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Arrows */}
-        <div className="flex md:hidden justify-center gap-4 mt-4">
-          <button
-            onClick={goPrev}
-            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={goNext}
-            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+        {/* Step Indicators */}
+        <div className="flex justify-center gap-2 mt-6">
+          {STEPS.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToStep(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentStep 
+                  ? 'w-8 bg-gradient-to-r from-violet-500 to-pink-500' 
+                  : 'w-2 bg-slate-300 hover:bg-slate-400'
+              }`}
+            />
+          ))}
         </div>
-      </div>
 
-      {/* Step Indicators */}
-      <div className="flex justify-center gap-2 mt-6">
-        {STEPS.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToStep(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentStep 
-                ? 'w-8 bg-violet-500' 
-                : 'w-2 bg-slate-300 hover:bg-slate-400'
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* CTA Button */}
-      <div className="text-center mt-6">
-        <Link to="/create">
-          <Button className="bg-gradient-to-r from-violet-500 to-pink-500 hover:from-violet-600 hover:to-pink-600 text-white px-8 py-6 rounded-full font-medium shadow-lg hover:shadow-xl transition-all">
-            <Sparkles className="w-5 h-5 mr-2" />
-            Hemen Masal Oluştur
-          </Button>
-        </Link>
+        {/* CTA Button */}
+        <div className="text-center mt-6">
+          <Link to="/create">
+            <Button className="bg-gradient-to-r from-violet-500 to-pink-500 hover:from-violet-600 hover:to-pink-600 text-white px-8 py-6 rounded-full font-medium shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+              <Sparkles className="w-5 h-5 mr-2" />
+              Hemen Masal Oluştur
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
