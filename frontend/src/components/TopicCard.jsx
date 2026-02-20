@@ -1,50 +1,91 @@
 import { cn } from "@/lib/utils";
+import { ChevronRight } from "lucide-react";
+import { getCategoryTheme, getThemeColors, getThemeByIndex } from "@/lib/categoryThemes";
 
-export const TopicCard = ({ topic, icon: Icon, gradient, onClick, className, style, ...props }) => {
+export const TopicCard = ({ 
+  topic, 
+  icon: Icon, 
+  gradient, 
+  onClick, 
+  className, 
+  style,
+  index = 0,
+  ...props 
+}) => {
+  // Dinamik tema - kategoriye göre veya index'e göre
+  const theme = getCategoryTheme(topic.id, topic.name) || getThemeByIndex(index);
+  const colors = getThemeColors(theme);
+
   return (
     <button
       onClick={onClick}
       className={cn(
-        "topic-card w-full text-left relative overflow-hidden group",
+        "w-full text-left relative overflow-hidden group",
+        "bg-white/60 backdrop-blur-lg",
+        "border border-white/60",
+        "rounded-2xl",
+        "shadow-sm hover:shadow-xl",
+        "transition-all duration-400 ease-out",
+        "hover:scale-[1.03] hover:-translate-y-1",
         className
       )}
       style={style}
       {...props}
     >
-      {/* Background Gradient */}
-      <div className={cn("absolute inset-0 opacity-10 bg-gradient-to-br", gradient)} />
+      {/* Hover Background Glow */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-500"
+        style={{ background: colors.gradient }}
+      />
       
       {/* Content */}
-      <div className="relative p-5">
+      <div className="relative p-4 sm:p-5">
         {/* Icon */}
-        <div className={cn(
-          "w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-gradient-to-br shadow-lg",
-          gradient
-        )}>
-          {Icon && <Icon className="w-6 h-6 text-white" />}
+        <div 
+          className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+          style={{ background: colors.gradient }}
+        >
+          {Icon && <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />}
         </div>
 
         {/* Text */}
-        <h4 className="text-lg font-bold text-slate-800 mb-1 group-hover:text-violet-600 transition-colors line-clamp-1">
+        <h3 className="text-base sm:text-lg font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors line-clamp-1">
           {topic.name}
-        </h4>
-        <p className="text-xs text-slate-500 line-clamp-2 mb-2">
+        </h3>
+        <p className="text-xs text-slate-500 line-clamp-2 mb-3 min-h-[2rem]">
           {topic.description}
         </p>
         
-        {/* Subtopic Count Badge */}
-        {topic.subtopic_count && (
-          <span className="inline-flex items-center gap-1 text-xs font-medium text-violet-600 bg-violet-50 px-2 py-1 rounded-full">
-            {topic.subtopic_count} alt konu
-          </span>
-        )}
+        {/* Footer */}
+        <div className="flex items-center justify-between">
+          {/* Subtopic Count Badge */}
+          {topic.subtopic_count && (
+            <span 
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full transition-colors"
+              style={{ 
+                backgroundColor: colors.light,
+                color: colors.dark 
+              }}
+            >
+              {topic.subtopic_count} alt konu
+            </span>
+          )}
+          
+          {/* Arrow */}
+          <div 
+            className="w-7 h-7 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0"
+            style={{ backgroundColor: colors.light }}
+          >
+            <ChevronRight className="w-4 h-4" style={{ color: colors.dark }} />
+          </div>
+        </div>
       </div>
 
-      {/* Hover Indicator */}
-      <div className={cn(
-        "absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left",
-        gradient
-      )} />
+      {/* Bottom Accent Line */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+        style={{ background: colors.gradient }}
+      />
     </button>
   );
 };
