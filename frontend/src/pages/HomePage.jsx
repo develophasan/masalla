@@ -150,10 +150,10 @@ export default function HomePage() {
 
       {/* Hero Section - Cloud Dancer Style */}
       <section className="relative overflow-hidden py-12 md:py-20">
-        {/* Floating Gradient Orbs */}
-        <div className="absolute top-20 left-[10%] w-72 h-72 bg-gradient-to-br from-violet-400/30 to-fuchsia-400/20 rounded-full blur-3xl float" />
-        <div className="absolute bottom-10 right-[5%] w-96 h-96 bg-gradient-to-br from-cyan-400/20 to-teal-400/20 rounded-full blur-3xl float float-delay-1" />
-        <div className="absolute top-40 right-[20%] w-48 h-48 bg-gradient-to-br from-amber-400/25 to-orange-400/20 rounded-full blur-3xl float float-delay-2" />
+        {/* Floating Gradient Orbs - Hidden on mobile via CSS */}
+        <div className="hidden md:block absolute top-20 left-[10%] w-72 h-72 bg-gradient-to-br from-violet-400/30 to-fuchsia-400/20 rounded-full blur-3xl float pointer-events-none" />
+        <div className="hidden md:block absolute bottom-10 right-[5%] w-96 h-96 bg-gradient-to-br from-cyan-400/20 to-teal-400/20 rounded-full blur-3xl float float-delay-1 pointer-events-none" />
+        <div className="hidden md:block absolute top-40 right-[20%] w-48 h-48 bg-gradient-to-br from-amber-400/25 to-orange-400/20 rounded-full blur-3xl float float-delay-2 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
