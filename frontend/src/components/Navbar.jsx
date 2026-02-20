@@ -65,6 +65,12 @@ export default function Navbar() {
                 Tüm Masallar
               </Button>
             </Link>
+            <Link to="/magaza">
+              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
+                <ShoppingBag className="w-4 h-4 mr-1.5" />
+                Mağaza
+              </Button>
+            </Link>
             <Link to="/about">
               <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
                 <Info className="w-4 h-4 mr-1.5" />
