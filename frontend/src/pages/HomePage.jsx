@@ -320,10 +320,10 @@ export default function HomePage() {
             {/* Background with gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500" />
             
-            {/* Glass overlay elements */}
-            <div className="absolute top-0 right-0 w-72 h-72 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-            <div className="absolute bottom-0 left-0 w-56 h-56 bg-white/15 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-32 bg-white/10 blur-2xl" />
+            {/* Glass overlay elements - Hidden on mobile */}
+            <div className="hidden md:block absolute top-0 right-0 w-72 h-72 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+            <div className="hidden md:block absolute bottom-0 left-0 w-56 h-56 bg-white/15 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 pointer-events-none" />
+            <div className="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-32 bg-white/10 blur-2xl pointer-events-none" />
             
             <div className="relative z-10 text-white">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
