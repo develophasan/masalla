@@ -416,19 +416,6 @@ export default function StoryDetailPage() {
     ]
   };
 
-  // Scrollytelling - paragraphs
-  const paragraphs = useScrollytelling(story?.content);
-  
-  // Scroll progress for reading indicator
-  const scrollProgress = useScrollProgress();
-  
-  // Mouse parallax for decorations
-  const mousePosition = useMouseParallax(0.02);
-  
-  // Get category theme colors
-  const theme = getCategoryTheme(story?.topic_id, story?.topic_name);
-  const colors = getThemeColors(theme);
-
   return (
     <div className="min-h-screen cloud-bg-animated pb-20 sm:pb-0 story-immersive-container">
       {/* Reading Progress Bar */}
