@@ -36,11 +36,11 @@ export const useStories = (filters = {}) => {
       const params = new URLSearchParams();
       if (topicId) params.append('topic_id', topicId);
       if (search) params.append('search', search);
-      if (sort) params.append('sort', sort);
+      if (sort) params.append('sort_by', sort);
       if (limit) params.append('limit', limit);
       
       const response = await axios.get(`${API}/stories?${params.toString()}`);
-      return response.data;
+      return Array.isArray(response.data) ? response.data : [];
     },
   });
 };
