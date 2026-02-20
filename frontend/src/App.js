@@ -86,14 +86,16 @@ function AppRouter() {
 
 function App() {
   return (
-    <HelmetProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRouter />
-        </AuthProvider>
-      </BrowserRouter>
-      <Toaster position="top-center" richColors />
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
+        </BrowserRouter>
+        <Toaster position="top-center" richColors />
+      </HelmetProvider>
+    </QueryClientProvider>
   );
 }
 
