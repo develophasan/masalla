@@ -1,25 +1,161 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ExternalLink, BookOpen, Gift, Star, Sparkles } from 'lucide-react';
 
-// Google AdSense Banner Ad Component
-export const AdBanner = ({ slot = "auto", className = "" }) => {
+const AMAZON_TAG = 'masalspace-21';
+const AMAZON_BASE = 'https://www.amazon.com.tr';
+
+const createAmazonLink = (path) => {
+  const params = new URLSearchParams({
+    tag: AMAZON_TAG,
+    linkCode: 'll2',
+    ref_: 'as_li_ss_tl'
+  });
+  return `${AMAZON_BASE}${path}?${params.toString()}`;
+};
+
+// Amazon banner products
+const AMAZON_PRODUCTS = [
+  {
+    title: 'Çocuk Masal Kitapları',
+    description: 'En sevilen masallar',
+    path: '/s?k=çocuk+masal+kitabı+set',
+    icon: BookOpen,
+    gradient: 'from-purple-500 to-violet-600'
+  },
+  {
+    title: 'Eğitici Oyuncaklar',
+    description: 'Öğrenirken eğlenin',
+    path: '/s?k=eğitici+oyuncak+çocuk+3-6+yaş',
+    icon: Gift,
+    gradient: 'from-pink-500 to-rose-600'
+  },
+  {
+    title: 'Uyku Arkadaşları',
+    description: 'Yumuşak peluşlar',
+    path: '/s?k=çocuk+peluş+oyuncak+uyku',
+    icon: Star,
+    gradient: 'from-amber-500 to-orange-600'
+  },
+  {
+    title: 'Boyama Kitapları',
+    description: 'Yaratıcılığı geliştir',
+    path: '/s?k=çocuk+boyama+kitabı+aktivite',
+    icon: Sparkles,
+    gradient: 'from-teal-500 to-cyan-600'
+  }
+];
+
+// AdSense with Amazon Fallback Banner
+export const AdBanner = ({ slot = "auto", className = "", variant = "horizontal" }) => {
   const adRef = useRef(null);
-  const isLoaded = useRef(false);
+  const [adLoaded, setAdLoaded] = useState(false);
+  const [showAmazon, setShowAmazon] = useState(true);
 
   useEffect(() => {
-    if (adRef.current && !isLoaded.current) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        isLoaded.current = true;
-      } catch (e) {
-        console.log('AdSense error:', e);
+    // Try to load AdSense
+    const timer = setTimeout(() => {
+      if (adRef.current) {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          // Check if ad actually rendered
+          setTimeout(() => {
+            const adElement = adRef.current?.querySelector('ins');
+            if (adElement && adElement.getAttribute('data-ad-status') === 'filled') {
+              setAdLoaded(true);
+              setShowAmazon(false);
+            }
+          }, 1000);
+        } catch (e) {
+          console.log('AdSense not available, showing Amazon');
+        }
       }
-    }
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, []);
 
+  // Always show Amazon for now (until AdSense is approved)
+  const displayAmazon = showAmazon || !adLoaded;
+
+  if (displayAmazon) {
+    // Horizontal variant - show 4 products in a row
+    if (variant === "horizontal") {
+      return (
+        <div className={`ad-container ${className}`}>
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-medium text-slate-600 flex items-center gap-1">
+                📚 Önerilen Ürünler
+              </span>
+              <span className="text-xs text-slate-400">Sponsorlu</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {AMAZON_PRODUCTS.map((product, idx) => {
+                const Icon = product.icon;
+                return (
+                  <a
+                    key={idx}
+                    href={createAmazonLink(product.path)}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md transition-all group"
+                  >
+                    <div className={`w-8 h-8 bg-gradient-to-br ${product.gradient} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                      <Icon className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-slate-800 truncate group-hover:text-orange-600">{product.title}</p>
+                      <p className="text-xs text-slate-500 truncate">{product.description}</p>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Vertical/Rectangle variant
+    return (
+      <div className={`ad-container ${className}`}>
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4">
+          <div className="text-center mb-3">
+            <span className="text-sm font-bold text-slate-800">📚 Amazon'da Çocuk Ürünleri</span>
+          </div>
+          <div className="space-y-2">
+            {AMAZON_PRODUCTS.slice(0, 3).map((product, idx) => {
+              const Icon = product.icon;
+              return (
+                <a
+                  key={idx}
+                  href={createAmazonLink(product.path)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all group"
+                >
+                  <div className={`w-10 h-10 bg-gradient-to-br ${product.gradient} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-800 group-hover:text-orange-600">{product.title}</p>
+                    <p className="text-xs text-slate-500">{product.description}</p>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-orange-500" />
+                </a>
+              );
+            })}
+          </div>
+          <p className="text-center text-xs text-slate-400 mt-3">Amazon iş ortağı bağlantısı</p>
+        </div>
+      </div>
+    );
+  }
+
+  // AdSense (when approved)
   return (
-    <div className={`ad-container ${className}`}>
+    <div className={`ad-container ${className}`} ref={adRef}>
       <ins
-        ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-client="ca-pub-7470017453637950"
