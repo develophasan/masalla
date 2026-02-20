@@ -689,6 +689,9 @@ export default function StoryDetailPage() {
           <AdBanner className="rounded-xl overflow-hidden" />
         </div>
 
+        {/* Amazon Affiliate Banner */}
+        <AmazonStoryBanner topic={story.topic_name} />
+
         {/* Story Info */}
         <div className="mt-8 p-6 bg-gradient-to-br from-violet-50 to-pink-50 rounded-2xl border border-violet-100 animate-slide-up stagger-3">
           <h3 className="font-bold text-slate-800 mb-4">Masal Bilgileri</h3>
