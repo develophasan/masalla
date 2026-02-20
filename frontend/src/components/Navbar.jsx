@@ -171,6 +171,14 @@ export default function Navbar() {
                 Tüm Masallar
               </Link>
               <Link
+                to="/magaza"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-violet-50 rounded-lg"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                Öneri Mağazası
+              </Link>
+              <Link
                 to="/about"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-violet-50 rounded-lg"
