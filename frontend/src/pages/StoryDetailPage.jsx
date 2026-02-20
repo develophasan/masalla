@@ -892,15 +892,15 @@ export default function StoryDetailPage() {
         )}
 
         {/* Ad Banner after story content */}
-        <div className="my-8">
+        <div className="my-8 glass-card p-4 rounded-2xl">
           <AdBanner className="rounded-xl overflow-hidden" />
         </div>
 
         {/* Amazon Affiliate Banner */}
         <AmazonStoryBanner topic={story.topic_name} />
 
-        {/* Story Info */}
-        <div className="mt-8 p-6 bg-gradient-to-br from-violet-50 to-pink-50 rounded-2xl border border-violet-100 animate-slide-up stagger-3">
+        {/* Story Info - Glass Style */}
+        <div className="mt-8 p-6 glass-card-strong rounded-2xl animate-slide-up">
           <h3 className="font-bold text-slate-800 mb-4">Masal Bilgileri</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
@@ -932,7 +932,8 @@ export default function StoryDetailPage() {
                 <span className="text-slate-500">Oluşturan:</span>
                 <Link 
                   to={`/user/${story.creator_id}`}
-                  className="font-medium text-violet-600 hover:text-violet-700 flex items-center gap-1"
+                  className="font-medium hover:underline flex items-center gap-1"
+                  style={{ color: colors.main }}
                 >
                   {story.creator_picture ? (
                     <img src={story.creator_picture} alt="" className="w-5 h-5 rounded-full inline" />
