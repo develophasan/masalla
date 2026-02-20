@@ -451,12 +451,10 @@
 
 /* Story text styling */
 .story-text-immersive {
-  font-family: 'Georgia', serif;
-  font-size: 1.25rem;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.35rem;
   line-height: 2;
   color: var(--cloud-dark);
-  text-align: justify;
-  hyphens: auto;
 }
 
 .story-text-immersive::first-letter {
@@ -466,6 +464,7 @@
   line-height: 1;
   margin-right: 0.5rem;
   margin-top: 0.1rem;
+  font-family: 'Fredoka', sans-serif;
   background: linear-gradient(135deg, var(--aurora) 0%, var(--rose) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
