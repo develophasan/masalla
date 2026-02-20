@@ -54,129 +54,14 @@ const TOPIC_COLORS = {
 };
 
 export default function HomePage() {
-  const [topics, setTopics] = useState(() => {
-    // Load from cache immediately for faster render
-    const cached = localStorage.getItem('masal_topics_cache');
-    if (cached) {
-      try {
-        const { data, timestamp } = JSON.parse(cached);
-        // Cache valid for 1 hour and data must be array
-        if (Date.now() - timestamp < 3600000 && Array.isArray(data)) {
-          return data;
-        }
-      } catch (e) {
-        // Invalid cache, clear it
-        localStorage.removeItem('masal_topics_cache');
-      }
-    }
-    return [];
-  });
-  
-  const [popularStories, setPopularStories] = useState(() => {
-    // Load popular stories from cache
-    const cached = localStorage.getItem('masal_popular_cache');
-    if (cached) {
-      try {
-        const { data, timestamp } = JSON.parse(cached);
-        // Cache valid for 5 minutes and data must be array
-        if (Date.now() - timestamp < 300000 && Array.isArray(data)) {
-          return data;
-        }
-      } catch (e) {
-        // Invalid cache, clear it
-        localStorage.removeItem('masal_popular_cache');
-      }
-    }
-    return [];
-  });
+  // React Query hooks - automatically cached and synced
+  const { data: topics = [], isLoading: topicsLoading } = useTopics();
+  const { data: popularStories = [], isLoading: storiesLoading } = usePopularStories(6);
   
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(topics.length === 0 && popularStories.length === 0);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      // Check if we need to fetch
-      const topicsCached = localStorage.getItem('masal_topics_cache');
-      const storiesCached = localStorage.getItem('masal_popular_cache');
-      
-      let needTopics = true;
-      let needStories = true;
-      
-      if (topicsCached) {
-        const { timestamp } = JSON.parse(topicsCached);
-        if (Date.now() - timestamp < 3600000) needTopics = false;
-      }
-      
-      if (storiesCached) {
-        const { timestamp } = JSON.parse(storiesCached);
-        if (Date.now() - timestamp < 300000) needStories = false;
-      }
-      
-      // Only fetch what's needed
-      const requests = [];
-      if (needTopics) requests.push(axios.get(`${API}/topics`));
-      if (needStories) requests.push(axios.get(`${API}/stories/popular?limit=6`));
-      
-      if (requests.length === 0) {
-        setLoading(false);
-        return;
-      }
-      
-      const responses = await Promise.all(requests);
-      let idx = 0;
-      
-      if (needTopics) {
-        const topicsData = responses[idx].data;
-        // Validate that data is an array
-        if (Array.isArray(topicsData)) {
-          setTopics(topicsData);
-          try {
-            localStorage.setItem('masal_topics_cache', JSON.stringify({
-              data: topicsData,
-              timestamp: Date.now()
-            }));
-          } catch (e) {
-            console.warn('Cache quota exceeded, skipping cache');
-          }
-        } else {
-          console.error('Topics API did not return an array:', topicsData);
-          setTopics([]);
-        }
-        idx++;
-      }
-      
-      if (needStories) {
-        const storiesData = responses[idx].data;
-        // Validate that data is an array
-        if (Array.isArray(storiesData)) {
-          setPopularStories(storiesData);
-          // Cache without audio_base64 to save space
-          try {
-            const cacheData = storiesData.map(s => ({...s, audio_base64: null}));
-            localStorage.setItem('masal_popular_cache', JSON.stringify({
-              data: cacheData,
-              timestamp: Date.now()
-            }));
-          } catch (e) {
-            // localStorage quota exceeded - ignore
-            console.warn('Cache quota exceeded, skipping cache');
-          }
-        } else {
-          console.error('Stories API did not return an array:', storiesData);
-          setPopularStories([]);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
+  const loading = topicsLoading && storiesLoading;
 
   const handleSearch = (e) => {
     e.preventDefault();
