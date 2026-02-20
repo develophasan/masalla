@@ -60,6 +60,13 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
   - StoryListPage - Glassmorphism filtreler
   - StoryCreatePage - Cloud Dancer arka plan
   - HowToCreateStory - Glass card, floating decorations
+- [x] **Faz 3: Hikaye Okuma Sayfası - Scrollytelling & Paralaks**
+  - Reading progress bar (sayfa başında)
+  - Parallax floating decorations (mouse takipli)
+  - Immersive audio player (wave animasyonu, pulse efekti)
+  - Scrollytelling paragraflar (scroll ile ortaya çıkma)
+  - Kategori bazlı dinamik renkler
+  - Glass morphism tüm kartlarda
 
 ## Required Environment Variables (Backend)
 ```
