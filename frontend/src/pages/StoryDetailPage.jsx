@@ -915,7 +915,7 @@ export default function StoryDetailPage() {
 const StoryParagraph = ({ text, index, colors }) => {
   const [ref, isInView] = useInView();
   
-  // First paragraph gets special styling
+  // First paragraph gets special styling (drop cap)
   const isFirst = index === 0;
   
   return (
@@ -924,10 +924,11 @@ const StoryParagraph = ({ text, index, colors }) => {
       className={cn(
         "story-paragraph mb-6 last:mb-0",
         isInView && "in-view",
-        isFirst ? "story-text-immersive" : "text-lg leading-relaxed text-slate-700"
+        isFirst ? "story-text-immersive" : "story-text-immersive"
       )}
       style={{
-        transitionDelay: `${index * 150}ms`
+        transitionDelay: `${index * 150}ms`,
+        fontFamily: "'Patrick Hand', cursive"
       }}
     >
       {text}
