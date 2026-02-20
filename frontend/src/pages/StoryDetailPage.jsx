@@ -445,8 +445,80 @@ export default function StoryDetailPage() {
         onClose={handleDownloadAdClose}
         message="İndirme hazırlanıyor..."
         autoCloseDelay={5000}
-        
       />
+
+      {/* Share Ad Interstitial */}
+      <AdInterstitial 
+        isOpen={showShareAd} 
+        onClose={handleShareAdClose}
+        message="Paylaşım hazırlanıyor..."
+        autoCloseDelay={5000}
+      />
+
+      {/* Auth Required Modal */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-slide-up">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-violet-500 to-pink-500 px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white">
+                <Lock className="w-5 h-5" />
+                <span className="font-bold">Üyelik Gerekli</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowAuthModal(false)}
+                className="text-white hover:bg-white/20 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-violet-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  {pendingAction === 'download' ? (
+                    <Download className="w-8 h-8 text-violet-600" />
+                  ) : (
+                    <Share2 className="w-8 h-8 text-violet-600" />
+                  )}
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">
+                  {pendingAction === 'download' ? 'Masalı İndirmek İster misiniz?' : 'Masalı Paylaşmak İster misiniz?'}
+                </h3>
+                <p className="text-slate-600">
+                  {pendingAction === 'download' 
+                    ? 'Masalları indirmek için ücretsiz üye olun veya giriş yapın.' 
+                    : 'Masalları paylaşmak için ücretsiz üye olun veya giriş yapın.'}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Link
+                  to="/register"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold rounded-full hover:shadow-lg transition-all"
+                >
+                  <UserPlus className="w-5 h-5" />
+                  Ücretsiz Üye Ol
+                </Link>
+                <Link
+                  to="/login"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-slate-100 text-slate-700 font-medium rounded-full hover:bg-slate-200 transition-all"
+                >
+                  <LogIn className="w-5 h-5" />
+                  Giriş Yap
+                </Link>
+              </div>
+
+              <p className="text-center text-xs text-slate-400 mt-4">
+                Üyelik tamamen ücretsizdir
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hidden Audio Element */}
       {story.audio_base64 && (
