@@ -393,6 +393,178 @@
 
 .text-accent {
   color: var(--accent);
+
+
+/* ================================================
+   SCROLLYTELLING EFFECTS
+   ================================================ */
+
+/* Story paragraph reveal animation */
+.story-paragraph {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.story-paragraph.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered paragraph delays */
+.story-paragraph:nth-child(1) { transition-delay: 0ms; }
+.story-paragraph:nth-child(2) { transition-delay: 100ms; }
+.story-paragraph:nth-child(3) { transition-delay: 200ms; }
+.story-paragraph:nth-child(4) { transition-delay: 300ms; }
+.story-paragraph:nth-child(5) { transition-delay: 400ms; }
+
+/* Story text styling */
+.story-text-immersive {
+  font-family: 'Georgia', serif;
+  font-size: 1.25rem;
+  line-height: 2;
+  color: var(--cloud-dark);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.story-text-immersive::first-letter {
+  font-size: 3.5rem;
+  font-weight: bold;
+  float: left;
+  line-height: 1;
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
+  background: linear-gradient(135deg, var(--aurora) 0%, var(--rose) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Parallax layers */
+.parallax-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.parallax-layer {
+  position: absolute;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Progress bar for story reading */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--aurora) 0%, var(--rose) 50%, var(--sunset) 100%);
+  z-index: 100;
+  transition: width 0.1s ease-out;
+}
+
+/* Immersive story container */
+.story-immersive-container {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Floating decorations for story page */
+.story-decoration {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: floatSlow 15s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-15px) scale(0.95);
+  }
+  75% {
+    transform: translateY(-25px) translateX(5px) scale(1.02);
+  }
+}
+
+/* Audio waveform animation */
+.audio-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 40px;
+}
+
+.audio-wave-bar {
+  width: 4px;
+  background: linear-gradient(180deg, var(--aurora) 0%, var(--rose) 100%);
+  border-radius: 2px;
+  animation: waveAnimation 1s ease-in-out infinite;
+}
+
+.audio-wave-bar:nth-child(1) { animation-delay: 0ms; height: 20px; }
+.audio-wave-bar:nth-child(2) { animation-delay: 100ms; height: 30px; }
+.audio-wave-bar:nth-child(3) { animation-delay: 200ms; height: 40px; }
+.audio-wave-bar:nth-child(4) { animation-delay: 300ms; height: 25px; }
+.audio-wave-bar:nth-child(5) { animation-delay: 400ms; height: 35px; }
+
+@keyframes waveAnimation {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+
+.audio-wave-bar.paused {
+  animation: none;
+  transform: scaleY(0.3);
+}
+
+/* Immersive audio player */
+.immersive-player {
+  position: relative;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: 2rem;
+  box-shadow: var(--glass-shadow-lg);
+}
+
+.immersive-player::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(251, 113, 133, 0.05) 100%);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* Pulse effect for play button */
+.play-pulse {
+  animation: playPulse 2s ease-in-out infinite;
+}
+
+@keyframes playPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+  }
+}
+
 }
 
 .text-accent-dark {
