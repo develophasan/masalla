@@ -21,7 +21,11 @@ export default function PublicProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const formatDate = (dateString) => {
     if (!dateString) return '';

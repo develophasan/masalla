@@ -27,10 +27,16 @@ export const StoryCard = ({
     try {
       const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
       setIsFavorite(response.data.is_favorite);
-    } catch (error) {
+    } catch (err) {
       // Ignore errors
     }
-  };
+  }, [story.id]);
+
+  useEffect(() => {
+    if (isAuthenticated && showFavorite) {
+      checkFavorite();
+    }
+  }, [isAuthenticated, showFavorite, checkFavorite]);
 
   const toggleFavorite = async (e) => {
     e.preventDefault();
