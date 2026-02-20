@@ -404,6 +404,11 @@ export default function StoryDetailPage() {
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
         </script>
+        {audioSchema && (
+          <script type="application/ld+json">
+            {JSON.stringify(audioSchema)}
+          </script>
+        )}
       </Helmet>
 
       {/* Download Ad Interstitial */}
