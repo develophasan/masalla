@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { 
   ArrowLeft, Play, Pause, RotateCcw, Volume2, VolumeX, 
-  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User, ChevronRight, Home
+  Clock, BookOpen, Heart, Sparkles, Share2, GraduationCap, Download, Lock, User, ChevronRight, Home, X, LogIn, UserPlus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
