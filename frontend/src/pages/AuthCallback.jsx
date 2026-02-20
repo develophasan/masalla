@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2, CheckCircle } from 'lucide-react';
@@ -11,52 +11,52 @@ export default function AuthCallback() {
   const hasProcessed = useRef(false);
   const [status, setStatus] = useState('processing'); // processing, success, error
 
+  const processAuth = useCallback(async () => {
+    try {
+      // Get authorization code from URL query params
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get('code');
+      const error = searchParams.get('error');
+
+      if (error) {
+        console.error('Google OAuth error:', error);
+        toast.error('Google girişi iptal edildi');
+        navigate('/login');
+        return;
+      }
+
+      if (!code) {
+        toast.error('Giriş başarısız - kod bulunamadı');
+        navigate('/login');
+        return;
+      }
+
+      await processGoogleCallback(code);
+      setStatus('success');
+      toast.success('Google ile giriş başarılı!');
+      
+      // Small delay to ensure state is propagated, then force reload to home
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
+      
+    } catch (err) {
+      console.error('Auth callback error:', err);
+      setStatus('error');
+      toast.error('Giriş sırasında hata oluştu');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+    }
+  }, [location.search, navigate, processGoogleCallback]);
+
   useEffect(() => {
     // Prevent double processing in StrictMode
     if (hasProcessed.current) return;
     hasProcessed.current = true;
 
-    const processAuth = async () => {
-      try {
-        // Get authorization code from URL query params
-        const searchParams = new URLSearchParams(location.search);
-        const code = searchParams.get('code');
-        const error = searchParams.get('error');
-
-        if (error) {
-          console.error('Google OAuth error:', error);
-          toast.error('Google girişi iptal edildi');
-          navigate('/login');
-          return;
-        }
-
-        if (!code) {
-          toast.error('Giriş başarısız - kod bulunamadı');
-          navigate('/login');
-          return;
-        }
-
-        await processGoogleCallback(code);
-        setStatus('success');
-        toast.success('Google ile giriş başarılı!');
-        
-        // Small delay to ensure state is propagated, then force reload to home
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 500);
-        
-      } catch (error) {
-        console.error('Auth callback error:', error);
-        setStatus('error');
-        toast.error('Giriş sırasında hata oluştu');
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
-      }
-    };
-
     processAuth();
-  }, []);
+  }, [processAuth]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white flex items-center justify-center">

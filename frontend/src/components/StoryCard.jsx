@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Play, Clock, Heart, GraduationCap, User, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,13 +23,7 @@ export const StoryCard = ({
   const theme = getCategoryTheme(story.topic_id, story.topic_name) || getThemeByIndex(index);
   const colors = getThemeColors(theme);
 
-  useEffect(() => {
-    if (isAuthenticated && showFavorite) {
-      checkFavorite();
-    }
-  }, [isAuthenticated, story.id]);
-
-  const checkFavorite = async () => {
+  const checkFavorite = useCallback(async () => {
     try {
       const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
       setIsFavorite(response.data.is_favorite);
