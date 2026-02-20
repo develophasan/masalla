@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import AdInterstitial from "@/components/AdInterstitial";
 import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
+import { AmazonStoryBanner } from "@/components/AmazonAffiliate";
 import { useAuth, authAxios } from "@/contexts/AuthContext";
 import { API } from "@/config/api";
 
