@@ -33,7 +33,22 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) return;
+    
+    // Check if user exists and is admin - early redirect for better UX
+    if (user && user.role !== 'admin') {
+      toast.error('Admin yetkisi gerekli');
+      navigate('/admin/login');
+      return;
+    }
+    
+    // If no user, try fetching stats (token might be valid in localStorage)
+    fetchStats();
+  }, [authLoading, user, navigate, fetchStats]);
 
   const fetchUsers = async () => {
     try {
