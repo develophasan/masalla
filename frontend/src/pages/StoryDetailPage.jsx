@@ -535,8 +535,11 @@ export default function StoryDetailPage() {
         </div>
       )}
 
-      {/* Parallax Background Decorations - Hidden on mobile */}
-      <div className="parallax-bg hidden md:block">
+      {/* Navbar */}
+      <Navbar />
+
+      {/* Parallax Background Decorations - Hidden on mobile, behind content */}
+      <div className="parallax-bg hidden md:block" style={{ zIndex: -1 }}>
         <div 
           className="story-decoration w-96 h-96 top-20 -left-20"
           style={{ 
