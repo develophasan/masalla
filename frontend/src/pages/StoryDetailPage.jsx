@@ -444,7 +444,7 @@ export default function StoryDetailPage() {
         isOpen={showDownloadAd} 
         onClose={handleDownloadAdClose}
         message="İndirme hazırlanıyor..."
-        autoCloseDelay={5000}
+        autoCloseDelay={10000}
       />
 
       {/* Share Ad Interstitial */}
@@ -452,7 +452,7 @@ export default function StoryDetailPage() {
         isOpen={showShareAd} 
         onClose={handleShareAdClose}
         message="Paylaşım hazırlanıyor..."
-        autoCloseDelay={5000}
+        autoCloseDelay={10000}
       />
 
       {/* Auth Required Modal */}

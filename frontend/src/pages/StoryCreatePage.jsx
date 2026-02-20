@@ -206,7 +206,7 @@ export default function StoryCreatePage() {
         isOpen={showAd} 
         onClose={handleAdClose}
         message="Masalınız hazırlanıyor..."
-        
+        autoCloseDelay={10000}
       />
 
       {/* Navbar */}
