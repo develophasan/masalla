@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from '@/contexts/AuthContext';
 import { 
@@ -51,36 +51,7 @@ export default function BulkGeneratePage() {
     character: ''
   });
 
-  useEffect(() => {
-    // Wait for auth to load
-    if (authLoading) return;
-    
-    // Check if user exists and is admin
-    if (!user || user.role !== 'admin') {
-      toast.error('Admin yetkisi gerekli');
-      navigate('/admin/login');
-      return;
-    }
-    
-    fetchPresets();
-    fetchStatus();
-  }, [authLoading, user, navigate]);
-
-  // Polling for status updates when running
-  useEffect(() => {
-    let interval;
-    if (status.is_running || polling) {
-      interval = setInterval(fetchStatus, 2000);
-    }
-    return () => clearInterval(interval);
-  }, [status.is_running, polling]);
-
-  // Auto-scroll logs
-  useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [status.logs]);
-
-  const fetchPresets = async () => {
+  const fetchPresets = useCallback(async () => {
     try {
       const response = await authAxios.get(`${API}/admin/generation-presets`);
       setPresets(response.data);
