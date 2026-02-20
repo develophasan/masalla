@@ -5,248 +5,154 @@ The user wants to build a full-stack web application called MASAL SEPETİ (Tale 
 - **Core Functionality:**
     - Full user membership with custom Google OAuth social login and local registration.
     - An admin panel with statistics and user management.
-    - AI story generation using the Google Gemini API (migrated from OpenAI).
+    - AI story generation using the Google Gemini API.
     - Text-to-speech audio generation using Google Cloud TTS.
-    - SEO-friendly story URLs () with dynamic metadata, a , and .
+    - SEO-friendly story URLs (), , and .
     - A profanity filter for user inputs.
     - A favorites system for users.
-    - A bulk story generation page in the admin panel with a queue and live logging.
+    - A bulk story generation page in the admin panel.
 - **UI/UX:**
     - A responsive, mobile-friendly design that works as a Progressive Web App (PWA).
-    - A site-wide footer containing legal links and affiliate links.
-    - Monetization via Amazon Associates affiliate links, replacing the initial AdSense placeholders.
+    - Monetization via Amazon Associates affiliate links.
     - Gated features (download/share) that require login or viewing an ad.
 - **Developer Support:**
-    - A private, key-protected API documentation page to support the development of a native Flutter application.
+    - A private, key-protected API documentation page.
 
 **User's preferred language**: Turkish (Türkçe)
 
 **what currently exists?**
-The application is a full-stack platform (React, FastAPI, MongoDB). Key features include custom Google OAuth, story generation via Google Gemini, audio via Google TTS, a profanity filter, SEO-optimized story pages (sitemap, robots.txt, JSON-LD), and a new admin page for bulk story generation. The app is fully configured as a PWA, and monetization has been shifted from AdSense placeholders to Amazon Affiliate banners. All previous deployment blockers and dependency issues have been resolved.
+The application is a full-stack platform (React, FastAPI, MongoDB). The core features and a major visual overhaul (Phases 1-3) are complete. In the last session, upon user request, the agent performed a code quality pass, identifying and fixing all ESLint warnings related to missing dependencies in  hooks across the frontend. A deprecation warning for the  package in the backend was identified but deferred to avoid breaking core functionality. The frontend build is now clean.
 
 **Last working item**:
-- **Last item agent was working:** The user reported two final UI/UX bugs:
-    1. The Back to Home button on the Login/Register pages was positioned incorrectly on iPhones, overlapping with the status bar (notch).
-    2. When navigating between pages, the scroll position was not resetting to the top.
-The agent fixed both issues by adding safe-area padding to the auth pages and implementing a global  component in .
+- **Last item agent was working:** The agent identified and fixed multiple ESLint warnings across 6 frontend files (, , , , , ). The fixes involved adding missing dependencies to  and  hooks to prevent stale closures and ensure correct component behavior.
 - **Status:** COMPLETED
-- **Agent Testing Done:** N
-- **Which testing method agent to use?** Frontend testing agent. The agent should verify:
-    1. On a simulated mobile view, the Login page UI does not overlap with the top of the screen.
-    2. Navigate from the home page (scrolled down) to a story page, and confirm the new page starts at the top.
+- **Agent Testing Done:** Y (Verified by running yarn run v1.22.22
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command., which completed successfully without warnings, and by using  to confirm backend and frontend services are responsive.)
+- **Which testing method agent to use?** Frontend testing agent. The next task is a new feature (Phase 4), which will require visual and functional validation.
 - **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1 (P0): Leaked Gemini API Key leads to  errors.**
+- **Issue 1 (P0): Preview Environment API Calls Fail.**
+    - **Description:** The frontend in the preview environment consistently sends API requests to an incorrect URL, resulting in CORS errors. This prevents any data-dependent pages from loading, making UI testing via screenshots or browser interaction impossible for those pages.
+    - **Status:** BLOCKED
+    - **Is recurring issue?** Y
+    - **Note:** This is a known platform limitation. The agent should not attempt to fix it. Rely on yarn run v1.22.22
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command. for compile-time checks and inform the user that full testing must occur on their live deployment.
 
-**Issues Detail:**
-- **Issue 1:**
-    - **Description:** During bulk story generation, the process started failing with a  error. This is because the key was exposed in GitHub's commit history, and Google's secret scanning automatically disabled it. This blocks all AI-related functionality.
-    - **Attempted fixes:** The agent correctly diagnosed the issue. The user was instructed to generate a new API key from Google AI Studio and update the  environment variable in their Railway deployment. The user has confirmed via chat that they have done this. All sensitive information has been scrubbed from the repository.
-    - **Next debug checklist:**
-        1.  Verify the fix by generating a single story through the UI.
-        2.  If successful, run a small task (2-3 stories) on the bulk generation page () to confirm it's also working.
-        3.  If it fails, check the backend logs for the  error and inform the user that the new key is either incorrect or not properly configured in Railway.
-    - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. Fixing it will restore the application's core story generation functionality.
-    - **Status:** USER VERIFICATION PENDING
-    - **Is recurring issue?** Y (Sensitive keys have been leaked to git history before).
-    - **Should Test frontend/backend/both after fix?** Backend
-    - **Blocked on other issue:** None. This is the primary blocker.
+- **Issue 2 (P2): Backend Deprecation Warning.**
+    - **Description:** The  Python package used in  is deprecated and should be migrated to .
+    - **Status:** NOT STARTED
+    - **Is recurring issue?** N
+    - **Note:** This was deferred as a low-priority task to avoid risking the core story generation functionality.
 
 **In progress Task List**:
-- None.
+- **Task 1 (P0): Visual Overhaul (masal.space 2026 Vision)**
+    - **Description:** A major, multi-phase redesign of the entire application's UI/UX.
+    - **Where to resume:** Phases 1, 2, and 3 are complete. The next step is to begin **Phase 4: AI Kişiselleştirme (AI Personalization)** as per the user's approved plan.
+    - **What will be achieved with this?** A complete modernization of the app's UI/UX, leading to a more interactive and visually appealing experience.
+    - **Status:** IN PROGRESS
+    - **Should Test frontend/backend/both after fix?** Frontend
+    - **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-  - **P1: Implement Rewarded Ads for Story Downloads:** The user wants a rewarded video ad to be shown before a story can be downloaded. The current implementation shows a static Amazon affiliate banner (). This needs to be replaced with a proper rewarded ad SDK integration.
-  - **P2: Update Audio for Old Stories:** The user noted that stories generated before the TTS voice change still have the old male voice. The agent needs to write and execute a script that clears the  field for all existing stories in the database, allowing the new female voice to be generated on the next listen.
+    - **P0: Visual Overhaul - Phase 4: AI Personalization:** Implement a recommendation engine based on listening history and add smart filtering by age group and interests.
+    - **P1: Visual Overhaul - Phase 5: Inclusive Design:** WCAG 2.1 AA compliance check and implementation.
+    - **P2: Implement Rewarded Ads for Story Downloads:** Replace the static Amazon banner with a real rewarded video ad SDK.
+    - **P3: Update Audio for Old Stories:** Write and run a one-time script to clear the  field for all stories, forcing regeneration with the new, preferred TTS voice.
 
 - **Future Tasks:**
-  - **PWA Push Notifications:** Implement a system to send push notifications for new stories or announcements.
-  - **Backend Refactoring:** Break down the monolithic  into a more scalable, modular structure (e.g., routers, services).
-  - **Masal Illustrations:** Integrate an image generation AI (like DALL-E or Gemini Vision) to create a unique illustration for each story.
-  - **Multi-Language Support:** Add the ability to generate stories in other languages like English.
-  - **Robust Bulk Generation Queue:** Replace the current in-memory bulk generation state with a persistent queue system (e.g., a dedicated MongoDB collection or Redis) to prevent data loss on server restarts.
-  - **Advanced Parent/Admin Features:** A dashboard for parents to track listening history, or more advanced controls in the admin panel.
+    - PWA Push Notifications.
+    - Backend Refactoring (decompose ).
+    - AI-generated story illustrations.
+    - Multi-language support.
+    - A persistent, robust queue for the bulk story generation feature.
 
 **Completed work in this session**
-- **Gemini API Migration:** Successfully migrated the entire story generation process from OpenAI to the Google Gemini API ( SDK).
-- **Bulk Story Generation Feature:** Built a complete feature in the admin panel to queue and generate multiple stories sequentially, with a UI showing live progress and logs.
-- **TTS Improvements:** Changed the TTS voice to a Turkish female voice () and updated the AI prompt to limit story length, preventing TTS API errors.
-- **PWA Implementation & Fixes:**
-    - Configured the application to be a fully installable PWA with a manifest, service worker, and offline page.
-    - Created correctly padded, square PWA icons from the rectangular source logo to fix aspect ratio issues.
-    - Resolved the iOS status bar/notch overlap issue by implementing safe-area padding.
-- **Amazon Affiliate Integration:** Replaced all AdSense placeholders with Amazon Affiliate banners and added an affiliate link section to the footer.
-- **Feature Gating:** Modified the Download and Share buttons to require user login and to show an ad interstitial for logged-in users.
-- **SEO Enhancements:** Generated a static  and , and improved the structured data (JSON-LD) on story and home pages.
-- **Deployment & Security:** Resolved multiple Railway deployment issues, created a comprehensive Flutter API guide, and scrubbed all leaked secrets from the codebase and git history.
-- **UX Fixes:** Implemented a  component to reset scroll position on navigation and fixed UI layout on auth pages.
+- **Code Quality:** Resolved all frontend ESLint warnings for missing  dependencies across the application.
+- **Previously Completed:**
+  - Migrated data-fetching to .
+  - Created Öneri Mağazası () page.
+  - Completed Visual Overhaul Phases 1-3 (New design system, Bento Grid, Scrollytelling).
+  - Fixed multiple UI bugs related to the new design.
 
 **Earlier issues found/mentioned but not fixed**
 - None.
 
 **Known issue recurrence from previous fork**
-- **Issue:** Leaking sensitive API keys to the Git repository.
-- **Recurrence count:** 2 (First with Google OAuth, now with Gemini).
-- **Status:** RESOLVED (for now). The agent has cleaned the repository and strengthened . The next agent must remain vigilant about not putting any secrets in tracked files.
+- **Issue recurrence in previous fork:** Leaking sensitive API keys.
+- **Recurrence count:** 2
+- **Status:** RESOLVED (Codebase is clean, but vigilance is required).
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **AI API Migration:** Switching from usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
-              [-o ORGANIZATION] [-t {openai,azure}]
-              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
-              [--azure-ad-token AZURE_AD_TOKEN] [-V]
-              {api,tools,migrate,grit} ...
-
-positional arguments:
-  {api,tools,migrate,grit}
-    api                 Direct API calls
-    tools               Client side tools for convenience
-
-options:
-  -h, --help            show this help message and exit
-  -v, --verbose         Set verbosity.
-  -b API_BASE, --api-base API_BASE
-                        What API base url to use.
-  -k API_KEY, --api-key API_KEY
-                        What API key to use.
-  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
-                        What proxy to use.
-  -o ORGANIZATION, --organization ORGANIZATION
-                        Which organization to run as (will use your default
-                        organization if not specified)
-  -t {openai,azure}, --api-type {openai,azure}
-                        The backend API to call, must be `openai` or `azure`
-  --api-version API_VERSION
-                        The Azure API version, e.g.
-                        'https://learn.microsoft.com/en-us/azure/ai-
-                        services/openai/reference#rest-api-versioning'
-  --azure-endpoint AZURE_ENDPOINT
-                        The Azure endpoint, e.g.
-                        'https://endpoint.openai.azure.com'
-  --azure-ad-token AZURE_AD_TOKEN
-                        A token from Azure Active Directory,
-                        https://www.microsoft.com/en-
-                        us/security/business/identity-access/microsoft-entra-
-                        id
-  -V, --version         show program's version number and exit Python library to .
-- **PWA Configuration:** Using  and a Service Worker () to make the React app installable and provide offline capabilities.
-- **Affiliate Marketing:** Integrating Amazon Associates links (SiteStripe) as a monetization strategy.
-- **Feature Gating:** Using React state and context to conditionally render UI (AuthModal, AdInterstitial) based on user authentication status.
-- **Mobile UX:** Using  in CSS to adapt layouts for modern phone notches/islands.
-- **Static Site Generation (for SEO):** Creating a static  during the build/deploy process to improve crawlability.
+- **Server State Management:**  for all data fetching, caching, and invalidation.
+- **UI/UX Design:** Glassmorphism, Bento Grids, Scrollytelling, and Parallax effects.
+- **CSS Architecture:** A design system in  using CSS variables.
+- **Responsive Design:** Tailwind CSS media queries (, , ).
 
 **key DB schema**
-- No changes to the database schema were made.
+- No changes.
 
 **changes in tech stack**
-- **Removed:** usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
-              [-o ORGANIZATION] [-t {openai,azure}]
-              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
-              [--azure-ad-token AZURE_AD_TOKEN] [-V]
-              {api,tools,migrate,grit} ...
-
-positional arguments:
-  {api,tools,migrate,grit}
-    api                 Direct API calls
-    tools               Client side tools for convenience
-
-options:
-  -h, --help            show this help message and exit
-  -v, --verbose         Set verbosity.
-  -b API_BASE, --api-base API_BASE
-                        What API base url to use.
-  -k API_KEY, --api-key API_KEY
-                        What API key to use.
-  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
-                        What proxy to use.
-  -o ORGANIZATION, --organization ORGANIZATION
-                        Which organization to run as (will use your default
-                        organization if not specified)
-  -t {openai,azure}, --api-type {openai,azure}
-                        The backend API to call, must be `openai` or `azure`
-  --api-version API_VERSION
-                        The Azure API version, e.g.
-                        'https://learn.microsoft.com/en-us/azure/ai-
-                        services/openai/reference#rest-api-versioning'
-  --azure-endpoint AZURE_ENDPOINT
-                        The Azure endpoint, e.g.
-                        'https://endpoint.openai.azure.com'
-  --azure-ad-token AZURE_AD_TOKEN
-                        A token from Azure Active Directory,
-                        https://www.microsoft.com/en-
-                        us/security/business/identity-access/microsoft-entra-
-                        id
-  -V, --version         show program's version number and exit, .
-- **Added:** .
+- **Added (Previous Session):** 
 
 **All files of reference**
-- : Core logic for Gemini integration and the new bulk generation endpoints.
-- : The UI for the new bulk generation feature.
-- : Contains logic for feature gating (download/share) and enhanced SEO schema.
-- : Defines the PWA's properties.
-- : The service worker for offline functionality.
-- : The primary ad component, now configured for Amazon.
-- : Integrated the  component.
-- : Updated to be more robust in excluding sensitive files.
+- **Updated in this session:**
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+- **Key existing files:**
+  - 
+  - 
 
 **Areas that need refactoring**:
-- The bulk generation state in  is stored in a simple in-memory dictionary. This is not robust and will be lost on server restart. It should be refactored to use a persistent store like a MongoDB collection.
-- The user has previously requested **not** to refactor the monolithic  for stability reasons, but it remains a long-term technical debt.
+- The backend  file remains a large monolith.
+- The bulk story generation feature's state is not persistent and will be lost on server restart.
 
 **key api endpoints**
-- **NEW:**
-    - : Initiates a bulk story generation task.
-    - : Halts the ongoing bulk generation task.
-    - : Provides real-time status of the bulk generation queue.
-    - : Fetches topics and subtopics for the bulk generation UI.
-- **REPLACED (Functionality):**
-    - The  is now served statically from  instead of a backend endpoint.
+- 
+- 
+- 
+- 
 
 **Critical Info for New Agent**
-- **Verify API Key First:** The highest priority is to confirm that the story generation is working with the user's new Gemini API key. Do not start any other task until this is verified.
-- **PWA Cache:** Inform the user that after PWA-related changes are deployed, they may need to clear their browser cache or reinstall the PWA on their device to see the updates (especially for icons and the manifest).
-- **Bulk Generation is Not Persistent:** The bulk generation process state is stored in-memory on the backend. If the server restarts for any reason, the queue and progress will be lost. This is a known limitation.
+- **Follow the User's Roadmap:** The user has a multi-phase plan for the visual overhaul. You are to begin work on **Phase 4 (AI Personalization)**.
+- **Preview Environment Is for Build Checks Only:** Do not waste time trying to test data-dependent pages with screenshots. The preview environment's frontend cannot communicate with its backend due to a platform issue. Confirm changes by running yarn run v1.22.22
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command..
+- **Confirm Core Functionality:** Before starting Phase 4, ask the user to quickly confirm that core features (like story generation) still work on their live site, as major frontend refactoring has occurred.
 
 **documents and test reports created in this job**
--  (Updated)
--  (Created)
+-  (Updated to reflect ESLint fix completion).
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. **User Request:** Fix UI bugs: login page safe-area and page scroll position not resetting. (Status: **Completed**)
-2. **User Confirmation:** User states they have fixed the leaked API key and asks the agent to wait for the next task. (Status: **Pending Verification**)
-3. **User Request:** Ask for the project's to-do list. (Status: **Completed**)
-4. **User Report:** PWA icon is distorted and the app UI overlaps with the iOS status bar. (Status: **Completed**)
-5. **User Request:** Make the app a PWA so it can be installed on devices. (Status: **Completed**)
-6. **User Report:** Bulk generation is failing due to a leaked API key. (Status: **Resolved, Pending Verification**)
-7. **User Report:** Old stories still have the old male TTS voice after the voice was changed in the code. (Status: **Acknowledged**, new task created).
-8. **User Confirmation:** User agrees to proceed with security cleanup after being informed about the risks of leaked credentials in git history. (Status: **Completed**)
-9. **User Request:** Before pushing to GitHub, remove all API keys and sensitive info from the code and documentation. (Status: **Completed**)
-10. **User Request:** Switch the AI story generation from OpenAI to Gemini, providing an API key and code snippet. (Status: **Completed**)
+1.  **User:**  (Fix bugs if any). (Status: **Completed**)
 
 **Project Health Check:**
-- **Broken:** The core story generation feature is presumed broken due to the  error from the leaked Gemini API key. This status can be cleared only after verifying the user's new key works.
+- **Broken:** API calls in the preview environment are non-functional due to a platform-level CORS/networking issue.
+- **Mocked:** None.
 
 **3rd Party Integrations**
-- **Google Gemini** (Story Generation) — Requires User API Key ().
-- **Google Cloud Text-to-Speech** (Audio Generation) — Requires User API Key ().
-- **Custom Google OAuth** (Social Login) — Requires User API Keys (, ).
-- **Amazon Associates (Gelir Ortaklığı)** (Advertisements) — Integrated via SiteStripe link with partner tag .
-- **Google AdSense** (Advertisements) — Publisher ID is integrated, but ad components are currently used by Amazon as a fallback.
+- **Google Gemini** (Story Generation) — Requires User API Key.
+- **Google Cloud Text-to-Speech** (Audio Generation) — Requires User API Key.
+- **Custom Google OAuth** (Social Login) — Requires User API Keys.
+- **Amazon Associates** (Advertisements) — Integrated via static links.
+- **** (Frontend Caching) - Library integrated.
 
 **Testing status**
 - Testing agent used after significant changes: NO
 - Troubleshoot agent used after agent stuck in loop: NO
 - Test files created: []
-- Known regressions: Story generation is non-functional until the API key issue is confirmed to be resolved.
+- Known regressions: None.
 
 **Credentials to test flow:**
 - **Admin:**  / 
-- **Google OAuth:** Requires a test user to be configured in the user's Google Cloud project.
 
 **What agent forgot to execute**
-- The agent did not design the bulk generation feature with a persistent queue, making it vulnerable to data loss on server restarts. This is a significant architectural weakness for a production feature.
-- The agent initially tried to install a private package () on a public PaaS (Railway), showing a lack of environmental awareness, though it did self-correct.</analysis>
+- The agent did not present the initial plan via  because the user immediately intervened with a direct instruction (Fix bugs if any), which the agent correctly prioritized and executed.</analysis>
