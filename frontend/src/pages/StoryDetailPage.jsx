@@ -36,6 +36,9 @@ export default function StoryDetailPage() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showText, setShowText] = useState(false);
   const [showDownloadAd, setShowDownloadAd] = useState(false);
+  const [showShareAd, setShowShareAd] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null); // 'download' or 'share'
   const [canDownload, setCanDownload] = useState(false);
   const [isPopularStory, setIsPopularStory] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
