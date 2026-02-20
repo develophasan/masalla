@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   BookOpen, Menu, X, Plus, Library, Info, User, LogOut, 
-  Coins, Shield, ChevronDown 
+  Coins, Shield, ChevronDown, ShoppingBag 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
