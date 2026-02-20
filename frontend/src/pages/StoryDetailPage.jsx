@@ -949,3 +949,27 @@ export default function StoryDetailPage() {
     </div>
   );
 }
+
+// Scrollytelling Paragraph Component
+const StoryParagraph = ({ text, index, colors }) => {
+  const [ref, isInView] = useInView();
+  
+  // First paragraph gets special styling
+  const isFirst = index === 0;
+  
+  return (
+    <p
+      ref={ref}
+      className={cn(
+        "story-paragraph mb-6 last:mb-0",
+        isInView && "in-view",
+        isFirst ? "story-text-immersive" : "text-lg leading-relaxed text-slate-700"
+      )}
+      style={{
+        transitionDelay: `${index * 150}ms`
+      }}
+    >
+      {text}
+    </p>
+  );
+};
