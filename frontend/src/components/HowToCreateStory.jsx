@@ -83,9 +83,9 @@ export default function HowToCreateStory() {
 
   return (
     <div className="glass-card-strong rounded-3xl p-6 md:p-8 overflow-hidden relative">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-400/10 to-pink-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-amber-400/10 to-orange-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      {/* Background decoration - Hidden on mobile */}
+      <div className="hidden md:block absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-400/10 to-pink-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="hidden md:block absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-amber-400/10 to-orange-400/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
       
       <div className="relative">
         <div className="text-center mb-6">
