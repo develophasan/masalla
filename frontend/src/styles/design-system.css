@@ -513,7 +513,8 @@
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  opacity: 0.4;
+  opacity: 0.3;
+  z-index: 0;
   animation: floatSlow 15s ease-in-out infinite;
 }
 
