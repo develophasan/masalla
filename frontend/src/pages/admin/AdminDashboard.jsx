@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from '@/contexts/AuthContext';
 import { 
@@ -19,22 +19,7 @@ export default function AdminDashboard() {
   const [stories, setStories] = useState([]);
   const [creditRequests, setCreditRequests] = useState([]);
 
-  useEffect(() => {
-    // Wait for auth to load
-    if (authLoading) return;
-    
-    // Check if user exists and is admin - early redirect for better UX
-    if (user && user.role !== 'admin') {
-      toast.error('Admin yetkisi gerekli');
-      navigate('/admin/login');
-      return;
-    }
-    
-    // If no user, try fetching stats (token might be valid in localStorage)
-    fetchStats();
-  }, [authLoading, user, navigate]);
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await authAxios.get(`${API}/admin/stats`, );
       setStats(response.data);
