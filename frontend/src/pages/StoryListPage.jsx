@@ -98,13 +98,12 @@ export default function StoryListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-purple-50 to-white pb-20 sm:pb-0">
+    <div className="min-h-screen cloud-bg-animated pb-20 sm:pb-0">
       {/* Search Interstitial Ad */}
       <AdInterstitial 
         isOpen={showSearchAd} 
         onClose={handleSearchAdClose}
         message="Masallar aranıyor..."
-        
       />
 
       {/* Navbar */}
@@ -121,64 +120,66 @@ export default function StoryListPage() {
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="mb-8 flex flex-col sm:flex-row gap-4 animate-slide-up stagger-1">
-          {/* Search */}
-          <form onSubmit={handleSearch} className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <Input
-              type="text"
-              placeholder="Masal veya kazanım ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-4 py-3 rounded-full border-2 border-slate-200 focus:border-violet-400"
-              data-testid="search-input"
-            />
-          </form>
+        {/* Filters - Glassmorphism */}
+        <div className="mb-8 glass-card-strong p-4 rounded-2xl animate-slide-up stagger-1">
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Input
+                type="text"
+                placeholder="Masal veya kazanım ara..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 pr-4 py-3 rounded-xl bg-white/70 border-white/60 focus:border-violet-400 focus:bg-white transition-colors"
+                data-testid="search-input"
+              />
+            </form>
 
-          {/* Topic Filter */}
-          <Select value={selectedTopic} onValueChange={handleTopicChange}>
-            <SelectTrigger className="w-full sm:w-48 rounded-full border-2 border-slate-200" data-testid="topic-filter">
-              <Filter className="w-4 h-4 mr-2 text-slate-400" />
-              <SelectValue placeholder="Konu Filtrele" />
-            </SelectTrigger>
-            <SelectContent className="max-h-80">
-              <SelectItem value="all">Tüm Konular</SelectItem>
-              {Array.isArray(topics) && topics.map((topic) => (
-                <SelectItem key={topic.id} value={topic.id}>
-                  {topic.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            {/* Topic Filter */}
+            <Select value={selectedTopic} onValueChange={handleTopicChange}>
+              <SelectTrigger className="w-full sm:w-48 rounded-xl bg-white/70 border-white/60" data-testid="topic-filter">
+                <Filter className="w-4 h-4 mr-2 text-slate-400" />
+                <SelectValue placeholder="Konu Filtrele" />
+              </SelectTrigger>
+              <SelectContent className="max-h-80 rounded-xl">
+                <SelectItem value="all">Tüm Konular</SelectItem>
+                {Array.isArray(topics) && topics.map((topic) => (
+                  <SelectItem key={topic.id} value={topic.id}>
+                    {topic.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          {/* Sort Filter */}
-          <Select value={sortBy} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-full sm:w-40 rounded-full border-2 border-slate-200" data-testid="sort-filter">
-              <ArrowUpDown className="w-4 h-4 mr-2 text-slate-400" />
-              <SelectValue placeholder="Sırala" />
-            </SelectTrigger>
-            <SelectContent>
-              {SORT_OPTIONS.map((option) => (
-                <SelectItem key={option.id} value={option.id}>
-                  {option.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            {/* Sort Filter */}
+            <Select value={sortBy} onValueChange={handleSortChange}>
+              <SelectTrigger className="w-full sm:w-40 rounded-xl bg-white/70 border-white/60" data-testid="sort-filter">
+                <ArrowUpDown className="w-4 h-4 mr-2 text-slate-400" />
+                <SelectValue placeholder="Sırala" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                {SORT_OPTIONS.map((option) => (
+                  <SelectItem key={option.id} value={option.id}>
+                    {option.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          {/* Clear Filters */}
-          {hasFilters && (
-            <Button
-              variant="ghost"
-              onClick={clearFilters}
-              className="text-slate-500 hover:text-slate-700"
-              data-testid="clear-filters-btn"
-            >
-              <X className="w-4 h-4 mr-1" />
-              Temizle
-            </Button>
-          )}
+            {/* Clear Filters */}
+            {hasFilters && (
+              <Button
+                variant="ghost"
+                onClick={clearFilters}
+                className="text-slate-500 hover:text-slate-700 hover:bg-white/50 rounded-xl"
+                data-testid="clear-filters-btn"
+              >
+                <X className="w-4 h-4 mr-1" />
+                Temizle
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Stories Grid */}
@@ -191,7 +192,7 @@ export default function StoryListPage() {
           <>
             {/* Ad Banner in results */}
             <div className="mb-8 flex justify-center">
-              <div className="w-full max-w-3xl bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+              <div className="w-full max-w-3xl glass-card p-4 rounded-2xl">
                 <AdBanner className="rounded-xl overflow-hidden" />
               </div>
             </div>
