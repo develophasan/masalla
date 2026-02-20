@@ -320,6 +320,7 @@ export default function StoryDetailPage() {
     "headline": story.title,
     "description": seoDescription,
     "datePublished": story.created_at,
+    "dateModified": story.updated_at || story.created_at,
     "author": {
       "@type": "Person",
       "name": story.creator_name || "Masal Sepeti"
@@ -327,10 +328,29 @@ export default function StoryDetailPage() {
     "publisher": {
       "@type": "Organization",
       "name": "Masal Sepeti",
-      "url": "https://www.masal.space"
+      "url": "https://masal.space",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://masal.space/icons/icon-512x512.png"
+      }
     },
-    "mainEntityOfPage": canonicalUrl
+    "mainEntityOfPage": canonicalUrl,
+    "articleSection": story.topic_name || "Çocuk Masalları",
+    "keywords": `masal, ${story.topic_name || ''}, ${story.subtopic_name || ''}, çocuk masalları, eğitici masal, ${story.age_group || ''} yaş`.replace(/,\s*,/g, ','),
+    "inLanguage": "tr-TR"
   };
+
+  // AudioObject Schema for voice-enabled stories
+  const audioSchema = story.audio_base64 ? {
+    "@context": "https://schema.org",
+    "@type": "AudioObject",
+    "name": story.title,
+    "description": `${story.title} sesli masal`,
+    "duration": story.duration ? `PT${Math.floor(story.duration / 60)}M${story.duration % 60}S` : undefined,
+    "encodingFormat": "audio/mpeg",
+    "inLanguage": "tr-TR",
+    "isAccessibleForFree": true
+  } : null;
 
   // Breadcrumb Schema
   const breadcrumbSchema = {
