@@ -51,6 +51,7 @@ Build a full-stack web application called "MASAL SEPETİ" (Tale Basket) - a plat
 - [x] Gemini API Key - Active ✓
 - [x] Download/Share with 10-second Amazon ad display
 - [x] **React Query caching** - Automatic data caching for topics, stories, and pages
+- [x] **Öneri Mağazası** (`/magaza`) - Amazon affiliate ürün kategorileri sayfası
 
 ## Required Environment Variables (Backend)
 ```
