@@ -28,8 +28,24 @@ export default function StoryDetailPage() {
   const isNewRoute = location.pathname.startsWith('/masal/');
   const storyIdentifier = slug || id;
   
-  const [story, setStory] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // React Query for story data
+  const { data: story, isLoading: loading, isError } = useQuery({
+    queryKey: ['story', storyIdentifier, isNewRoute],
+    queryFn: async () => {
+      const endpoint = isNewRoute 
+        ? `${API}/masal/${storyIdentifier}`
+        : `${API}/stories/${storyIdentifier}`;
+      const response = await axios.get(endpoint);
+      return response.data;
+    },
+    enabled: !!storyIdentifier,
+    staleTime: 10 * 60 * 1000, // 10 minutes cache
+  });
+
+  // Use cached popular stories to check if current story is popular
+  const { data: popularStories = [] } = usePopularStories(10);
+  const isPopularStory = popularStories.some(s => s.id === story?.id || s.slug === storyIdentifier);
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -42,14 +58,16 @@ export default function StoryDetailPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingAction, setPendingAction] = useState(null); // 'download' or 'share'
   const [canDownload, setCanDownload] = useState(false);
-  const [isPopularStory, setIsPopularStory] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
 
+  // Handle error
   useEffect(() => {
-    fetchStory();
-    checkIfPopular();
-  }, [storyIdentifier]);
+    if (isError) {
+      toast.error("Masal yüklenirken hata oluştu");
+      navigate("/");
+    }
+  }, [isError, navigate]);
 
   useEffect(() => {
     if (isAuthenticated && story?.id) {
