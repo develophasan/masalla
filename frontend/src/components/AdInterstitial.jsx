@@ -1,8 +1,46 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Sparkles } from 'lucide-react';
+import { X, Sparkles, ExternalLink, BookOpen, Gift, Star, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Google AdSense Interstitial Ad Component
+const AMAZON_TAG = 'masalspace-21';
+const AMAZON_BASE = 'https://www.amazon.com.tr';
+
+const createAmazonLink = (path) => {
+  const params = new URLSearchParams({
+    tag: AMAZON_TAG,
+    linkCode: 'll2',
+    ref_: 'as_li_ss_tl'
+  });
+  return `${AMAZON_BASE}${path}?${params.toString()}`;
+};
+
+// Featured Amazon products for interstitial
+const FEATURED_PRODUCTS = [
+  {
+    title: 'En Çok Satan Masal Kitapları',
+    description: 'Çocukların en sevdiği klasik ve yeni masallar',
+    path: '/s?k=en+çok+satan+çocuk+masal+kitabı',
+    icon: BookOpen,
+    gradient: 'from-violet-500 to-purple-600',
+    highlight: true
+  },
+  {
+    title: 'Eğitici Oyuncak Setleri',
+    description: 'STEM ve montessori oyuncakları',
+    path: '/s?k=eğitici+oyuncak+set+çocuk',
+    icon: Gift,
+    gradient: 'from-pink-500 to-rose-600'
+  },
+  {
+    title: 'Sesli Masal Kitapları',
+    description: 'Butonlu sesli hikaye kitapları',
+    path: '/s?k=sesli+masal+kitabı+çocuk',
+    icon: Star,
+    gradient: 'from-amber-500 to-orange-600'
+  }
+];
+
+// Interstitial Ad Component with Amazon
 export const AdInterstitial = ({ 
   isOpen, 
   onClose, 
@@ -11,28 +49,11 @@ export const AdInterstitial = ({
 }) => {
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(false);
-  const adRef = useRef(null);
-  const isLoaded = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
       setCountdown(5);
       setCanClose(false);
-      isLoaded.current = false;
-      
-      // Load ad when modal opens
-      const timer = setTimeout(() => {
-        if (adRef.current && !isLoaded.current) {
-          try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            isLoaded.current = true;
-          } catch (e) {
-            console.log('AdSense error:', e);
-          }
-        }
-      }, 100);
-
-      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
@@ -80,22 +101,49 @@ export const AdInterstitial = ({
           )}
         </div>
 
-        {/* Ad Content */}
+        {/* Amazon Products Content */}
         <div className="p-6">
-          <div className="bg-slate-50 rounded-2xl p-4 min-h-[280px] flex items-center justify-center">
-            <ins
-              ref={adRef}
-              className="adsbygoogle"
-              style={{ display: 'block', width: '100%', height: '250px' }}
-              data-ad-client="ca-pub-7470017453637950"
-              data-ad-slot="auto"
-              data-ad-format="rectangle"
-            />
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+              <ShoppingBag className="w-4 h-4" />
+              Sizin İçin Öneriler
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {FEATURED_PRODUCTS.map((product, idx) => {
+              const Icon = product.icon;
+              return (
+                <a
+                  key={idx}
+                  href={createAmazonLink(product.path)}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className={`flex items-center gap-4 p-4 rounded-xl transition-all group ${
+                    product.highlight 
+                      ? 'bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 hover:border-amber-400' 
+                      : 'bg-slate-50 hover:bg-slate-100 border border-slate-200'
+                  }`}
+                >
+                  <div className={`w-12 h-12 bg-gradient-to-br ${product.gradient} rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-slate-800 group-hover:text-orange-600 transition-colors">
+                      {product.title}
+                    </p>
+                    <p className="text-sm text-slate-500 truncate">{product.description}</p>
+                  </div>
+                  <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-orange-500 flex-shrink-0" />
+                </a>
+              );
+            })}
           </div>
           
           {/* Sponsor text */}
-          <p className="text-center text-xs text-slate-400 mt-4">
-            Sponsorlu içerik - Masal Sepeti'ni destekleyin
+          <p className="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1">
+            <img src="https://www.amazon.com.tr/favicon.ico" alt="Amazon" className="w-3 h-3" />
+            Amazon iş ortağı bağlantısı
           </p>
         </div>
 
