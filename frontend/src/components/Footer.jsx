@@ -77,6 +77,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/magaza" className="flex items-center gap-2 text-slate-600 hover:text-violet-600 transition-colors text-sm">
+                  <ShoppingBag className="w-4 h-4" />
+                  Öneri Mağazası
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="flex items-center gap-2 text-slate-600 hover:text-violet-600 transition-colors text-sm">
                   <Info className="w-4 h-4" />
                   Hakkımızda
