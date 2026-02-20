@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import axios from "axios";
 import { ArrowLeft, Search, BookOpen, Filter, X, GraduationCap, Clock, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +15,7 @@ import AdInterstitial from "@/components/AdInterstitial";
 import AdBanner from "@/components/AdBanner";
 import Navbar from "@/components/Navbar";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { API } from "@/config/api";
+import { useTopics, useStories } from "@/hooks/useStories";
 
 const SORT_OPTIONS = [
   { id: "popular", name: "En Popüler" },
