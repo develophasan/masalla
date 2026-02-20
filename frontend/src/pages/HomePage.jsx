@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import axios from "axios";
 import { 
   Search, Plus, BookOpen, Star, Sparkles, Heart, Leaf, Smile, 
   Users, Activity, Shield, Rocket, Palette, GraduationCap, 
@@ -16,7 +15,7 @@ import Navbar from "@/components/Navbar";
 import HowToCreateStory from "@/components/HowToCreateStory";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import WelcomeModal from "@/components/WelcomeModal";
-import { API } from "@/config/api";
+import { useTopics, usePopularStories } from "@/hooks/useStories";
 
 const TOPIC_ICONS = {
   heart: Heart,
