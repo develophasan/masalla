@@ -224,6 +224,18 @@ export default function StoryDetailPage() {
   };
 
   const handleShare = async () => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      setPendingAction('share');
+      setShowAuthModal(true);
+      return;
+    }
+    
+    // Show ad before share
+    setShowShareAd(true);
+  };
+
+  const executeShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
@@ -240,7 +252,19 @@ export default function StoryDetailPage() {
     }
   };
 
+  const handleShareAdClose = () => {
+    setShowShareAd(false);
+    executeShare();
+  };
+
   const handleDownloadClick = () => {
+    // Check if user is logged in
+    if (!isAuthenticated) {
+      setPendingAction('download');
+      setShowAuthModal(true);
+      return;
+    }
+    
     // Show ad before download
     setShowDownloadAd(true);
   };
