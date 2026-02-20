@@ -117,32 +117,7 @@ export default function StoryDetailPage() {
     }
   };
 
-  const checkIfPopular = async () => {
-    try {
-      const response = await axios.get(`${API}/stories/popular?limit=10`);
-      const popularIds = Array.isArray(response.data) ? response.data.map(s => s.id) : [];
-      setIsPopularStory(popularIds.includes(storyIdentifier));
-    } catch (error) {
-      console.log("Could not check popular stories");
-    }
-  };
-
-  const fetchStory = async () => {
-    try {
-      // Try slug-based API first if on new route, else use story ID
-      const endpoint = isNewRoute 
-        ? `${API}/masal/${storyIdentifier}`
-        : `${API}/stories/${storyIdentifier}`;
-      const response = await axios.get(endpoint);
-      setStory(response.data);
-    } catch (error) {
-      console.error("Error fetching story:", error);
-      toast.error("Masal yüklenirken hata oluştu");
-      navigate("/");
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
 
   const incrementPlayCount = async () => {
     if (!story?.id) return;
