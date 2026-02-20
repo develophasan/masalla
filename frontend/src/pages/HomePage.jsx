@@ -190,8 +190,74 @@ export default function HomePage() {
     navigate(`/topics/${topicId}`);
   };
 
+  // Schema.org structured data for homepage
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Masal Sepeti",
+    "url": "https://masal.space",
+    "logo": "https://masal.space/icons/icon-512x512.png",
+    "description": "Çocuklar için yapay zeka destekli, kazanım temelli eğitici masal platformu",
+    "sameAs": []
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Masal Sepeti",
+    "url": "https://masal.space",
+    "description": "Çocuklar için yapay zeka destekli eğitici masallar",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://masal.space/stories?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const educationalOrgSchema = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Masal Sepeti",
+    "url": "https://masal.space",
+    "description": "4-8 yaş çocuklar için pedagojik kazanım destekli sesli masal platformu",
+    "educationalCredentialAwarded": "Çocuk gelişimi ve değer eğitimi"
+  };
+
   return (
     <div className="min-h-screen pb-20 sm:pb-0">
+      {/* SEO Meta Tags */}
+      <Helmet>
+        <title>Masal Sepeti - Çocuklar için Eğitici Sesli Masallar | masal.space</title>
+        <meta name="description" content="Yapay zeka destekli, kazanım temelli eğitici masal platformu. 15 ana kategori, 150+ alt konu ile çocuklarınız için özel masallar oluşturun. Ücretsiz sesli masallar." />
+        <meta name="keywords" content="çocuk masalları, eğitici masallar, sesli masal, yapay zeka masal, Türkçe masallar, uyku masalları, değer eğitimi, okul öncesi" />
+        <link rel="canonical" href="https://masal.space" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Masal Sepeti - Çocuklar için Eğitici Sesli Masallar" />
+        <meta property="og:description" content="Yapay zeka destekli, kazanım temelli eğitici masal platformu. Çocuklarınız için özel masallar oluşturun." />
+        <meta property="og:url" content="https://masal.space" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://masal.space/icons/icon-512x512.png" />
+        <meta property="og:locale" content="tr_TR" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Masal Sepeti - Çocuklar için Eğitici Masallar" />
+        <meta name="twitter:description" content="Yapay zeka destekli, kazanım temelli eğitici masal platformu" />
+        <meta name="twitter:image" content="https://masal.space/icons/icon-512x512.png" />
+
+        {/* Schema.org JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(websiteSchema)}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify(educationalOrgSchema)}
+        </script>
+      </Helmet>
+
       {/* Welcome Modal for First Time Visitors */}
       <WelcomeModal />
       
