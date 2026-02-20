@@ -84,11 +84,21 @@ export default function StoryDetailPage() {
     }
   }, [isError, navigate]);
 
+  const checkFavorite = useCallback(async () => {
+    if (!story?.id) return;
+    try {
+      const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
+      setIsFavorite(response.data.is_favorite);
+    } catch (err) {
+      // Ignore
+    }
+  }, [story?.id]);
+
   useEffect(() => {
     if (isAuthenticated && story?.id) {
       checkFavorite();
     }
-  }, [isAuthenticated, story?.id]);
+  }, [isAuthenticated, story?.id, checkFavorite]);
 
   // Redirect old URL to new SEO URL if story has slug
   useEffect(() => {
@@ -96,15 +106,6 @@ export default function StoryDetailPage() {
       navigate(`/masal/${story.slug}`, { replace: true });
     }
   }, [story?.slug, isNewRoute, storyIdentifier, navigate]);
-
-  const checkFavorite = async () => {
-    try {
-      const response = await authAxios.get(`${API}/favorites/check/${story.id}`);
-      setIsFavorite(response.data.is_favorite);
-    } catch (error) {
-      // Ignore
-    }
-  };
 
   const toggleFavorite = async () => {
     if (!isAuthenticated || favoriteLoading) {
