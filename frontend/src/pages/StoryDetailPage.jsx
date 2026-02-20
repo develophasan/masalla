@@ -619,31 +619,45 @@ export default function StoryDetailPage() {
         </div>
       )}
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Story Header */}
-        <div className="text-center mb-8 animate-slide-up">
-          <div className="flex items-center justify-center gap-2 flex-wrap mb-4">
-            <span className="badge-topic">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+        {/* Story Header - Immersive Style */}
+        <div className="text-center mb-12 animate-slide-up">
+          {/* Topic Badge */}
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-6">
+            <span 
+              className="px-4 py-2 rounded-full text-white font-medium shadow-lg"
+              style={{ background: colors.gradient }}
+            >
               {story.topic_name}
             </span>
             {story.subtopic_name && (
-              <span className="text-sm text-slate-500">• {story.subtopic_name}</span>
+              <span className="text-sm text-slate-500 bg-white/60 backdrop-blur-sm px-3 py-1 rounded-full">
+                {story.subtopic_name}
+              </span>
             )}
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
-            {story.title}
+          
+          {/* Title with gradient */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 bg-clip-text text-transparent">
+              {story.title}
+            </span>
           </h1>
-          <div className="flex items-center justify-center gap-6 text-sm text-slate-500 flex-wrap">
-            <span className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
+          
+          {/* Meta info with glass style */}
+          <div className="inline-flex items-center gap-4 px-6 py-3 glass-card rounded-full text-sm text-slate-600 flex-wrap justify-center">
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4" style={{ color: colors.main }} />
               {story.duration ? `${Math.ceil(story.duration / 60)} dk` : "~5 dk"}
             </span>
-            <span className="flex items-center gap-1">
-              <Heart className="w-4 h-4" />
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="flex items-center gap-1.5">
+              <Heart className="w-4 h-4" style={{ color: colors.main }} />
               {story.play_count} dinleme
             </span>
-            <span className="flex items-center gap-1">
-              <Sparkles className="w-4 h-4" />
+            <span className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4" style={{ color: colors.main }} />
               {story.age_group}
             </span>
           </div>
@@ -652,31 +666,38 @@ export default function StoryDetailPage() {
           {story.creator_name && (
             <Link 
               to={`/user/${story.creator_id}`}
-              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-slate-100 hover:border-violet-200 hover:shadow-md transition-all"
+              className="mt-6 inline-flex items-center gap-3 px-5 py-2.5 glass-card rounded-full hover:shadow-lg transition-all group"
             >
               {story.creator_picture ? (
-                <img src={story.creator_picture} alt="" className="w-6 h-6 rounded-full" />
+                <img src={story.creator_picture} alt="" className="w-8 h-8 rounded-full ring-2 ring-white shadow" />
               ) : (
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-400 to-pink-400 flex items-center justify-center">
-                  <User className="w-3 h-3 text-white" />
+                <div 
+                  className="w-8 h-8 rounded-full flex items-center justify-center ring-2 ring-white shadow"
+                  style={{ background: colors.gradient }}
+                >
+                  <User className="w-4 h-4 text-white" />
                 </div>
               )}
-              <span className="text-sm text-slate-600 hover:text-violet-600 transition-colors">
+              <span className="text-sm text-slate-600 group-hover:text-slate-800 transition-colors">
                 {story.creator_name} tarafından oluşturuldu
               </span>
             </Link>
           )}
 
-          {/* Favorite Button */}
-          <div className="mt-4">
+          {/* Action Buttons Row */}
+          <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
             <Button
               onClick={toggleFavorite}
               disabled={favoriteLoading}
-              variant={isFavorite ? "default" : "outline"}
-              className={`rounded-full ${isFavorite ? "bg-red-500 hover:bg-red-600 text-white" : "border-red-200 text-red-500 hover:bg-red-50"}`}
+              className={cn(
+                "rounded-full px-6 transition-all",
+                isFavorite 
+                  ? "bg-red-500 hover:bg-red-600 text-white shadow-lg" 
+                  : "bg-white/80 backdrop-blur-sm text-red-500 border border-red-200 hover:bg-red-50"
+              )}
             >
               <Heart 
-                className={`w-5 h-5 mr-2 ${favoriteLoading ? "animate-pulse" : ""}`} 
+                className={cn("w-5 h-5 mr-2", favoriteLoading && "animate-pulse")} 
                 fill={isFavorite ? "currentColor" : "none"}
               />
               {isFavorite ? "Favorilerimde" : "Favorilere Ekle"}
@@ -684,29 +705,48 @@ export default function StoryDetailPage() {
           </div>
         </div>
 
-        {/* Kazanım Card */}
+        {/* Kazanım Card - Glass Style */}
         {story.kazanim && (
-          <div className="mb-8 p-5 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 animate-slide-up">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
-                <GraduationCap className="w-5 h-5 text-amber-600" />
+          <div 
+            className="mb-10 p-6 glass-card-strong rounded-2xl animate-slide-up"
+            style={{ borderLeft: `4px solid ${colors.main}` }}
+          >
+            <div className="flex items-start gap-4">
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg"
+                style={{ background: colors.gradient }}
+              >
+                <GraduationCap className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="font-bold text-amber-800 mb-1">Hedef Kazanım</p>
-                <p className="text-amber-700">{story.kazanim}</p>
+                <p className="font-bold text-slate-800 mb-1 text-lg">Hedef Kazanım</p>
+                <p className="text-slate-600">{story.kazanim}</p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Audio Player */}
+        {/* Immersive Audio Player */}
         {story.audio_base64 && (
-          <div className="audio-player mb-8 animate-slide-up stagger-1" data-testid="audio-player">
+          <div className="immersive-player mb-10 animate-slide-up" data-testid="audio-player">
+            {/* Audio Waveform Visualization */}
+            <div className="flex items-center justify-center mb-8">
+              <div className="audio-wave">
+                {[...Array(5)].map((_, i) => (
+                  <div 
+                    key={i} 
+                    className={cn("audio-wave-bar", !isPlaying && "paused")}
+                    style={{ background: colors.gradient }}
+                  />
+                ))}
+              </div>
+            </div>
+            
             {/* Main Controls */}
-            <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="flex items-center justify-center gap-6 mb-8">
               <button
                 onClick={handleRestart}
-                className="p-3 rounded-full bg-white shadow-md hover:shadow-lg text-violet-500 hover:scale-110 transition-transform"
+                className="p-4 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg text-slate-600 hover:scale-110 transition-all"
                 data-testid="restart-button"
               >
                 <RotateCcw className="w-5 h-5" />
@@ -714,7 +754,11 @@ export default function StoryDetailPage() {
               
               <button
                 onClick={togglePlay}
-                className="play-button"
+                className={cn(
+                  "w-20 h-20 rounded-full flex items-center justify-center text-white shadow-xl hover:scale-105 transition-all",
+                  isPlaying ? "" : "play-pulse"
+                )}
+                style={{ background: colors.gradient }}
                 data-testid="play-pause-button"
               >
                 {isPlaying ? (
@@ -726,7 +770,7 @@ export default function StoryDetailPage() {
               
               <button
                 onClick={toggleMute}
-                className="p-3 rounded-full bg-white shadow-md hover:shadow-lg text-violet-500 hover:scale-110 transition-transform"
+                className="p-4 rounded-2xl bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg text-slate-600 hover:scale-110 transition-all"
                 data-testid="mute-button"
               >
                 {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
@@ -734,15 +778,18 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Progress Bar */}
-            <div className="mb-4">
+            <div className="mb-6">
               <div 
-                className="progress-track cursor-pointer"
+                className="h-2 bg-slate-100 rounded-full cursor-pointer overflow-hidden"
                 onClick={handleSeek}
                 data-testid="progress-bar"
               >
                 <div 
-                  className="progress-fill"
-                  style={{ width: `${(currentTime / duration) * 100 || 0}%` }}
+                  className="h-full rounded-full transition-all duration-150"
+                  style={{ 
+                    width: `${(currentTime / duration) * 100 || 0}%`,
+                    background: colors.gradient 
+                  }}
                 />
               </div>
               <div className="flex justify-between text-sm text-slate-500 mt-2">
@@ -752,9 +799,9 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Secondary Controls */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               {/* Volume Slider */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <Volume2 className="w-4 h-4 text-slate-400" />
                 <input
                   type="range"
@@ -763,7 +810,10 @@ export default function StoryDetailPage() {
                   step="0.1"
                   value={volume}
                   onChange={handleVolumeChange}
-                  className="volume-slider"
+                  className="w-24 h-2 bg-slate-200 rounded-full appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, ${colors.main} ${volume * 100}%, #e2e8f0 ${volume * 100}%)`
+                  }}
                   data-testid="volume-slider"
                 />
               </div>
@@ -775,7 +825,13 @@ export default function StoryDetailPage() {
                   <button
                     key={rate}
                     onClick={() => handlePlaybackRateChange(rate)}
-                    className={`speed-btn ${playbackRate === rate ? "active" : ""}`}
+                    className={cn(
+                      "px-3 py-1.5 rounded-lg text-sm font-medium transition-all",
+                      playbackRate === rate 
+                        ? "text-white shadow-md" 
+                        : "bg-white/60 text-slate-600 hover:bg-white"
+                    )}
+                    style={playbackRate === rate ? { background: colors.gradient } : {}}
                     data-testid={`speed-btn-${rate}`}
                   >
                     {rate}x
@@ -785,18 +841,19 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Action Buttons: Share & Download */}
-            <div className="flex items-center justify-center gap-4 mt-6 pt-6 border-t border-slate-100">
+            <div className="flex items-center justify-center gap-4 mt-8 pt-6 border-t border-slate-100/50">
               <Button
                 variant="outline"
                 onClick={handleShare}
-                className="flex-1 rounded-full border-violet-200 text-violet-600 hover:bg-violet-50"
+                className="flex-1 rounded-xl border-slate-200 text-slate-700 hover:bg-white/80 py-6"
               >
                 <Share2 className="w-5 h-5 mr-2" />
                 Paylaş
               </Button>
               <Button
                 onClick={handleDownloadClick}
-                className="flex-1 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:from-violet-600 hover:to-pink-600"
+                className="flex-1 rounded-xl text-white py-6 shadow-lg hover:shadow-xl transition-all"
+                style={{ background: colors.gradient }}
               >
                 <Download className="w-5 h-5 mr-2" />
                 İndir
@@ -806,23 +863,30 @@ export default function StoryDetailPage() {
         )}
 
         {/* Story Text Toggle */}
-        <div className="mb-6 animate-slide-up stagger-2">
+        <div className="mb-8 animate-slide-up">
           <Button
             variant="outline"
             onClick={() => setShowText(!showText)}
-            className="w-full rounded-2xl border-violet-200 text-violet-600 hover:bg-violet-50"
+            className="w-full rounded-2xl py-6 glass-card border-white/60 text-slate-700 hover:bg-white/80 transition-all"
             data-testid="toggle-text-button"
           >
-            <BookOpen className="w-5 h-5 mr-2" />
-            {showText ? "Metni Gizle" : "Metni Göster"}
+            {showText ? <EyeOff className="w-5 h-5 mr-2" /> : <Eye className="w-5 h-5 mr-2" />}
+            {showText ? "Metni Gizle" : "Hikayeyi Oku"}
           </Button>
         </div>
 
-        {/* Story Content */}
+        {/* Scrollytelling Story Content */}
         {showText && (
-          <div className="bg-white rounded-3xl p-6 md:p-10 shadow-lg border border-slate-100 animate-slide-up" data-testid="story-content">
-            <div className="story-content whitespace-pre-wrap">
-              {story.content}
+          <div className="glass-card-strong rounded-3xl p-8 md:p-12 mb-10 animate-slide-up" data-testid="story-content">
+            <div className="max-w-2xl mx-auto">
+              {paragraphs.map((paragraph, index) => (
+                <StoryParagraph 
+                  key={index} 
+                  text={paragraph} 
+                  index={index}
+                  colors={colors}
+                />
+              ))}
             </div>
           </div>
         )}
