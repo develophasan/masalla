@@ -538,47 +538,6 @@ export default function StoryDetailPage() {
       {/* Navbar */}
       <Navbar />
 
-      {/* Parallax Background Decorations - Hidden on mobile, behind content */}
-      <div className="parallax-bg hidden md:block" style={{ zIndex: -1 }}>
-        <div 
-          className="story-decoration w-96 h-96 top-20 -left-20"
-          style={{ 
-            background: colors.gradient,
-            transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)` 
-          }}
-        />
-        <div 
-          className="story-decoration w-72 h-72 top-1/3 -right-10"
-          style={{ 
-            background: `linear-gradient(135deg, ${colors.light} 0%, ${colors.main}50 100%)`,
-            transform: `translate(${mousePosition.x * -1.5}px, ${mousePosition.y * -1.5}px)`,
-            animationDelay: '-5s'
-          }}
-        />
-        <div 
-          className="story-decoration w-64 h-64 bottom-1/4 left-1/4"
-          style={{ 
-            background: `linear-gradient(135deg, rgba(251, 113, 133, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%)`,
-            transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
-            animationDelay: '-10s'
-          }}
-        />
-      </div>
-
-      {/* Hidden Audio Element */}
-      {story.audio_base64 && (
-        <audio
-          ref={audioRef}
-          src={`data:audio/mp3;base64,${story.audio_base64}`}
-          onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={handleLoadedMetadata}
-          onEnded={handleEnded}
-        />
-      )}
-
-      {/* Navbar */}
-      <Navbar />
-
       {/* Breadcrumb Navigation */}
       <div className="max-w-4xl mx-auto px-4 pt-4">
         <nav className="flex items-center gap-2 text-sm text-slate-500 flex-wrap">
