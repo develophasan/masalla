@@ -1,0 +1,435 @@
+/* ================================================
+   MASAL SEPETİ 2026 DESIGN SYSTEM
+   Cloud Dancer + Dynamic Category Accents
+   ================================================ */
+
+:root {
+  /* ============================================
+     CLOUD DANCER - BASE PALETTE
+     Yumuşak, bulutsu nötr zemin renkleri
+     ============================================ */
+  --cloud-white: #FEFEFE;
+  --cloud-soft: #F8F9FC;
+  --cloud-base: #F1F3F8;
+  --cloud-mist: #E8ECF4;
+  --cloud-silver: #D1D9E6;
+  --cloud-gray: #9BA4B5;
+  --cloud-dark: #4A5568;
+  --cloud-night: #2D3748;
+
+  /* ============================================
+     CATEGORY ACCENT COLORS
+     Masal kategorilerine göre dinamik renkler
+     ============================================ */
+  
+  /* Neo-Mint - Doğa & Hayvanlar */
+  --neo-mint-light: #E0FFF4;
+  --neo-mint: #56D4A5;
+  --neo-mint-dark: #38B583;
+  --neo-mint-gradient: linear-gradient(135deg, #56D4A5 0%, #38B583 100%);
+  
+  /* Mermaidcore - Deniz & Su Masalları */
+  --mermaid-light: #E0FFFE;
+  --mermaid: #40E0D0;
+  --mermaid-dark: #20B2AA;
+  --mermaid-gradient: linear-gradient(135deg, #40E0D0 0%, #48D1CC 50%, #20B2AA 100%);
+  
+  /* Aurora - Uzay & Macera */
+  --aurora-light: #EDE9FE;
+  --aurora: #8B5CF6;
+  --aurora-dark: #7C3AED;
+  --aurora-gradient: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 50%, #7C3AED 100%);
+  
+  /* Rose Dream - Aile & Sevgi */
+  --rose-light: #FFF1F2;
+  --rose: #FB7185;
+  --rose-dark: #F43F5E;
+  --rose-gradient: linear-gradient(135deg, #FDA4AF 0%, #FB7185 50%, #F43F5E 100%);
+  
+  /* Sunset Gold - Cesaret & Özgüven */
+  --sunset-light: #FFF7ED;
+  --sunset: #FB923C;
+  --sunset-dark: #F97316;
+  --sunset-gradient: linear-gradient(135deg, #FDBA74 0%, #FB923C 50%, #F97316 100%);
+  
+  /* Ocean Blue - Okul & Öğrenme */
+  --ocean-light: #EFF6FF;
+  --ocean: #3B82F6;
+  --ocean-dark: #2563EB;
+  --ocean-gradient: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
+  
+  /* Forest - Arkadaşlık & Paylaşım */
+  --forest-light: #ECFDF5;
+  --forest: #10B981;
+  --forest-dark: #059669;
+  --forest-gradient: linear-gradient(135deg, #34D399 0%, #10B981 50%, #059669 100%);
+  
+  /* Lavender - Uyku & Rüya */
+  --lavender-light: #FAF5FF;
+  --lavender: #A855F7;
+  --lavender-dark: #9333EA;
+  --lavender-gradient: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #9333EA 100%);
+  
+  /* Coral - Duygular & İfade */
+  --coral-light: #FFF5F5;
+  --coral: #F87171;
+  --coral-dark: #EF4444;
+  --coral-gradient: linear-gradient(135deg, #FCA5A5 0%, #F87171 50%, #EF4444 100%);
+  
+  /* Sky - Hayal Gücü */
+  --sky-light: #F0F9FF;
+  --sky: #0EA5E9;
+  --sky-dark: #0284C7;
+  --sky-gradient: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 50%, #0284C7 100%);
+
+  /* ============================================
+     GLASSMORPHISM & EFFECTS
+     ============================================ */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --glass-blur: blur(16px);
+  --glass-blur-strong: blur(24px);
+
+  /* ============================================
+     ANIMATIONS & TRANSITIONS
+     ============================================ */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* ============================================
+     SPACING & RADIUS
+     ============================================ */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* ============================================
+     SHADOWS - Depth Layers
+     ============================================ */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.10);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+  
+  /* Category Glow Shadows */
+  --glow-mint: 0 0 30px rgba(86, 212, 165, 0.3);
+  --glow-mermaid: 0 0 30px rgba(64, 224, 208, 0.3);
+  --glow-aurora: 0 0 30px rgba(139, 92, 246, 0.3);
+  --glow-rose: 0 0 30px rgba(251, 113, 133, 0.3);
+  --glow-sunset: 0 0 30px rgba(251, 146, 60, 0.3);
+}
+
+/* ================================================
+   GLASSMORPHISM COMPONENTS
+   ================================================ */
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+  transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-shadow-lg);
+  transform: translateY(-4px);
+}
+
+.glass-card-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur-strong);
+  -webkit-backdrop-filter: var(--glass-blur-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-lg);
+}
+
+/* ================================================
+   CATEGORY THEME CLASSES
+   Dinamik renk sistemi için utility sınıfları
+   ================================================ */
+
+/* Neo-Mint Theme */
+.theme-nature {
+  --accent-light: var(--neo-mint-light);
+  --accent: var(--neo-mint);
+  --accent-dark: var(--neo-mint-dark);
+  --accent-gradient: var(--neo-mint-gradient);
+  --accent-glow: var(--glow-mint);
+}
+
+/* Mermaidcore Theme */
+.theme-sea {
+  --accent-light: var(--mermaid-light);
+  --accent: var(--mermaid);
+  --accent-dark: var(--mermaid-dark);
+  --accent-gradient: var(--mermaid-gradient);
+  --accent-glow: var(--glow-mermaid);
+}
+
+/* Aurora Theme */
+.theme-adventure {
+  --accent-light: var(--aurora-light);
+  --accent: var(--aurora);
+  --accent-dark: var(--aurora-dark);
+  --accent-gradient: var(--aurora-gradient);
+  --accent-glow: var(--glow-aurora);
+}
+
+/* Rose Dream Theme */
+.theme-family {
+  --accent-light: var(--rose-light);
+  --accent: var(--rose);
+  --accent-dark: var(--rose-dark);
+  --accent-gradient: var(--rose-gradient);
+  --accent-glow: var(--glow-rose);
+}
+
+/* Sunset Gold Theme */
+.theme-courage {
+  --accent-light: var(--sunset-light);
+  --accent: var(--sunset);
+  --accent-dark: var(--sunset-dark);
+  --accent-gradient: var(--sunset-gradient);
+  --accent-glow: var(--glow-sunset);
+}
+
+/* Ocean Blue Theme */
+.theme-school {
+  --accent-light: var(--ocean-light);
+  --accent: var(--ocean);
+  --accent-dark: var(--ocean-dark);
+  --accent-gradient: var(--ocean-gradient);
+  --accent-glow: 0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+/* Forest Theme */
+.theme-friendship {
+  --accent-light: var(--forest-light);
+  --accent: var(--forest);
+  --accent-dark: var(--forest-dark);
+  --accent-gradient: var(--forest-gradient);
+  --accent-glow: 0 0 30px rgba(16, 185, 129, 0.3);
+}
+
+/* Lavender Theme */
+.theme-sleep {
+  --accent-light: var(--lavender-light);
+  --accent: var(--lavender);
+  --accent-dark: var(--lavender-dark);
+  --accent-gradient: var(--lavender-gradient);
+  --accent-glow: 0 0 30px rgba(168, 85, 247, 0.3);
+}
+
+/* Coral Theme */
+.theme-emotions {
+  --accent-light: var(--coral-light);
+  --accent: var(--coral);
+  --accent-dark: var(--coral-dark);
+  --accent-gradient: var(--coral-gradient);
+  --accent-glow: 0 0 30px rgba(248, 113, 113, 0.3);
+}
+
+/* Sky Theme */
+.theme-imagination {
+  --accent-light: var(--sky-light);
+  --accent: var(--sky);
+  --accent-dark: var(--sky-dark);
+  --accent-gradient: var(--sky-gradient);
+  --accent-glow: 0 0 30px rgba(14, 165, 233, 0.3);
+}
+
+/* ================================================
+   ANIMATED BACKGROUNDS
+   ================================================ */
+
+.cloud-bg {
+  background: linear-gradient(180deg, var(--cloud-soft) 0%, var(--cloud-base) 50%, var(--cloud-mist) 100%);
+  min-height: 100vh;
+}
+
+.cloud-bg-animated {
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(64, 224, 208, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(251, 113, 133, 0.05) 0%, transparent 60%),
+    linear-gradient(180deg, var(--cloud-soft) 0%, var(--cloud-base) 50%, var(--cloud-mist) 100%);
+  min-height: 100vh;
+  animation: cloudShift 20s ease-in-out infinite;
+}
+
+@keyframes cloudShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ================================================
+   3D CARD EFFECTS
+   ================================================ */
+
+.card-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform var(--transition-base);
+}
+
+.card-3d:hover {
+  transform: rotateX(5deg) rotateY(-5deg) translateZ(10px);
+}
+
+.card-3d-content {
+  transform: translateZ(20px);
+}
+
+/* ================================================
+   FLOATING ANIMATION
+   ================================================ */
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.float-delay-1 {
+  animation-delay: -2s;
+}
+
+.float-delay-2 {
+  animation-delay: -4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ================================================
+   SHIMMER EFFECT
+   ================================================ */
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ================================================
+   GLOW PULSE EFFECT
+   ================================================ */
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: var(--shadow-md);
+  }
+  50% {
+    box-shadow: var(--accent-glow, var(--shadow-glow));
+  }
+}
+
+/* ================================================
+   ACCENT COLOR UTILITIES
+   ================================================ */
+
+.bg-accent {
+  background: var(--accent);
+}
+
+.bg-accent-light {
+  background: var(--accent-light);
+}
+
+.bg-accent-gradient {
+  background: var(--accent-gradient);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-accent-dark {
+  color: var(--accent-dark);
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+
+.shadow-accent-glow {
+  box-shadow: var(--accent-glow);
+}
+
+/* ================================================
+   SMOOTH SCROLL BEHAVIOR
+   ================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ================================================
+   PARALLAX HELPERS
+   ================================================ */
+
+.parallax-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.parallax-slow {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+.parallax-fast {
+  will-change: transform;
+  transition: transform 0.05s linear;
+}
