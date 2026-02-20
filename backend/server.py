@@ -1838,6 +1838,91 @@ async def get_generation_presets(request: Request):
     return presets
 
 
+# ============= SEO - SITEMAP =============
+
+from fastapi.responses import PlainTextResponse
+
+@api_router.get("/sitemap.xml", response_class=PlainTextResponse)
+async def generate_sitemap():
+    """Generate dynamic sitemap.xml for SEO"""
+    base_url = "https://masal.space"
+    
+    # Start XML
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    # Static pages
+    static_pages = [
+        {"loc": "/", "priority": "1.0", "changefreq": "daily"},
+        {"loc": "/stories", "priority": "0.9", "changefreq": "daily"},
+        {"loc": "/about", "priority": "0.5", "changefreq": "monthly"},
+        {"loc": "/privacy", "priority": "0.3", "changefreq": "yearly"},
+        {"loc": "/terms", "priority": "0.3", "changefreq": "yearly"},
+    ]
+    
+    for page in static_pages:
+        xml_content += f'''  <url>
+    <loc>{base_url}{page["loc"]}</loc>
+    <changefreq>{page["changefreq"]}</changefreq>
+    <priority>{page["priority"]}</priority>
+  </url>\n'''
+    
+    # Topic pages
+    all_topics = get_all_topics()
+    for topic in all_topics:
+        xml_content += f'''  <url>
+    <loc>{base_url}/topics/{topic["id"]}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>\n'''
+    
+    # Story pages (get all stories with slugs)
+    try:
+        stories = await db.stories.find(
+            {"slug": {"$exists": True, "$ne": None}},
+            {"slug": 1, "created_at": 1}
+        ).sort("created_at", -1).limit(1000).to_list(1000)
+        
+        for story in stories:
+            lastmod = ""
+            if story.get("created_at"):
+                if isinstance(story["created_at"], str):
+                    lastmod = f"\n    <lastmod>{story['created_at'][:10]}</lastmod>"
+                else:
+                    lastmod = f"\n    <lastmod>{story['created_at'].strftime('%Y-%m-%d')}</lastmod>"
+            
+            xml_content += f'''  <url>
+    <loc>{base_url}/masal/{story["slug"]}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>{lastmod}
+  </url>\n'''
+    except Exception as e:
+        logging.error(f"Sitemap story fetch error: {e}")
+    
+    xml_content += '</urlset>'
+    
+    return PlainTextResponse(content=xml_content, media_type="application/xml")
+
+
+@api_router.get("/seo/stats")
+async def get_seo_stats():
+    """Get SEO statistics for the site"""
+    try:
+        total_stories = await db.stories.count_documents({})
+        stories_with_slug = await db.stories.count_documents({"slug": {"$exists": True, "$ne": None}})
+        total_topics = len(get_all_topics())
+        
+        return {
+            "total_stories": total_stories,
+            "indexed_stories": stories_with_slug,
+            "total_topics": total_topics,
+            "sitemap_url": "https://masal.space/api/sitemap.xml",
+            "robots_url": "https://masal.space/robots.txt"
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
 # Include router
 app.include_router(api_router)
 
