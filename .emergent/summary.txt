@@ -4,314 +4,249 @@ The user wants to build a full-stack web application called MASAL SEPETİ (Tale 
 **PRODUCT REQUIREMENTS:**
 - **Core Functionality:**
     - Full user membership with custom Google OAuth social login and local registration.
-    - An admin panel for administrative tasks.
-    - A credit system for story generation.
-    - AI story generation using the user's own OpenAI API key.
+    - An admin panel with statistics and user management.
+    - AI story generation using the Google Gemini API (migrated from OpenAI).
     - Text-to-speech audio generation using Google Cloud TTS.
-    - SEO-friendly story URLs () with dynamic metadata.
-    - A profanity filter to prevent the generation of inappropriate content.
-    - A favorites system for users to save stories.
+    - SEO-friendly story URLs () with dynamic metadata, a , and .
+    - A profanity filter for user inputs.
+    - A favorites system for users.
+    - A bulk story generation page in the admin panel with a queue and live logging.
 - **UI/UX:**
-    - A responsive, mobile-friendly design with a footer containing legal links and developer credits.
-    - Back to Home buttons on pages without main navigation (e.g., Login, Register).
-    - AdSense integration for monetization.
+    - A responsive, mobile-friendly design that works as a Progressive Web App (PWA).
+    - A site-wide footer containing legal links and affiliate links.
+    - Monetization via Amazon Associates affiliate links, replacing the initial AdSense placeholders.
+    - Gated features (download/share) that require login or viewing an ad.
 - **Developer Support:**
-    - A private, key-protected API documentation page to support the development of a native Android application.
+    - A private, key-protected API documentation page to support the development of a native Flutter application.
 
 **User's preferred language**: Turkish (Türkçe)
 
 **what currently exists?**
-The application is a full-stack platform (React, FastAPI, MongoDB) that has been significantly customized to use the user's own API keys, removing dependencies on Emergent-managed services. Key features include custom Google OAuth, story generation via OpenAI, audio via Google TTS, a profanity filter, SEO-optimized story pages, and a new site-wide footer. A private API documentation page has also been created.
+The application is a full-stack platform (React, FastAPI, MongoDB). Key features include custom Google OAuth, story generation via Google Gemini, audio via Google TTS, a profanity filter, SEO-optimized story pages (sitemap, robots.txt, JSON-LD), and a new admin page for bulk story generation. The app is fully configured as a PWA, and monetization has been shifted from AdSense placeholders to Amazon Affiliate banners. All previous deployment blockers and dependency issues have been resolved.
 
 **Last working item**:
-- **Last item agent was working:** The user pointed out that the newly created API documentation page does not explain how to obtain the  required for the  header. The agent was about to update the documentation to clarify this.
-- **Status:** IN PROGRESS
+- **Last item agent was working:** The user reported two final UI/UX bugs:
+    1. The Back to Home button on the Login/Register pages was positioned incorrectly on iPhones, overlapping with the status bar (notch).
+    2. When navigating between pages, the scroll position was not resetting to the top.
+The agent fixed both issues by adding safe-area padding to the auth pages and implementing a global  component in .
+- **Status:** COMPLETED
 - **Agent Testing Done:** N
-- **Which testing method agent to use?** manual testing by curl
+- **Which testing method agent to use?** Frontend testing agent. The agent should verify:
+    1. On a simulated mobile view, the Login page UI does not overlap with the top of the screen.
+    2. Navigate from the home page (scrolled down) to a story page, and confirm the new page starts at the top.
 - **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1 (P0): Missing  dependency in backend.**
-- **Issue 2 (P1): Clarify API Token Generation in Documentation.**
+- **Issue 1 (P0): Leaked Gemini API Key leads to  errors.**
 
 **Issues Detail:**
 - **Issue 1:**
-    - **Description:** The backend code for the custom Google OAuth in  uses the  library, but this dependency was never added to . This is a critical blocker that will cause the backend service to fail on deployment.
-    - **Attempted fixes:** None. The issue was introduced in the last session but not caught.
+    - **Description:** During bulk story generation, the process started failing with a  error. This is because the key was exposed in GitHub's commit history, and Google's secret scanning automatically disabled it. This blocks all AI-related functionality.
+    - **Attempted fixes:** The agent correctly diagnosed the issue. The user was instructed to generate a new API key from Google AI Studio and update the  environment variable in their Railway deployment. The user has confirmed via chat that they have done this. All sensitive information has been scrubbed from the repository.
     - **Next debug checklist:**
-        1. Execute Looking in indexes: https://pypi.org/simple, https://d33sy5i8bnduwe.cloudfront.net/simple/
-Requirement already satisfied: requests-oauthlib in /root/.venv/lib/python3.11/site-packages (2.0.0)
-Requirement already satisfied: oauthlib>=3.0.0 in /root/.venv/lib/python3.11/site-packages (from requests-oauthlib) (3.3.1)
-Requirement already satisfied: requests>=2.0.0 in /root/.venv/lib/python3.11/site-packages (from requests-oauthlib) (2.32.5)
-Requirement already satisfied: charset_normalizer<4,>=2 in /root/.venv/lib/python3.11/site-packages (from requests>=2.0.0->requests-oauthlib) (3.4.4)
-Requirement already satisfied: idna<4,>=2.5 in /root/.venv/lib/python3.11/site-packages (from requests>=2.0.0->requests-oauthlib) (3.11)
-Requirement already satisfied: urllib3<3,>=1.21.1 in /root/.venv/lib/python3.11/site-packages (from requests>=2.0.0->requests-oauthlib) (2.6.1)
-Requirement already satisfied: certifi>=2017.4.17 in /root/.venv/lib/python3.11/site-packages (from requests>=2.0.0->requests-oauthlib) (2025.11.12).
-        2. Execute  to ensure all dependencies are correctly captured.
-        3. Restart the backend service using backend: stopped
-backend: started and check its status.
-    - **Why fix this issue and what will be achieved with the fix?** To prevent a fatal crash on deployment and ensure the custom Google OAuth functionality works.
-    - **Status:** NOT STARTED
-    - **Is recurring issue?** N
+        1.  Verify the fix by generating a single story through the UI.
+        2.  If successful, run a small task (2-3 stories) on the bulk generation page () to confirm it's also working.
+        3.  If it fails, check the backend logs for the  error and inform the user that the new key is either incorrect or not properly configured in Railway.
+    - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. Fixing it will restore the application's core story generation functionality.
+    - **Status:** USER VERIFICATION PENDING
+    - **Is recurring issue?** Y (Sensitive keys have been leaked to git history before).
     - **Should Test frontend/backend/both after fix?** Backend
-    - **Blocked on other issue:** None.
-- **Issue 2:**
-    - **Description:** The API documentation at  explains that protected endpoints require an  header but fails to explain how to acquire the .
-    - **Attempted fixes:** None. The agent was just about to start this.
-    - **Next debug checklist:**
-        1. View the file .
-        2. Add a new section titled Authentication that explains the login flow:
-           - To get a , the client must make a  request to  (for local auth) or handle the Google OAuth flow which results in a call to .
-           - The successful response from these endpoints will contain the .
-           - This token must then be included in the  header for all subsequent requests to protected routes.
-    - **Why fix this issue and what will be achieved with the fix?** The API documentation will be complete, providing the user with all the necessary information to build their Android application.
-    - **Status:** IN PROGRESS
-    - **Is recurring issue?** N
-    - **Should Test frontend/backend/both after fix?** Frontend (verify the documentation page is updated).
-    - **Blocked on other issue:** None.
+    - **Blocked on other issue:** None. This is the primary blocker.
 
 **In progress Task List**:
 - None.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-  - **P0: Implement Rewarded Ad for Story Downloads:** The download button on the  should trigger a rewarded video ad before the download starts. This requires integrating a client-side ad network SDK.
+  - **P1: Implement Rewarded Ads for Story Downloads:** The user wants a rewarded video ad to be shown before a story can be downloaded. The current implementation shows a static Amazon affiliate banner (). This needs to be replaced with a proper rewarded ad SDK integration.
+  - **P2: Update Audio for Old Stories:** The user noted that stories generated before the TTS voice change still have the old male voice. The agent needs to write and execute a script that clears the  field for all existing stories in the database, allowing the new female voice to be generated on the next listen.
+
 - **Future Tasks:**
-  - **Backend Code Refactor:** The user has explicitly requested **not** to refactor the monolithic  file at this time to maintain stability.
+  - **PWA Push Notifications:** Implement a system to send push notifications for new stories or announcements.
+  - **Backend Refactoring:** Break down the monolithic  into a more scalable, modular structure (e.g., routers, services).
+  - **Masal Illustrations:** Integrate an image generation AI (like DALL-E or Gemini Vision) to create a unique illustration for each story.
+  - **Multi-Language Support:** Add the ability to generate stories in other languages like English.
+  - **Robust Bulk Generation Queue:** Replace the current in-memory bulk generation state with a persistent queue system (e.g., a dedicated MongoDB collection or Redis) to prevent data loss on server restarts.
+  - **Advanced Parent/Admin Features:** A dashboard for parents to track listening history, or more advanced controls in the admin panel.
 
 **Completed work in this session**
-- **Custom Google OAuth Implementation:** Replaced Emergent-managed Google Auth with a custom solution using the user's own Google Cloud credentials. This included backend logic and frontend UI/callback handling.
-- **Content Moderation System:** Implemented and later refined a profanity filter in the backend to prevent the generation of stories with inappropriate user input. Added warnings on the UI and a clause in the Terms of Service.
-- **AdSense ID Update:** Updated all instances of the Google AdSense publisher ID across , , and React components multiple times as requested by the user.
-- **Creation of Legal & Info Pages:**
-  - Created  and  pages.
-  - Added a new site-wide  component with links to legal pages and developer credit.
-  - Added Back to Home buttons on Login/Register pages.
-- **API Documentation Page:** Created a private, key-protected page () detailing API endpoints for the user's native Android app development.
-- **Configuration & Bug Fixes:**
-  - Removed dependency on  and configured the backend to use the user's  exclusively.
-  - Guided the user to fix a  error with their Google TTS API key.
-  - Addressed Google OAuth verification requirements by adding a privacy link to the homepage.
+- **Gemini API Migration:** Successfully migrated the entire story generation process from OpenAI to the Google Gemini API ( SDK).
+- **Bulk Story Generation Feature:** Built a complete feature in the admin panel to queue and generate multiple stories sequentially, with a UI showing live progress and logs.
+- **TTS Improvements:** Changed the TTS voice to a Turkish female voice () and updated the AI prompt to limit story length, preventing TTS API errors.
+- **PWA Implementation & Fixes:**
+    - Configured the application to be a fully installable PWA with a manifest, service worker, and offline page.
+    - Created correctly padded, square PWA icons from the rectangular source logo to fix aspect ratio issues.
+    - Resolved the iOS status bar/notch overlap issue by implementing safe-area padding.
+- **Amazon Affiliate Integration:** Replaced all AdSense placeholders with Amazon Affiliate banners and added an affiliate link section to the footer.
+- **Feature Gating:** Modified the Download and Share buttons to require user login and to show an ad interstitial for logged-in users.
+- **SEO Enhancements:** Generated a static  and , and improved the structured data (JSON-LD) on story and home pages.
+- **Deployment & Security:** Resolved multiple Railway deployment issues, created a comprehensive Flutter API guide, and scrubbed all leaked secrets from the codebase and git history.
+- **UX Fixes:** Implemented a  component to reset scroll position on navigation and fixed UI layout on auth pages.
 
 **Earlier issues found/mentioned but not fixed**
-   - None.
+- None.
 
 **Known issue recurrence from previous fork**
-  - None.
+- **Issue:** Leaking sensitive API keys to the Git repository.
+- **Recurrence count:** 2 (First with Google OAuth, now with Gemini).
+- **Status:** RESOLVED (for now). The agent has cleaned the repository and strengthened . The next agent must remain vigilant about not putting any secrets in tracked files.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Custom Google OAuth 2.0:** Implementation of the web server flow using  on the backend to exchange an authorization code for user info and a session token.
-- **Content Moderation:** A simple backend profanity filter based on a hardcoded list of Turkish words to validate user input before sending it to the AI.
-- **AdSense Integration:** Full integration including  script/meta tags, a public  file, and ad unit components.
-- **Conditional Rendering:** The API documentation page at  uses a URL query parameter () to grant access.
+- **AI API Migration:** Switching from usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
+              [-o ORGANIZATION] [-t {openai,azure}]
+              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
+              [--azure-ad-token AZURE_AD_TOKEN] [-V]
+              {api,tools,migrate,grit} ...
+
+positional arguments:
+  {api,tools,migrate,grit}
+    api                 Direct API calls
+    tools               Client side tools for convenience
+
+options:
+  -h, --help            show this help message and exit
+  -v, --verbose         Set verbosity.
+  -b API_BASE, --api-base API_BASE
+                        What API base url to use.
+  -k API_KEY, --api-key API_KEY
+                        What API key to use.
+  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
+                        What proxy to use.
+  -o ORGANIZATION, --organization ORGANIZATION
+                        Which organization to run as (will use your default
+                        organization if not specified)
+  -t {openai,azure}, --api-type {openai,azure}
+                        The backend API to call, must be `openai` or `azure`
+  --api-version API_VERSION
+                        The Azure API version, e.g.
+                        'https://learn.microsoft.com/en-us/azure/ai-
+                        services/openai/reference#rest-api-versioning'
+  --azure-endpoint AZURE_ENDPOINT
+                        The Azure endpoint, e.g.
+                        'https://endpoint.openai.azure.com'
+  --azure-ad-token AZURE_AD_TOKEN
+                        A token from Azure Active Directory,
+                        https://www.microsoft.com/en-
+                        us/security/business/identity-access/microsoft-entra-
+                        id
+  -V, --version         show program's version number and exit Python library to .
+- **PWA Configuration:** Using  and a Service Worker () to make the React app installable and provide offline capabilities.
+- **Affiliate Marketing:** Integrating Amazon Associates links (SiteStripe) as a monetization strategy.
+- **Feature Gating:** Using React state and context to conditionally render UI (AuthModal, AdInterstitial) based on user authentication status.
+- **Mobile UX:** Using  in CSS to adapt layouts for modern phone notches/islands.
+- **Static Site Generation (for SEO):** Creating a static  during the build/deploy process to improve crawlability.
 
 **key DB schema**
-- No changes to the database schema were made in this session.
+- No changes to the database schema were made.
 
 **changes in tech stack**
-- **Removed:** , .
-- **Needs to be Added:**  (Python, Backend).
+- **Removed:** usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
+              [-o ORGANIZATION] [-t {openai,azure}]
+              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
+              [--azure-ad-token AZURE_AD_TOKEN] [-V]
+              {api,tools,migrate,grit} ...
+
+positional arguments:
+  {api,tools,migrate,grit}
+    api                 Direct API calls
+    tools               Client side tools for convenience
+
+options:
+  -h, --help            show this help message and exit
+  -v, --verbose         Set verbosity.
+  -b API_BASE, --api-base API_BASE
+                        What API base url to use.
+  -k API_KEY, --api-key API_KEY
+                        What API key to use.
+  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
+                        What proxy to use.
+  -o ORGANIZATION, --organization ORGANIZATION
+                        Which organization to run as (will use your default
+                        organization if not specified)
+  -t {openai,azure}, --api-type {openai,azure}
+                        The backend API to call, must be `openai` or `azure`
+  --api-version API_VERSION
+                        The Azure API version, e.g.
+                        'https://learn.microsoft.com/en-us/azure/ai-
+                        services/openai/reference#rest-api-versioning'
+  --azure-endpoint AZURE_ENDPOINT
+                        The Azure endpoint, e.g.
+                        'https://endpoint.openai.azure.com'
+  --azure-ad-token AZURE_AD_TOKEN
+                        A token from Azure Active Directory,
+                        https://www.microsoft.com/en-
+                        us/security/business/identity-access/microsoft-entra-
+                        id
+  -V, --version         show program's version number and exit, .
+- **Added:** .
 
 **All files of reference**
-- : Major changes for custom Google OAuth and profanity filter.
-- : Modified to remove packages, but is missing a critical new dependency.
-- : Updated with new AdSense meta tags and scripts.
-- : Created and updated for AdSense.
-- : Added new routes (, , ) and the global .
-- : Rewritten to handle the custom Google OAuth flow.
-- : New file for API documentation.
-- : Rewritten for the new OAuth flow.
-- , : New static content pages.
-- : New site-wide footer component.
+- : Core logic for Gemini integration and the new bulk generation endpoints.
+- : The UI for the new bulk generation feature.
+- : Contains logic for feature gating (download/share) and enhanced SEO schema.
+- : Defines the PWA's properties.
+- : The service worker for offline functionality.
+- : The primary ad component, now configured for Amazon.
+- : Integrated the  component.
+- : Updated to be more robust in excluding sensitive files.
 
 **Areas that need refactoring**:
-- The user has explicitly requested **not** to refactor the backend monolith ().
+- The bulk generation state in  is stored in a simple in-memory dictionary. This is not robust and will be lost on server restart. It should be refactored to use a persistent store like a MongoDB collection.
+- The user has previously requested **not** to refactor the monolithic  for stability reasons, but it remains a long-term technical debt.
 
 **key api endpoints**
-- **MODIFIED:**  - Now includes input validation with a profanity filter.
 - **NEW:**
-    - : Initiates the custom Google OAuth flow by returning an authorization URL.
-    - : Exchanges the auth code from Google for user details and a session token.
-- **FRONTEND ROUTES (New):**
-    - : A private, key-protected page for API documentation.
-    - : Displays the Privacy Policy.
-    - : Displays the Terms of Service.
+    - : Initiates a bulk story generation task.
+    - : Halts the ongoing bulk generation task.
+    - : Provides real-time status of the bulk generation queue.
+    - : Fetches topics and subtopics for the bulk generation UI.
+- **REPLACED (Functionality):**
+    - The  is now served statically from  instead of a backend endpoint.
 
 **Critical Info for New Agent**
-- **Deployment Blocker:** The  dependency is missing from . This is the highest priority (P0) and must be fixed before any other work.
-- The application is now fully dependent on user-provided API keys for Google OAuth, OpenAI, and Google TTS. These must be correctly configured in the deployment environment.
-- The profanity filter is intentionally simple (a small, hardcoded list of Turkish words) after the user found more complex solutions too restrictive. Do not make it more aggressive without user consent.
-- The API docs page at  is accessed with the key .
+- **Verify API Key First:** The highest priority is to confirm that the story generation is working with the user's new Gemini API key. Do not start any other task until this is verified.
+- **PWA Cache:** Inform the user that after PWA-related changes are deployed, they may need to clear their browser cache or reinstall the PWA on their device to see the updates (especially for icons and the manifest).
+- **Bulk Generation is Not Persistent:** The bulk generation process state is stored in-memory on the backend. If the server restarts for any reason, the queue and progress will be lost. This is a known limitation.
 
 **documents and test reports created in this job**
-- 
-- 
-- 
-- 
-- 
+-  (Updated)
+-  (Created)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. **User asks how to get the API token mentioned in the new docs.** (PENDING)
-2. User asks for a Cursor AI prompt for Android development. (Completed)
-3. User asks to create a secret API documentation page. (Completed)
-4. User requests a final AdSense ID update. (Completed)
-5. User requests another AdSense ID update. (Completed)
-6. User reports the profanity filter is still too strict. (Completed)
-7. User complains the profanity filter is too aggressive and blocks simple, valid stories. (Completed)
-8. User asks to make the filter less strict, only blocking profanity and insults. (Completed)
-9. User reports Google OAuth verification errors (missing privacy link, domain not verified) and asks for guidance. (Completed)
-10. User asks to add Back to Home buttons on the login and register pages. (Completed)
+1. **User Request:** Fix UI bugs: login page safe-area and page scroll position not resetting. (Status: **Completed**)
+2. **User Confirmation:** User states they have fixed the leaked API key and asks the agent to wait for the next task. (Status: **Pending Verification**)
+3. **User Request:** Ask for the project's to-do list. (Status: **Completed**)
+4. **User Report:** PWA icon is distorted and the app UI overlaps with the iOS status bar. (Status: **Completed**)
+5. **User Request:** Make the app a PWA so it can be installed on devices. (Status: **Completed**)
+6. **User Report:** Bulk generation is failing due to a leaked API key. (Status: **Resolved, Pending Verification**)
+7. **User Report:** Old stories still have the old male TTS voice after the voice was changed in the code. (Status: **Acknowledged**, new task created).
+8. **User Confirmation:** User agrees to proceed with security cleanup after being informed about the risks of leaked credentials in git history. (Status: **Completed**)
+9. **User Request:** Before pushing to GitHub, remove all API keys and sensitive info from the code and documentation. (Status: **Completed**)
+10. **User Request:** Switch the AI story generation from OpenAI to Gemini, providing an API key and code snippet. (Status: **Completed**)
 
 **Project Health Check:**
-- **Broken:** The backend is currently broken due to a missing Python dependency () and will not deploy successfully.
+- **Broken:** The core story generation feature is presumed broken due to the  error from the leaked Gemini API key. This status can be cleared only after verifying the user's new key works.
 
 **3rd Party Integrations**
-- **OpenAI GPT-4o** (Story Generation) — Requires User API Key ().
+- **Google Gemini** (Story Generation) — Requires User API Key ().
 - **Google Cloud Text-to-Speech** (Audio Generation) — Requires User API Key ().
 - **Custom Google OAuth** (Social Login) — Requires User API Keys (, ).
-- **Google AdSense** (Advertisements) — Integrated with user's publisher ID ().
+- **Amazon Associates (Gelir Ortaklığı)** (Advertisements) — Integrated via SiteStripe link with partner tag .
+- **Google AdSense** (Advertisements) — Publisher ID is integrated, but ad components are currently used by Amazon as a fallback.
 
 **Testing status**
 - Testing agent used after significant changes: NO
 - Troubleshoot agent used after agent stuck in loop: NO
 - Test files created: []
-- Known regressions: The backend will not start due to a missing dependency.
+- Known regressions: Story generation is non-functional until the API key issue is confirmed to be resolved.
 
 **Credentials to test flow:**
-- **Admin:** username , password .
-- **Google OAuth:** Requires a test user to be configured in the user's Google Cloud project or for the app to be published.
+- **Admin:**  / 
+- **Google OAuth:** Requires a test user to be configured in the user's Google Cloud project.
 
 **What agent forgot to execute**
-- The agent implemented functionality using the  library but forgot to add it to , which will cause the application to crash on deployment.
-- After removing packages, the agent did not regenerate  with aiofiles==25.1.0
-aiohappyeyeballs==2.6.1
-aiohttp==3.13.2
-aiosignal==1.4.0
-annotated-types==0.7.0
-anyio==4.12.0
-attrs==25.4.0
-bcrypt==4.1.3
-better-profanity==0.7.0
-black==25.12.0
-boto3==1.42.5
-botocore==1.42.5
-cachetools==6.2.4
-certifi==2025.11.12
-cffi==2.0.0
-charset-normalizer==3.4.4
-click==8.3.1
-cryptography==46.0.3
-distro==1.9.0
-dnspython==2.8.0
-ecdsa==0.19.1
-elevenlabs==2.27.0
-email-validator==2.3.0
-emergentintegrations==0.1.0
-fastapi==0.110.1
-fastuuid==0.14.0
-filelock==3.20.1
-flake8==7.3.0
-frozenlist==1.8.0
-fsspec==2025.12.0
-google-ai-generativelanguage==0.6.15
-google-api-core==2.28.1
-google-api-python-client==2.187.0
-google-auth==2.45.0
-google-auth-httplib2==0.3.0
-google-cloud-texttospeech==2.33.0
-google-genai==1.56.0
-google-generativeai==0.8.6
-googleapis-common-protos==1.72.0
-grpcio==1.76.0
-grpcio-status==1.71.2
-h11==0.16.0
-hf-xet==1.2.0
-httpcore==1.0.9
-httplib2==0.31.0
-httpx==0.28.1
-huggingface_hub==1.2.3
-idna==3.11
-importlib_metadata==8.7.1
-iniconfig==2.3.0
-isort==7.0.0
-Jinja2==3.1.6
-jiter==0.12.0
-jmespath==1.0.1
-jq==1.10.0
-jsonschema==4.25.1
-jsonschema-specifications==2025.9.1
-librt==0.7.3
-litellm==1.80.0
-markdown-it-py==4.0.0
-MarkupSafe==3.0.3
-mccabe==0.7.0
-mdurl==0.1.2
-motor==3.3.1
-multidict==6.7.0
-mypy==1.19.0
-mypy_extensions==1.1.0
-numpy==2.3.5
-oauthlib==3.3.1
-openai==1.99.9
-packaging==25.0
-pandas==2.3.3
-passlib==1.7.4
-pathspec==0.12.1
-pillow==12.0.0
-platformdirs==4.5.1
-pluggy==1.6.0
-propcache==0.4.1
-proto-plus==1.27.0
-protobuf==5.29.5
-pyasn1==0.6.1
-pyasn1_modules==0.4.2
-pycodestyle==2.14.0
-pycparser==2.23
-pydantic==2.12.5
-pydantic_core==2.41.5
-pyflakes==3.4.0
-Pygments==2.19.2
-PyJWT==2.10.1
-pymongo==4.5.0
-pyparsing==3.3.1
-pytest==9.0.2
-python-dateutil==2.9.0.post0
-python-dotenv==1.2.1
-python-jose==3.5.0
-python-multipart==0.0.20
-pytokens==0.3.0
-pytz==2025.2
-PyYAML==6.0.3
-referencing==0.37.0
-regex==2025.11.3
-requests==2.32.5
-requests-oauthlib==2.0.0
-rich==14.2.0
-rpds-py==0.30.0
-rsa==4.9.1
-s3transfer==0.16.0
-s5cmd==0.2.0
-shellingham==1.5.4
-six==1.17.0
-sniffio==1.3.1
-starlette==0.37.2
-stripe==14.1.0
-tenacity==9.1.2
-tiktoken==0.12.0
-tokenizers==0.22.1
-tqdm==4.67.1
-typer==0.20.0
-typer-slim==0.20.1
-typing-inspection==0.4.2
-typing_extensions==4.15.0
-tzdata==2025.2
-uritemplate==4.2.0
-urllib3==2.6.1
-uvicorn==0.25.0
-watchfiles==1.1.1
-websockets==15.0.1
-yarl==1.22.0
-zipp==3.23.0, which is the correct way to manage dependencies.</analysis>
+- The agent did not design the bulk generation feature with a persistent queue, making it vulnerable to data loss on server restarts. This is a significant architectural weakness for a production feature.
+- The agent initially tried to install a private package () on a public PaaS (Railway), showing a lack of environmental awareness, though it did self-correct.</analysis>
