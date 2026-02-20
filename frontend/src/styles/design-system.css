@@ -282,6 +282,37 @@
 }
 
 /* ================================================
+   RESPONSIVE UTILITIES
+   ================================================ */
+
+/* Hide floating decorations on mobile */
+@media (max-width: 768px) {
+  .float,
+  .story-decoration,
+  .parallax-bg {
+    display: none !important;
+  }
+  
+  .cloud-bg-animated {
+    background: linear-gradient(180deg, var(--cloud-soft) 0%, var(--cloud-base) 50%, var(--cloud-mist) 100%);
+    animation: none;
+  }
+}
+
+/* Reduce decoration size on tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .float {
+    transform: scale(0.6);
+    opacity: 0.3;
+  }
+  
+  .story-decoration {
+    transform: scale(0.5) !important;
+    opacity: 0.2 !important;
+  }
+}
+
+/* ================================================
    3D CARD EFFECTS
    ================================================ */
 
