@@ -1,4 +1,5 @@
 /* Masal Sepeti App Styles */
+@import './styles/design-system.css';
 
 /* PWA Safe Area - iOS Status Bar & Notch Support */
 :root {
