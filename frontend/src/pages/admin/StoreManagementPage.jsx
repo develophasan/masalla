@@ -93,9 +93,9 @@ export default function StoreManagementPage() {
     setLoading(true);
     try {
       const [catRes, featRes, statusRes] = await Promise.all([
-        fetch(`${API_URL}/api/admin/store/categories`, { headers: getAuthHeaders() }),
-        fetch(`${API_URL}/api/admin/store/featured`, { headers: getAuthHeaders() }),
-        fetch(`${API_URL}/api/admin/store/status`, { headers: getAuthHeaders() })
+        fetch(`${API}/admin/store/categories`, { headers: getAuthHeaders() }),
+        fetch(`${API}/admin/store/featured`, { headers: getAuthHeaders() }),
+        fetch(`${API}/admin/store/status`, { headers: getAuthHeaders() })
       ]);
 
       if (catRes.ok) {
