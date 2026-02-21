@@ -91,9 +91,10 @@ export default function StoreManagementPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [catRes, featRes] = await Promise.all([
+      const [catRes, featRes, statusRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/store/categories`, { headers: getAuthHeaders() }),
-        fetch(`${API_URL}/api/admin/store/featured`, { headers: getAuthHeaders() })
+        fetch(`${API_URL}/api/admin/store/featured`, { headers: getAuthHeaders() }),
+        fetch(`${API_URL}/api/admin/store/status`, { headers: getAuthHeaders() })
       ]);
 
       if (catRes.ok) {
@@ -105,11 +106,40 @@ export default function StoreManagementPage() {
         const featData = await featRes.json();
         setFeatured(featData);
       }
+
+      if (statusRes.ok) {
+        const statusData = await statusRes.json();
+        setStoreStatus(statusData);
+      }
     } catch (error) {
       console.error('Error fetching store data:', error);
       showMessage('Veriler yüklenirken hata oluştu', 'error');
     }
     setLoading(false);
+  };
+
+  const handleResetToDefaults = async () => {
+    if (!confirm('Tüm mağaza verileri silinip varsayılan verilerle değiştirilecek. Emin misiniz?')) return;
+
+    setResetting(true);
+    try {
+      const res = await fetch(`${API_URL}/api/admin/store/reset-defaults`, {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        showMessage(`${data.categories_count} kategori ve ${data.featured_count} öne çıkan ürün eklendi`);
+        await fetchData();
+      } else {
+        const error = await res.json();
+        showMessage(error.detail || 'Hata oluştu', 'error');
+      }
+    } catch (error) {
+      showMessage('Varsayılana dönme hatası', 'error');
+    }
+    setResetting(false);
   };
 
   const showMessage = (text, type = 'success') => {
