@@ -82,7 +82,7 @@ export default function StoreManagementPage() {
   }, []);
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('admin_session_token');
+    const token = localStorage.getItem('session_token');
     return {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
