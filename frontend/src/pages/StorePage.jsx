@@ -272,32 +272,61 @@ const API_URL = import.meta.env.VITE_API_URL || process.env.REACT_APP_BACKEND_UR
 
 export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [categories, setCategories] = useState(CATEGORIES);
-  const [featuredPicks, setFeaturedPicks] = useState(FEATURED_PICKS);
+  const [categories, setCategories] = useState([]);
+  const [featuredPicks, setFeaturedPicks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch dynamic data from backend
+  // Fetch data from database only
   useEffect(() => {
     const fetchStoreData = async () => {
       try {
         const res = await fetch(`${API_URL}/api/store/data`);
         if (res.ok) {
           const data = await res.json();
-          // Use database data if available, otherwise fall back to static
-          if (data.categories && data.categories.length > 0) {
-            setCategories(data.categories);
-          }
-          if (data.featured && data.featured.length > 0) {
-            setFeaturedPicks(data.featured);
-          }
+          setCategories(data.categories || []);
+          setFeaturedPicks(data.featured || []);
         }
       } catch (error) {
-        console.log('Using static store data');
+        console.error('Store data fetch error:', error);
       }
       setLoading(false);
     };
     fetchStoreData();
   }, []);
+
+  // Show loading or empty state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-violet-50 via-pink-50 to-white">
+        <Navbar />
+        <div className="flex items-center justify-center py-32">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-600">Yükleniyor...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show empty state if no data
+  if (categories.length === 0 && featuredPicks.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-violet-50 via-pink-50 to-white">
+        <Helmet>
+          <title>Öneri Mağazası | Masal Sepeti</title>
+        </Helmet>
+        <Navbar />
+        <div className="flex items-center justify-center py-32">
+          <div className="text-center max-w-md mx-auto px-4">
+            <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-slate-700 mb-2">Mağaza Hazırlanıyor</h2>
+            <p className="text-slate-500">Ürün önerileri yakında eklenecek. Lütfen daha sonra tekrar ziyaret edin.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-pink-50 to-white pb-24 sm:pb-8">
