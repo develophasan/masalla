@@ -214,6 +214,13 @@ export default function AdminDashboard() {
             <Zap className="w-5 h-5 text-amber-400" />
             Toplu Üretim
           </Link>
+          <Link
+            to="/admin/store"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-slate-300 hover:bg-slate-700"
+          >
+            <ShoppingBag className="w-5 h-5 text-emerald-400" />
+            Mağaza Yönetimi
+          </Link>
         </nav>
 
         <div className="border-t border-slate-700 pt-4 mt-4">
