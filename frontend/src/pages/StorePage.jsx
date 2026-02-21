@@ -257,8 +257,36 @@ const CATEGORIES = [
   },
 ];
 
+const API_URL = import.meta.env.VITE_API_URL || process.env.REACT_APP_BACKEND_URL || '';
+
 export default function StorePage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState(CATEGORIES);
+  const [featuredPicks, setFeaturedPicks] = useState(FEATURED_PICKS);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch dynamic data from backend
+  useEffect(() => {
+    const fetchStoreData = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/store/data`);
+        if (res.ok) {
+          const data = await res.json();
+          // Use database data if available, otherwise fall back to static
+          if (data.categories && data.categories.length > 0) {
+            setCategories(data.categories);
+          }
+          if (data.featured && data.featured.length > 0) {
+            setFeaturedPicks(data.featured);
+          }
+        }
+      } catch (error) {
+        console.log('Using static store data');
+      }
+      setLoading(false);
+    };
+    fetchStoreData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 via-pink-50 to-white pb-24 sm:pb-8">
