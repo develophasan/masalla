@@ -5,248 +5,163 @@ The user wants to build a full-stack web application called MASAL SEPETİ (Tale 
 - **Core Functionality:**
     - Full user membership with custom Google OAuth social login and local registration.
     - An admin panel with statistics and user management.
-    - AI story generation using the Google Gemini API (migrated from OpenAI).
+    - AI story generation using the Google Gemini API.
     - Text-to-speech audio generation using Google Cloud TTS.
     - SEO-friendly story URLs () with dynamic metadata, a , and .
-    - A profanity filter for user inputs.
     - A favorites system for users.
-    - A bulk story generation page in the admin panel with a queue and live logging.
+    - A bulk story generation page in the admin panel.
 - **UI/UX:**
     - A responsive, mobile-friendly design that works as a Progressive Web App (PWA).
-    - A site-wide footer containing legal links and affiliate links.
-    - Monetization via Amazon Associates affiliate links, replacing the initial AdSense placeholders.
+    - A site-wide footer containing legal links.
+    - Monetization via Amazon Associates affiliate links.
     - Gated features (download/share) that require login or viewing an ad.
-- **Developer Support:**
-    - A private, key-protected API documentation page to support the development of a native Flutter application.
+- **New Feature: Öneri Mağazası (Suggestion Store):** A dedicated page to showcase categorized products with Amazon affiliate links.
+- **New UI/UX Vision (Cloud Dancer):** A complete visual overhaul of the application, including a new color palette, layouts (Bento Grid), and interactive story pages (Scrollytelling).
 
 **User's preferred language**: Turkish (Türkçe)
 
 **what currently exists?**
-The application is a full-stack platform (React, FastAPI, MongoDB). Key features include custom Google OAuth, story generation via Google Gemini, audio via Google TTS, a profanity filter, SEO-optimized story pages (sitemap, robots.txt, JSON-LD), and a new admin page for bulk story generation. The app is fully configured as a PWA, and monetization has been shifted from AdSense placeholders to Amazon Affiliate banners. All previous deployment blockers and dependency issues have been resolved.
+The application is a full-stack platform (React, FastAPI, MongoDB). Most of the initial requirements have been met. A major frontend refactoring is in progress.
+- **Caching:** A manual  caching system was replaced with  for all major data-fetching operations (stories, topics), improving performance and data consistency.
+- **New Page:** An affiliate Öneri Mağazası () page has been created and linked in the navigation and footer.
+- **UI/UX Redesign:** A significant visual overhaul (Cloud Dancer theme) has been partially implemented across the frontend:
+    - **Phase 1 (Visual Identity):** A new design system with a soft, neutral background, glassmorphism effects, and floating gradient orbs has been applied to the homepage and navbar.
+    - **Phase 2 (Component Redesign):** Key components like  and  have been updated to the new visual style.
+    - **Phase 3 (Story Page Experience):** The story detail page has been revamped with Scrollytelling (text fades in on scroll) and parallax background effects for a more immersive experience.
+    - **Responsive Fixes:** Issues with the new design on mobile and tablet screens have been addressed.
 
 **Last working item**:
-- **Last item agent was working:** The user reported two final UI/UX bugs:
-    1. The Back to Home button on the Login/Register pages was positioned incorrectly on iPhones, overlapping with the status bar (notch).
-    2. When navigating between pages, the scroll position was not resetting to the top.
-The agent fixed both issues by adding safe-area padding to the auth pages and implementing a global  component in .
-- **Status:** COMPLETED
+- **Last item agent was working:** The user reported that Amazon Affiliate links are not tracking clicks or sales. The agent investigated and confirmed that the link generation logic in  was creating invalid URLs. The agent was in the process of fixing this critical monetization bug.
+- **Status:** IN PROGRESS
 - **Agent Testing Done:** N
-- **Which testing method agent to use?** Frontend testing agent. The agent should verify:
-    1. On a simulated mobile view, the Login page UI does not overlap with the top of the screen.
-    2. Navigate from the home page (scrolled down) to a story page, and confirm the new page starts at the top.
+- **Which testing method agent to use?** Manual testing. The agent must first inspect the generated URLs on the site to confirm the format is correct. Then, the user needs to be instructed to test a click and verify if it appears in their Amazon Associates dashboard (noting there can be a delay).
 - **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1 (P0): Leaked Gemini API Key leads to  errors.**
+- **Issue 1: Amazon Affiliate links are broken and do not track clicks or sales.** (P0)
 
 **Issues Detail:**
 - **Issue 1:**
-    - **Description:** During bulk story generation, the process started failing with a  error. This is because the key was exposed in GitHub's commit history, and Google's secret scanning automatically disabled it. This blocks all AI-related functionality.
-    - **Attempted fixes:** The agent correctly diagnosed the issue. The user was instructed to generate a new API key from Google AI Studio and update the  environment variable in their Railway deployment. The user has confirmed via chat that they have done this. All sensitive information has been scrubbed from the repository.
+    - **Attempted fixes:** The agent correctly identified that the  helper function was constructing invalid URLs, likely by including a superflous  character.
     - **Next debug checklist:**
-        1.  Verify the fix by generating a single story through the UI.
-        2.  If successful, run a small task (2-3 stories) on the bulk generation page () to confirm it's also working.
-        3.  If it fails, check the backend logs for the  error and inform the user that the new key is either incorrect or not properly configured in Railway.
-    - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. Fixing it will restore the application's core story generation functionality.
-    - **Status:** USER VERIFICATION PENDING
-    - **Is recurring issue?** Y (Sensitive keys have been leaked to git history before).
-    - **Should Test frontend/backend/both after fix?** Backend
-    - **Blocked on other issue:** None. This is the primary blocker.
+        1.  Edit .
+        2.  Modify the  function to ensure it generates a valid Amazon search URL with the affiliate tag (e.g., ).
+        3.  Inspect the links on the  page and any other affiliate banners to confirm the fix.
+    - **Why fix this issue and what will be achieved with the fix?** This is a critical bug blocking the entire monetization strategy of the application. Fixing it will restore the potential for affiliate revenue.
+    - **Status:** IN PROGRESS
+    - **Is recurring issue?** N
+    - **Should Test frontend/backend/both after fix?** Frontend.
+    - **Blocked on other issue:** None. This is the highest priority.
 
 **In progress Task List**:
-- None.
+- **Task 1: Complete the Cloud Dancer Visual Redesign.**
+    - **Where to resume:** Phases 1, 2, and 3 are implemented. The agent should verify that all bugs from the recent implementation (double navbar, font change, z-index issue) are resolved. Afterward, the agent should propose continuing to the next phases of the user's roadmap.
+    - **What will be achieved with this?** A modern, visually distinct, and engaging user experience that aligns with the user's long-term vision.
+    - **Status:** IN PROGRESS
+    - **Should Test frontend/backend/both after fix?** Frontend.
+    - **Blocked on something:** The P0 Amazon link issue should be fixed first.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-  - **P1: Implement Rewarded Ads for Story Downloads:** The user wants a rewarded video ad to be shown before a story can be downloaded. The current implementation shows a static Amazon affiliate banner (). This needs to be replaced with a proper rewarded ad SDK integration.
-  - **P2: Update Audio for Old Stories:** The user noted that stories generated before the TTS voice change still have the old male voice. The agent needs to write and execute a script that clears the  field for all existing stories in the database, allowing the new female voice to be generated on the next listen.
+    - **P1: Populate Öneri Mağazası:** The  is currently a template. It needs to be filled with actual product categories and affiliate links as requested by the user.
+    - **P2 (Deferred): Faz 4: AI Kişiselleştirme:** Implement a recommendation engine. The user has explicitly postponed this to focus on visual changes.
+    - **P3 (Deferred): Faz 5: Kapsayıcı Tasarım:** Implement accessibility improvements (WCAG). The user has also postponed this.
 
 - **Future Tasks:**
-  - **PWA Push Notifications:** Implement a system to send push notifications for new stories or announcements.
-  - **Backend Refactoring:** Break down the monolithic  into a more scalable, modular structure (e.g., routers, services).
-  - **Masal Illustrations:** Integrate an image generation AI (like DALL-E or Gemini Vision) to create a unique illustration for each story.
-  - **Multi-Language Support:** Add the ability to generate stories in other languages like English.
-  - **Robust Bulk Generation Queue:** Replace the current in-memory bulk generation state with a persistent queue system (e.g., a dedicated MongoDB collection or Redis) to prevent data loss on server restarts.
-  - **Advanced Parent/Admin Features:** A dashboard for parents to track listening history, or more advanced controls in the admin panel.
+    - Implement a real **rewarded video ad SDK** for story downloads.
+    - Write a script to **update audio for old stories** to the new TTS voice.
+    - Implement **PWA Push Notifications**.
+    - **Refactor the backend** by breaking down the monolithic .
+    - Integrate an AI for **masal illustrations**.
+    - Add **multi-language support**.
+    - Create a persistent queue for the **bulk story generation** feature.
 
 **Completed work in this session**
-- **Gemini API Migration:** Successfully migrated the entire story generation process from OpenAI to the Google Gemini API ( SDK).
-- **Bulk Story Generation Feature:** Built a complete feature in the admin panel to queue and generate multiple stories sequentially, with a UI showing live progress and logs.
-- **TTS Improvements:** Changed the TTS voice to a Turkish female voice () and updated the AI prompt to limit story length, preventing TTS API errors.
-- **PWA Implementation & Fixes:**
-    - Configured the application to be a fully installable PWA with a manifest, service worker, and offline page.
-    - Created correctly padded, square PWA icons from the rectangular source logo to fix aspect ratio issues.
-    - Resolved the iOS status bar/notch overlap issue by implementing safe-area padding.
-- **Amazon Affiliate Integration:** Replaced all AdSense placeholders with Amazon Affiliate banners and added an affiliate link section to the footer.
-- **Feature Gating:** Modified the Download and Share buttons to require user login and to show an ad interstitial for logged-in users.
-- **SEO Enhancements:** Generated a static  and , and improved the structured data (JSON-LD) on story and home pages.
-- **Deployment & Security:** Resolved multiple Railway deployment issues, created a comprehensive Flutter API guide, and scrubbed all leaked secrets from the codebase and git history.
-- **UX Fixes:** Implemented a  component to reset scroll position on navigation and fixed UI layout on auth pages.
+- **Performance:** Replaced manual  caching with  across the application for improved data fetching and client-side state management.
+- **New Feature:** Created a new Öneri Mağazası (Suggestion Store) page () and added links to it in the site's navigation.
+- **UI/UX Redesign (Phases 1-3):**
+    - Implemented a new Cloud Dancer visual identity with a custom design system (), glassmorphism cards, and new layouts.
+    - Redesigned the Homepage with a Bento Grid layout.
+    - Revamped the Story Detail Page with interactive Scrollytelling and parallax effects.
+- **Bug Fixes:**
+    - Fixed responsive design issues on mobile/tablet for the new UI.
+    - Resolved a z-index bug causing decorative elements to overlap the navbar.
+    - Removed a duplicate navbar instance on the Story Detail Page.
+    - Restored the user's preferred handwritten font for story text.
 
 **Earlier issues found/mentioned but not fixed**
 - None.
 
 **Known issue recurrence from previous fork**
-- **Issue:** Leaking sensitive API keys to the Git repository.
-- **Recurrence count:** 2 (First with Google OAuth, now with Gemini).
-- **Status:** RESOLVED (for now). The agent has cleaned the repository and strengthened . The next agent must remain vigilant about not putting any secrets in tracked files.
+- None in this session.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **AI API Migration:** Switching from usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
-              [-o ORGANIZATION] [-t {openai,azure}]
-              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
-              [--azure-ad-token AZURE_AD_TOKEN] [-V]
-              {api,tools,migrate,grit} ...
-
-positional arguments:
-  {api,tools,migrate,grit}
-    api                 Direct API calls
-    tools               Client side tools for convenience
-
-options:
-  -h, --help            show this help message and exit
-  -v, --verbose         Set verbosity.
-  -b API_BASE, --api-base API_BASE
-                        What API base url to use.
-  -k API_KEY, --api-key API_KEY
-                        What API key to use.
-  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
-                        What proxy to use.
-  -o ORGANIZATION, --organization ORGANIZATION
-                        Which organization to run as (will use your default
-                        organization if not specified)
-  -t {openai,azure}, --api-type {openai,azure}
-                        The backend API to call, must be `openai` or `azure`
-  --api-version API_VERSION
-                        The Azure API version, e.g.
-                        'https://learn.microsoft.com/en-us/azure/ai-
-                        services/openai/reference#rest-api-versioning'
-  --azure-endpoint AZURE_ENDPOINT
-                        The Azure endpoint, e.g.
-                        'https://endpoint.openai.azure.com'
-  --azure-ad-token AZURE_AD_TOKEN
-                        A token from Azure Active Directory,
-                        https://www.microsoft.com/en-
-                        us/security/business/identity-access/microsoft-entra-
-                        id
-  -V, --version         show program's version number and exit Python library to .
-- **PWA Configuration:** Using  and a Service Worker () to make the React app installable and provide offline capabilities.
-- **Affiliate Marketing:** Integrating Amazon Associates links (SiteStripe) as a monetization strategy.
-- **Feature Gating:** Using React state and context to conditionally render UI (AuthModal, AdInterstitial) based on user authentication status.
-- **Mobile UX:** Using  in CSS to adapt layouts for modern phone notches/islands.
-- **Static Site Generation (for SEO):** Creating a static  during the build/deploy process to improve crawlability.
+- **React Query:** Used for server-state management, caching, and removing boilerplate  data fetching.
+- **Advanced CSS & Animation:** Implementation of ,  effects,  (via Intersection Observer logic), responsive media queries, and complex layouts like Bento Grid.
+- **Component Refactoring:** Significant updates to existing components to match a new design system.
 
 **key DB schema**
-- No changes to the database schema were made.
+- No changes.
 
 **changes in tech stack**
-- **Removed:** usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-p PROXY [PROXY ...]]
-              [-o ORGANIZATION] [-t {openai,azure}]
-              [--api-version API_VERSION] [--azure-endpoint AZURE_ENDPOINT]
-              [--azure-ad-token AZURE_AD_TOKEN] [-V]
-              {api,tools,migrate,grit} ...
-
-positional arguments:
-  {api,tools,migrate,grit}
-    api                 Direct API calls
-    tools               Client side tools for convenience
-
-options:
-  -h, --help            show this help message and exit
-  -v, --verbose         Set verbosity.
-  -b API_BASE, --api-base API_BASE
-                        What API base url to use.
-  -k API_KEY, --api-key API_KEY
-                        What API key to use.
-  -p PROXY [PROXY ...], --proxy PROXY [PROXY ...]
-                        What proxy to use.
-  -o ORGANIZATION, --organization ORGANIZATION
-                        Which organization to run as (will use your default
-                        organization if not specified)
-  -t {openai,azure}, --api-type {openai,azure}
-                        The backend API to call, must be `openai` or `azure`
-  --api-version API_VERSION
-                        The Azure API version, e.g.
-                        'https://learn.microsoft.com/en-us/azure/ai-
-                        services/openai/reference#rest-api-versioning'
-  --azure-endpoint AZURE_ENDPOINT
-                        The Azure endpoint, e.g.
-                        'https://endpoint.openai.azure.com'
-  --azure-ad-token AZURE_AD_TOKEN
-                        A token from Azure Active Directory,
-                        https://www.microsoft.com/en-
-                        us/security/business/identity-access/microsoft-entra-
-                        id
-  -V, --version         show program's version number and exit, .
-- **Added:** .
+- **Added:** 
 
 **All files of reference**
-- : Core logic for Gemini integration and the new bulk generation endpoints.
-- : The UI for the new bulk generation feature.
-- : Contains logic for feature gating (download/share) and enhanced SEO schema.
-- : Defines the PWA's properties.
-- : The service worker for offline functionality.
-- : The primary ad component, now configured for Amazon.
-- : Integrated the  component.
-- : Updated to be more robust in excluding sensitive files.
+- : **(NEEDS FIX)** The file containing the broken affiliate link logic.
+- : The new affiliate store page that needs content.
+- : Location of the major redesign and recent bug fixes (double navbar, z-index).
+- : The central file for the new Cloud Dancer theme.
+- : The primary React Query hook for data fetching.
 
 **Areas that need refactoring**:
-- The bulk generation state in  is stored in a simple in-memory dictionary. This is not robust and will be lost on server restart. It should be refactored to use a persistent store like a MongoDB collection.
-- The user has previously requested **not** to refactor the monolithic  for stability reasons, but it remains a long-term technical debt.
+-  has grown to over 900 lines and contains component logic () that should be extracted into a separate file for better maintainability.
+- The backend  remains a monolith and is a candidate for future refactoring into separate routers/services.
 
 **key api endpoints**
-- **NEW:**
-    - : Initiates a bulk story generation task.
-    - : Halts the ongoing bulk generation task.
-    - : Provides real-time status of the bulk generation queue.
-    - : Fetches topics and subtopics for the bulk generation UI.
-- **REPLACED (Functionality):**
-    - The  is now served statically from  instead of a backend endpoint.
+- No changes to API endpoints in this session.
 
 **Critical Info for New Agent**
-- **Verify API Key First:** The highest priority is to confirm that the story generation is working with the user's new Gemini API key. Do not start any other task until this is verified.
-- **PWA Cache:** Inform the user that after PWA-related changes are deployed, they may need to clear their browser cache or reinstall the PWA on their device to see the updates (especially for icons and the manifest).
-- **Bulk Generation is Not Persistent:** The bulk generation process state is stored in-memory on the backend. If the server restarts for any reason, the queue and progress will be lost. This is a known limitation.
+- **Top Priority:** Fix the Amazon affiliate link generation in . This is a P0 issue blocking monetization. Do not start other tasks until this is resolved.
+- **User Collaboration:** The user is highly engaged in the design process. Continue the phased implementation of the Cloud Dancer redesign, always asking for approval before starting a new phase.
+- **Preview Environment Limitation:** Be aware that the frontend in the preview environment makes API calls to the *production* backend URL, which causes CORS errors and prevents data from loading. Do not waste time trying to fix this. Test structural and UI changes in preview, but data-dependent features must be tested by the user after deployment to their Railway environment.
 
 **documents and test reports created in this job**
--  (Updated)
--  (Created)
+-  (Updated to reflect the new UI/UX roadmap and completed caching task).
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. **User Request:** Fix UI bugs: login page safe-area and page scroll position not resetting. (Status: **Completed**)
-2. **User Confirmation:** User states they have fixed the leaked API key and asks the agent to wait for the next task. (Status: **Pending Verification**)
-3. **User Request:** Ask for the project's to-do list. (Status: **Completed**)
-4. **User Report:** PWA icon is distorted and the app UI overlaps with the iOS status bar. (Status: **Completed**)
-5. **User Request:** Make the app a PWA so it can be installed on devices. (Status: **Completed**)
-6. **User Report:** Bulk generation is failing due to a leaked API key. (Status: **Resolved, Pending Verification**)
-7. **User Report:** Old stories still have the old male TTS voice after the voice was changed in the code. (Status: **Acknowledged**, new task created).
-8. **User Confirmation:** User agrees to proceed with security cleanup after being informed about the risks of leaked credentials in git history. (Status: **Completed**)
-9. **User Request:** Before pushing to GitHub, remove all API keys and sensitive info from the code and documentation. (Status: **Completed**)
-10. **User Request:** Switch the AI story generation from OpenAI to Gemini, providing an API key and code snippet. (Status: **Completed**)
+1.  **User:** The Amazon links you added are all wrong. The link checker says they are invalid. (Status: **Pending fix**)
+2.  **User:** Clicks are not appearing either. (Status: **Pending fix**)
+3.  **User:** Amazon affiliate sales from yesterday are not showing up in my dashboard. (Status: **Answered**, likely a tracking delay, but now known to be a link format issue).
+4.  **User:** You fixed the navbar and font issues. Thanks. (Status: **Completed**)
+5.  **User:** I'm seeing two navbars on the story page, and the story font was better as handwritten text. (Status: **Completed**)
+6.  **User:** The new design elements are overlapping content on small screens. (Status: **Completed**)
+7.  **User:** Continue with the redesign. (Status: **In Progress**)
+8.  **User:** Okay, start the redesign with these choices: New palette (B), Rich animations (C), Phased approach (SIRALI), Defer AI (C), Defer a11y (C). (Status: **In Progress**)
+9.  **User:** Draw a new roadmap for visual improvements based on my philosophical plan. (Status: **Completed**)
+10. **User:** Also add the store page to the menu at the top. (Status: **Completed**)
 
 **Project Health Check:**
-- **Broken:** The core story generation feature is presumed broken due to the  error from the leaked Gemini API key. This status can be cleared only after verifying the user's new key works.
+- **Broken:** The entire Amazon Affiliate monetization system is non-functional due to invalid link generation.
 
 **3rd Party Integrations**
-- **Google Gemini** (Story Generation) — Requires User API Key ().
-- **Google Cloud Text-to-Speech** (Audio Generation) — Requires User API Key ().
-- **Custom Google OAuth** (Social Login) — Requires User API Keys (, ).
-- **Amazon Associates (Gelir Ortaklığı)** (Advertisements) — Integrated via SiteStripe link with partner tag .
-- **Google AdSense** (Advertisements) — Publisher ID is integrated, but ad components are currently used by Amazon as a fallback.
+- **Google Gemini** (Story Generation) — Requires User API Key.
+- **Google Cloud Text-to-Speech** (Audio Generation) — Requires User API Key.
+- **Custom Google OAuth** (Social Login) — Requires User API Keys.
+- **Amazon Associates** (Advertisements) — Integrated but currently **BROKEN**.
+- **Google AdSense** (Advertisements) — Integrated but currently secondary to Amazon.
 
 **Testing status**
 - Testing agent used after significant changes: NO
 - Troubleshoot agent used after agent stuck in loop: NO
 - Test files created: []
-- Known regressions: Story generation is non-functional until the API key issue is confirmed to be resolved.
+- Known regressions: Amazon Affiliate link generation is now broken.
 
 **Credentials to test flow:**
 - **Admin:**  / 
-- **Google OAuth:** Requires a test user to be configured in the user's Google Cloud project.
+- **Google OAuth:** Requires a test user configured in the user's Google Cloud project.
 
 **What agent forgot to execute**
-- The agent did not design the bulk generation feature with a persistent queue, making it vulnerable to data loss on server restarts. This is a significant architectural weakness for a production feature.
-- The agent initially tried to install a private package () on a public PaaS (Railway), showing a lack of environmental awareness, though it did self-correct.</analysis>
+- The agent did not fully resolve the Amazon link issue before the session ended. It is the immediate next step.</analysis>
