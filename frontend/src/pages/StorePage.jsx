@@ -1,16 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { 
   BookOpen, Baby, Puzzle, Palette, Headphones, Laptop, 
   Home, BookMarked, Gift, Star, ExternalLink, Sparkles,
   ChevronRight, Heart, Award, Gamepad2, Music, Lamp,
-  GraduationCap, TreePine, Crown, Flame, TrendingUp
+  GraduationCap, TreePine, Crown, Flame, TrendingUp, Package
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 
 const AMAZON_TAG = 'masalspace-21';
+
+// Icon string to component mapping (for dynamic data from database)
+const ICON_MAP = {
+  BookOpen, Baby, Puzzle, Palette, Headphones, Laptop,
+  Home, BookMarked, Gift, Star, Heart, Music, Lamp,
+  GraduationCap, TreePine, Crown, Sparkles, Package, Gamepad2
+};
+
+const getIconComponent = (iconName) => {
+  return ICON_MAP[iconName] || BookOpen;
+};
 
 // Amazon Türkiye arama affiliate link formatı
 // Doğru format: https://www.amazon.com.tr/s?k=ARAMA&tag=TAG_ID
