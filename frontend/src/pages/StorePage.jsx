@@ -4,7 +4,8 @@ import { Helmet } from "react-helmet-async";
 import { 
   BookOpen, Baby, Puzzle, Palette, Headphones, Laptop, 
   Home, BookMarked, Gift, Star, ExternalLink, Sparkles,
-  ChevronRight, Heart, Award, Gamepad2, Music, Lamp
+  ChevronRight, Heart, Award, Gamepad2, Music, Lamp,
+  GraduationCap, TreePine, Crown, Flame, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
