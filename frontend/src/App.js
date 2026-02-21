@@ -79,6 +79,7 @@ function AppRouter() {
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/bulk-generate" element={<BulkGeneratePage />} />
+          <Route path="/admin/store" element={<StoreManagementPage />} />
         </Routes>
       </div>
       {!hideFooter && <Footer />}
