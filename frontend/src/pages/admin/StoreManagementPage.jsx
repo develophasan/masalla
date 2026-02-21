@@ -70,7 +70,7 @@ export default function StoreManagementPage() {
 
   // Check admin auth
   useEffect(() => {
-    const adminToken = localStorage.getItem('admin_session_token');
+    const adminToken = localStorage.getItem('session_token');
     if (!adminToken) {
       navigate('/admin/login');
     }
