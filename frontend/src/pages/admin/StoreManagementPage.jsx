@@ -11,8 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { API } from "@/config/api";
 
-const API_URL = import.meta.env.VITE_API_URL || process.env.REACT_APP_BACKEND_URL || '';
 const AMAZON_TAG = 'masalspace-21';
 
 // Icon mapping
