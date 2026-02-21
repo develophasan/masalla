@@ -207,6 +207,54 @@ const CATEGORIES = [
       { name: 'Hatıra & Anı Ürünleri', query: 'bebek çocuk hatıra anı' },
     ]
   },
+  {
+    id: 'okul-oncesi',
+    title: 'Okul Öncesi Hazırlık',
+    description: 'Alfabe, sayılar, yazı çalışmaları ve okula hazırlık materyalleri',
+    icon: GraduationCap,
+    gradient: 'from-blue-500 to-indigo-600',
+    bgColor: 'bg-blue-50',
+    products: [
+      { name: 'Okula Hazırlık Setleri', query: 'okul öncesi hazırlık seti', highlight: true },
+      { name: 'Alfabe Öğrenme Kitapları', query: 'alfabe öğrenme kitabı çocuk' },
+      { name: 'Sayı ve Matematik', query: 'okul öncesi sayı matematik çocuk' },
+      { name: 'Yazı Çalışma Kitapları', query: 'okul öncesi yazı çalışma defteri' },
+      { name: 'Dikkat ve Konsantrasyon', query: 'çocuk dikkat konsantrasyon kitabı' },
+      { name: 'İngilizce Başlangıç', query: 'çocuk ingilizce başlangıç kitap' },
+    ]
+  },
+  {
+    id: 'dis-mekan',
+    title: 'Dış Mekan & Bahçe Oyunları',
+    description: 'Açık hava aktiviteleri, bisikletler ve bahçe oyuncakları',
+    icon: TreePine,
+    gradient: 'from-green-500 to-lime-600',
+    bgColor: 'bg-green-50',
+    products: [
+      { name: 'Çocuk Bisikletleri', query: 'çocuk bisiklet 3-6 yaş', highlight: true },
+      { name: 'Scooter & Kaykay', query: 'çocuk scooter kaykay' },
+      { name: 'Bahçe Oyun Setleri', query: 'çocuk bahçe oyun seti salıncak' },
+      { name: 'Kum Havuzu & Oyuncakları', query: 'çocuk kum havuzu oyuncak seti' },
+      { name: 'Top & Spor Oyunları', query: 'çocuk futbol basketbol top seti' },
+      { name: 'Su Oyuncakları', query: 'çocuk su oyuncağı havuz' },
+    ]
+  },
+  {
+    id: 'karakter-urunler',
+    title: 'Karakter & Lisanslı Ürünler',
+    description: 'Disney, Peppa Pig, PJ Masks ve sevilen karakterler',
+    icon: Crown,
+    gradient: 'from-pink-500 to-purple-600',
+    bgColor: 'bg-pink-50',
+    products: [
+      { name: 'Disney Prenses Ürünleri', query: 'disney prenses çocuk', highlight: true },
+      { name: 'Peppa Pig Koleksiyonu', query: 'peppa pig çocuk oyuncak kitap' },
+      { name: 'PJ Masks Pijamaskeliler', query: 'pj masks pijamaskeliler çocuk' },
+      { name: 'Paw Patrol', query: 'paw patrol çocuk oyuncak' },
+      { name: 'Frozen Karlar Ülkesi', query: 'frozen karlar ülkesi çocuk' },
+      { name: 'Spiderman & Süper Kahramanlar', query: 'spiderman süper kahraman çocuk' },
+    ]
+  },
 ];
 
 export default function StorePage() {
