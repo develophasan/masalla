@@ -114,7 +114,7 @@ export const AdInterstitial = ({
               return (
                 <a
                   key={idx}
-                  href={createAmazonLink(product.path)}
+                  href={createAmazonLink(product.searchQuery)}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
                   className={`flex items-center gap-4 p-4 rounded-xl transition-all group ${

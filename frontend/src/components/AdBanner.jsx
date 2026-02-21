@@ -92,7 +92,7 @@ export const AdBanner = ({ slot = "auto", className = "", variant = "horizontal"
                 return (
                   <a
                     key={idx}
-                    href={createAmazonLink(product.path)}
+                    href={createAmazonLink(product.searchQuery)}
                     target="_blank"
                     rel="noopener noreferrer sponsored"
                     className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md transition-all group"
@@ -126,7 +126,7 @@ export const AdBanner = ({ slot = "auto", className = "", variant = "horizontal"
               return (
                 <a
                   key={idx}
-                  href={createAmazonLink(product.path)}
+                  href={createAmazonLink(product.searchQuery)}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
                   className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-all group"
