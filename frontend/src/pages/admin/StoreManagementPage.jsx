@@ -124,7 +124,7 @@ export default function StoreManagementPage() {
 
     setResetting(true);
     try {
-      const res = await fetch(`${API_URL}/api/admin/store/reset-defaults`, {
+      const res = await fetch(`${API}/admin/store/reset-defaults`, {
         method: 'POST',
         headers: getAuthHeaders()
       });
