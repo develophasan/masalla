@@ -120,6 +120,16 @@ DB_NAME=your_database_name
     - Karakter & Lisanslı Ürünler (Disney, Peppa Pig, PJ Masks)
   - Toplam kategori sayısı: 13
 
+- **Admin Panel: Mağaza Yönetimi Sayfası Eklendi:**
+  - Yeni sayfa: `/admin/store`
+  - Kategoriler CRUD (ekleme, düzenleme, silme)
+  - Editörün Seçimi CRUD (ekleme, düzenleme, silme)
+  - Ürün ekleme/silme her kategori için
+  - Aktif/Pasif durumu kontrolü
+  - Doğrudan Amazon link testi
+  - Veritabanı koleksiyonları: `store_categories`, `store_featured`
+  - Public API: `/api/store/data` (frontend için)
+
 **Previous Update (Session Continued)**
 - **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
 - Güncellenen dosyalar:
