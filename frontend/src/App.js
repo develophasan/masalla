@@ -26,6 +26,7 @@ import ApiDocsPage from "@/pages/ApiDocsPage";
 import AdminLoginPage from "@/pages/admin/AdminLoginPage";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import BulkGeneratePage from "@/pages/admin/BulkGeneratePage";
+import StoreManagementPage from "@/pages/admin/StoreManagementPage";
 
 function AppRouter() {
   const location = useLocation();
