@@ -279,7 +279,7 @@ export default function StorePage() {
   useEffect(() => {
     const fetchStoreData = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/store/data`);
+        const res = await fetch(`${API}/store/data`);
         if (res.ok) {
           const data = await res.json();
           setCategories(data.categories || []);
