@@ -10,16 +10,12 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 
 const AMAZON_TAG = 'masalspace-21';
-const AMAZON_BASE = 'https://www.amazon.com.tr';
 
+// Amazon Türkiye arama affiliate link formatı
+// Doğru format: https://www.amazon.com.tr/s?k=ARAMA&tag=TAG_ID
 const createAmazonLink = (searchQuery) => {
-  const params = new URLSearchParams({
-    tag: AMAZON_TAG,
-    linkCode: 'll2',
-    ref_: 'as_li_ss_tl',
-    k: searchQuery
-  });
-  return `${AMAZON_BASE}/s?${params.toString()}`;
+  const encodedQuery = encodeURIComponent(searchQuery);
+  return `https://www.amazon.com.tr/s?k=${encodedQuery}&tag=${AMAZON_TAG}`;
 };
 
 const CATEGORIES = [
