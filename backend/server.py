@@ -2064,6 +2064,316 @@ async def reorder_store_featured(request: Request):
     
     return {"success": True, "message": "Sıralama güncellendi"}
 
+# Default store data - will be loaded on reset
+DEFAULT_FEATURED_PICKS = [
+    {
+        "title": "Tübitak Popüler Bilim Kitapları",
+        "description": "Bilimi sevdiren en çok satan seriler",
+        "query": "tübitak popüler bilim çocuk kitap",
+        "badge": "En Çok Satan",
+        "gradient": "from-blue-500 to-cyan-500",
+        "order": 0,
+        "isActive": True
+    },
+    {
+        "title": "Tonguç Akademi Okul Öncesi",
+        "description": "Eğlenceli okula hazırlık setleri",
+        "query": "tonguç akademi okul öncesi",
+        "badge": "Popüler",
+        "gradient": "from-orange-500 to-red-500",
+        "order": 1,
+        "isActive": True
+    },
+    {
+        "title": "Montessori Aktivite Setleri",
+        "description": "Öğrenirken eğlenen çocuklar için",
+        "query": "montessori aktivite seti çocuk",
+        "badge": "Tavsiye",
+        "gradient": "from-emerald-500 to-teal-500",
+        "order": 2,
+        "isActive": True
+    },
+    {
+        "title": "Sesli Masal Projektörü",
+        "description": "Uyku öncesi sihirli anlar",
+        "query": "çocuk hikaye projektör gece lambası",
+        "badge": "Yeni",
+        "gradient": "from-purple-500 to-pink-500",
+        "order": 3,
+        "isActive": True
+    }
+]
+
+DEFAULT_CATEGORIES = [
+    {
+        "title": "Masal & Hikaye Kitapları",
+        "description": "Klasik masallar, modern hikayeler ve resimli çocuk kitapları",
+        "icon": "BookOpen",
+        "gradient": "from-violet-500 to-purple-600",
+        "bgColor": "bg-violet-50",
+        "products": [
+            {"name": "En Çok Satan Masal Kitapları", "query": "en çok satan çocuk masal kitabı", "highlight": True},
+            {"name": "Resimli Hikaye Kitapları", "query": "resimli hikaye kitabı çocuk", "highlight": False},
+            {"name": "Klasik Masallar Seti", "query": "klasik masallar çocuk kitap seti", "highlight": False},
+            {"name": "Uyku Öncesi Masalları", "query": "uyku öncesi masal kitabı", "highlight": False},
+            {"name": "Değerler Eğitimi Kitapları", "query": "çocuk değerler eğitimi kitap", "highlight": False},
+            {"name": "İlk Okuma Kitapları", "query": "ilk okuma kitapları çocuk", "highlight": False}
+        ],
+        "order": 0,
+        "isActive": True
+    },
+    {
+        "title": "Sesli Kitaplar & Hikaye Kutuları",
+        "description": "Butonlu sesli kitaplar ve interaktif hikaye cihazları",
+        "icon": "Headphones",
+        "gradient": "from-pink-500 to-rose-600",
+        "bgColor": "bg-pink-50",
+        "products": [
+            {"name": "Sesli Masal Kitapları", "query": "sesli masal kitabı çocuk", "highlight": True},
+            {"name": "Hikaye Anlatma Makinesi", "query": "hikaye anlatma makinesi çocuk", "highlight": False},
+            {"name": "Butonlu Sesli Kitaplar", "query": "butonlu sesli kitap çocuk", "highlight": False},
+            {"name": "Müzikli Kitaplar", "query": "müzikli çocuk kitabı", "highlight": False},
+            {"name": "Projeksiyon Hikaye Cihazı", "query": "projeksiyon hikaye çocuk", "highlight": False}
+        ],
+        "order": 1,
+        "isActive": True
+    },
+    {
+        "title": "Eğitici Oyuncaklar",
+        "description": "STEM, Montessori ve gelişim destekleyici oyuncaklar",
+        "icon": "Puzzle",
+        "gradient": "from-emerald-500 to-green-600",
+        "bgColor": "bg-emerald-50",
+        "products": [
+            {"name": "Montessori Oyuncak Seti", "query": "montessori oyuncak seti", "highlight": True},
+            {"name": "STEM Eğitim Setleri", "query": "stem eğitim seti çocuk", "highlight": False},
+            {"name": "Ahşap Eğitici Oyuncaklar", "query": "ahşap eğitici oyuncak", "highlight": False},
+            {"name": "Puzzle & Yapboz", "query": "çocuk puzzle yapboz", "highlight": False},
+            {"name": "Blok & Lego Setleri", "query": "çocuk blok lego seti", "highlight": False},
+            {"name": "Zeka Oyunları", "query": "çocuk zeka oyunu", "highlight": False}
+        ],
+        "order": 2,
+        "isActive": True
+    },
+    {
+        "title": "Bebek Ürünleri (0-2 Yaş)",
+        "description": "Bebekler için güvenli kitaplar ve ilk oyuncaklar",
+        "icon": "Baby",
+        "gradient": "from-sky-500 to-blue-600",
+        "bgColor": "bg-sky-50",
+        "products": [
+            {"name": "Kumaş Bebek Kitapları", "query": "kumaş bebek kitabı", "highlight": True},
+            {"name": "Banyo Kitapları", "query": "bebek banyo kitabı", "highlight": False},
+            {"name": "Sensorik Oyuncaklar", "query": "bebek sensorik oyuncak", "highlight": False},
+            {"name": "İlk Yapbozlar", "query": "bebek ilk yapboz", "highlight": False},
+            {"name": "Müzikli Bebek Oyuncakları", "query": "müzikli bebek oyuncak", "highlight": False},
+            {"name": "Diş Kaşıyıcı Oyuncaklar", "query": "bebek diş kaşıyıcı oyuncak", "highlight": False}
+        ],
+        "order": 3,
+        "isActive": True
+    },
+    {
+        "title": "Yaratıcılık & El İşi",
+        "description": "Boyama, çizim ve el becerisi geliştiren aktiviteler",
+        "icon": "Palette",
+        "gradient": "from-amber-500 to-orange-600",
+        "bgColor": "bg-amber-50",
+        "products": [
+            {"name": "Boyama Kitapları", "query": "çocuk boyama kitabı", "highlight": True},
+            {"name": "Oyun Hamuru Setleri", "query": "oyun hamuru seti çocuk", "highlight": False},
+            {"name": "El İşi & Craft Setleri", "query": "çocuk el işi craft seti", "highlight": False},
+            {"name": "Parmak Boyası", "query": "çocuk parmak boyası seti", "highlight": False},
+            {"name": "Çizim & Resim Setleri", "query": "çocuk çizim resim seti", "highlight": False},
+            {"name": "Boncuk & Takı Setleri", "query": "çocuk boncuk takı seti", "highlight": False}
+        ],
+        "order": 4,
+        "isActive": True
+    },
+    {
+        "title": "Müzik & Hareket",
+        "description": "Müzik aletleri ve aktif oyun ürünleri",
+        "icon": "Music",
+        "gradient": "from-fuchsia-500 to-pink-600",
+        "bgColor": "bg-fuchsia-50",
+        "products": [
+            {"name": "Çocuk Müzik Aletleri Seti", "query": "çocuk müzik aleti seti", "highlight": True},
+            {"name": "Çocuk Gitarı", "query": "çocuk gitarı oyuncak", "highlight": False},
+            {"name": "Çocuk Piyanosu", "query": "çocuk piyano oyuncak", "highlight": False},
+            {"name": "Ritim Aletleri", "query": "çocuk ritim aleti seti", "highlight": False},
+            {"name": "Dans & Hareket Oyunları", "query": "çocuk dans hareket oyunu", "highlight": False}
+        ],
+        "order": 5,
+        "isActive": True
+    },
+    {
+        "title": "Çocuk Teknolojisi",
+        "description": "Güvenli tabletler ve eğitici elektronik cihazlar",
+        "icon": "Laptop",
+        "gradient": "from-indigo-500 to-blue-600",
+        "bgColor": "bg-indigo-50",
+        "products": [
+            {"name": "Çocuk Tabletleri", "query": "çocuk tablet eğitici", "highlight": True},
+            {"name": "Eğitici Elektronik Oyuncaklar", "query": "eğitici elektronik oyuncak çocuk", "highlight": False},
+            {"name": "Çocuk Akıllı Saati", "query": "çocuk akıllı saat", "highlight": False},
+            {"name": "Çocuk Kulaklığı", "query": "çocuk kulaklık güvenli", "highlight": False},
+            {"name": "Çocuk Kamerası", "query": "çocuk fotoğraf makinesi", "highlight": False}
+        ],
+        "order": 6,
+        "isActive": True
+    },
+    {
+        "title": "Çocuk Odası & Dekorasyon",
+        "description": "Çocuk odası mobilyaları ve dekorasyon ürünleri",
+        "icon": "Lamp",
+        "gradient": "from-teal-500 to-cyan-600",
+        "bgColor": "bg-teal-50",
+        "products": [
+            {"name": "Çocuk Kitaplığı", "query": "çocuk kitaplık raf", "highlight": True},
+            {"name": "Gece Lambası Projektör", "query": "çocuk gece lambası projektör", "highlight": False},
+            {"name": "Çocuk Masa Sandalye", "query": "çocuk çalışma masa sandalye", "highlight": False},
+            {"name": "Oyuncak Saklama Kutuları", "query": "çocuk oyuncak saklama kutusu", "highlight": False},
+            {"name": "Duvar Sticker & Dekor", "query": "çocuk odası duvar sticker", "highlight": False},
+            {"name": "Çocuk Halısı", "query": "çocuk odası halı oyun", "highlight": False}
+        ],
+        "order": 7,
+        "isActive": True
+    },
+    {
+        "title": "Anne & Baba Köşesi",
+        "description": "Ebeveynlik rehberleri ve aile için kaynaklar",
+        "icon": "Heart",
+        "gradient": "from-rose-500 to-red-600",
+        "bgColor": "bg-rose-50",
+        "products": [
+            {"name": "Ebeveynlik Kitapları", "query": "ebeveynlik rehber kitap", "highlight": True},
+            {"name": "Çocuk Gelişimi Kitapları", "query": "çocuk gelişimi kitap", "highlight": False},
+            {"name": "Pozitif Disiplin", "query": "pozitif disiplin çocuk yetiştirme", "highlight": False},
+            {"name": "Çocuk Psikolojisi", "query": "çocuk psikolojisi kitap", "highlight": False},
+            {"name": "Aile Aktivite Kitapları", "query": "aile aktivite oyun kitabı", "highlight": False}
+        ],
+        "order": 8,
+        "isActive": True
+    },
+    {
+        "title": "Hediye & Özel Günler",
+        "description": "Doğum günü ve özel günler için hediye fikirleri",
+        "icon": "Gift",
+        "gradient": "from-yellow-500 to-amber-600",
+        "bgColor": "bg-yellow-50",
+        "products": [
+            {"name": "Doğum Günü Hediyeleri", "query": "çocuk doğum günü hediye", "highlight": True},
+            {"name": "Hediye Setleri", "query": "çocuk hediye seti kutu", "highlight": False},
+            {"name": "Kişiselleştirilebilir Ürünler", "query": "kişiye özel çocuk hediye", "highlight": False},
+            {"name": "Parti Malzemeleri", "query": "çocuk doğum günü parti malzeme", "highlight": False},
+            {"name": "Hatıra & Anı Ürünleri", "query": "bebek çocuk hatıra anı", "highlight": False}
+        ],
+        "order": 9,
+        "isActive": True
+    },
+    {
+        "title": "Okul Öncesi Hazırlık",
+        "description": "Alfabe, sayılar, yazı çalışmaları ve okula hazırlık materyalleri",
+        "icon": "GraduationCap",
+        "gradient": "from-blue-500 to-indigo-600",
+        "bgColor": "bg-blue-50",
+        "products": [
+            {"name": "Okula Hazırlık Setleri", "query": "okul öncesi hazırlık seti", "highlight": True},
+            {"name": "Alfabe Öğrenme Kitapları", "query": "alfabe öğrenme kitabı çocuk", "highlight": False},
+            {"name": "Sayı ve Matematik", "query": "okul öncesi sayı matematik çocuk", "highlight": False},
+            {"name": "Yazı Çalışma Kitapları", "query": "okul öncesi yazı çalışma defteri", "highlight": False},
+            {"name": "Dikkat ve Konsantrasyon", "query": "çocuk dikkat konsantrasyon kitabı", "highlight": False},
+            {"name": "İngilizce Başlangıç", "query": "çocuk ingilizce başlangıç kitap", "highlight": False}
+        ],
+        "order": 10,
+        "isActive": True
+    },
+    {
+        "title": "Dış Mekan & Bahçe Oyunları",
+        "description": "Açık hava aktiviteleri, bisikletler ve bahçe oyuncakları",
+        "icon": "TreePine",
+        "gradient": "from-green-500 to-lime-600",
+        "bgColor": "bg-green-50",
+        "products": [
+            {"name": "Çocuk Bisikletleri", "query": "çocuk bisiklet 3-6 yaş", "highlight": True},
+            {"name": "Scooter & Kaykay", "query": "çocuk scooter kaykay", "highlight": False},
+            {"name": "Bahçe Oyun Setleri", "query": "çocuk bahçe oyun seti salıncak", "highlight": False},
+            {"name": "Kum Havuzu & Oyuncakları", "query": "çocuk kum havuzu oyuncak seti", "highlight": False},
+            {"name": "Top & Spor Oyunları", "query": "çocuk futbol basketbol top seti", "highlight": False},
+            {"name": "Su Oyuncakları", "query": "çocuk su oyuncağı havuz", "highlight": False}
+        ],
+        "order": 11,
+        "isActive": True
+    },
+    {
+        "title": "Karakter & Lisanslı Ürünler",
+        "description": "Disney, Peppa Pig, PJ Masks ve sevilen karakterler",
+        "icon": "Crown",
+        "gradient": "from-pink-500 to-purple-600",
+        "bgColor": "bg-pink-50",
+        "products": [
+            {"name": "Disney Prenses Ürünleri", "query": "disney prenses çocuk", "highlight": True},
+            {"name": "Peppa Pig Koleksiyonu", "query": "peppa pig çocuk oyuncak kitap", "highlight": False},
+            {"name": "PJ Masks Pijamaskeliler", "query": "pj masks pijamaskeliler çocuk", "highlight": False},
+            {"name": "Paw Patrol", "query": "paw patrol çocuk oyuncak", "highlight": False},
+            {"name": "Frozen Karlar Ülkesi", "query": "frozen karlar ülkesi çocuk", "highlight": False},
+            {"name": "Spiderman & Süper Kahramanlar", "query": "spiderman süper kahraman çocuk", "highlight": False}
+        ],
+        "order": 12,
+        "isActive": True
+    }
+]
+
+@api_router.post("/admin/store/reset-defaults")
+async def reset_store_to_defaults(request: Request):
+    """Reset store data to defaults - clears existing and adds default data"""
+    await require_admin(request)
+    
+    try:
+        # Clear existing data
+        await db.store_categories.delete_many({})
+        await db.store_featured.delete_many({})
+        
+        # Add default categories
+        for cat in DEFAULT_CATEGORIES:
+            cat_data = {
+                **cat,
+                "id": str(uuid.uuid4())[:8],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.store_categories.insert_one(cat_data)
+        
+        # Add default featured items
+        for item in DEFAULT_FEATURED_PICKS:
+            item_data = {
+                **item,
+                "id": str(uuid.uuid4())[:8],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.store_featured.insert_one(item_data)
+        
+        return {
+            "success": True, 
+            "message": "Mağaza verileri varsayılana döndürüldü",
+            "categories_count": len(DEFAULT_CATEGORIES),
+            "featured_count": len(DEFAULT_FEATURED_PICKS)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Hata: {str(e)}")
+
+@api_router.get("/admin/store/status")
+async def get_store_status(request: Request):
+    """Check if store has data"""
+    await require_admin(request)
+    
+    categories_count = await db.store_categories.count_documents({})
+    featured_count = await db.store_featured.count_documents({})
+    
+    return {
+        "has_data": categories_count > 0 or featured_count > 0,
+        "categories_count": categories_count,
+        "featured_count": featured_count
+    }
+
 # Public endpoint for frontend to fetch store data
 @api_router.get("/store/data")
 async def get_public_store_data():
