@@ -3,15 +3,12 @@ import { X, Sparkles, ExternalLink, BookOpen, Gift, Star, ShoppingBag } from 'lu
 import { Button } from '@/components/ui/button';
 
 const AMAZON_TAG = 'masalspace-21';
-const AMAZON_BASE = 'https://www.amazon.com.tr';
 
-const createAmazonLink = (path) => {
-  const params = new URLSearchParams({
-    tag: AMAZON_TAG,
-    linkCode: 'll2',
-    ref_: 'as_li_ss_tl'
-  });
-  return `${AMAZON_BASE}${path}?${params.toString()}`;
+// Amazon Türkiye affiliate link formatı
+// Doğru format: https://www.amazon.com.tr/s?k=ARAMA&tag=TAG_ID
+const createAmazonLink = (searchQuery) => {
+  const encodedQuery = encodeURIComponent(searchQuery);
+  return `https://www.amazon.com.tr/s?k=${encodedQuery}&tag=${AMAZON_TAG}`;
 };
 
 // Featured Amazon products for interstitial
@@ -19,7 +16,7 @@ const FEATURED_PRODUCTS = [
   {
     title: 'En Çok Satan Masal Kitapları',
     description: 'Çocukların en sevdiği klasik ve yeni masallar',
-    path: '/s?k=en+çok+satan+çocuk+masal+kitabı',
+    searchQuery: 'en çok satan çocuk masal kitabı',
     icon: BookOpen,
     gradient: 'from-violet-500 to-purple-600',
     highlight: true
@@ -27,14 +24,14 @@ const FEATURED_PRODUCTS = [
   {
     title: 'Eğitici Oyuncak Setleri',
     description: 'STEM ve montessori oyuncakları',
-    path: '/s?k=eğitici+oyuncak+set+çocuk',
+    searchQuery: 'eğitici oyuncak set çocuk',
     icon: Gift,
     gradient: 'from-pink-500 to-rose-600'
   },
   {
     title: 'Sesli Masal Kitapları',
     description: 'Butonlu sesli hikaye kitapları',
-    path: '/s?k=sesli+masal+kitabı+çocuk',
+    searchQuery: 'sesli masal kitabı çocuk',
     icon: Star,
     gradient: 'from-amber-500 to-orange-600'
   }

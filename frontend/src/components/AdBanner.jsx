@@ -2,15 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { ExternalLink, BookOpen, Gift, Star, Sparkles } from 'lucide-react';
 
 const AMAZON_TAG = 'masalspace-21';
-const AMAZON_BASE = 'https://www.amazon.com.tr';
 
-const createAmazonLink = (path) => {
-  const params = new URLSearchParams({
-    tag: AMAZON_TAG,
-    linkCode: 'll2',
-    ref_: 'as_li_ss_tl'
-  });
-  return `${AMAZON_BASE}${path}?${params.toString()}`;
+// Amazon Türkiye affiliate link formatı
+// Doğru format: https://www.amazon.com.tr/s?k=ARAMA&tag=TAG_ID
+const createAmazonLink = (searchQuery) => {
+  const encodedQuery = encodeURIComponent(searchQuery);
+  return `https://www.amazon.com.tr/s?k=${encodedQuery}&tag=${AMAZON_TAG}`;
 };
 
 // Amazon banner products
@@ -18,28 +15,28 @@ const AMAZON_PRODUCTS = [
   {
     title: 'Çocuk Masal Kitapları',
     description: 'En sevilen masallar',
-    path: '/s?k=çocuk+masal+kitabı+set',
+    searchQuery: 'çocuk masal kitabı set',
     icon: BookOpen,
     gradient: 'from-purple-500 to-violet-600'
   },
   {
     title: 'Eğitici Oyuncaklar',
     description: 'Öğrenirken eğlenin',
-    path: '/s?k=eğitici+oyuncak+çocuk+3-6+yaş',
+    searchQuery: 'eğitici oyuncak çocuk 3-6 yaş',
     icon: Gift,
     gradient: 'from-pink-500 to-rose-600'
   },
   {
     title: 'Uyku Arkadaşları',
     description: 'Yumuşak peluşlar',
-    path: '/s?k=çocuk+peluş+oyuncak+uyku',
+    searchQuery: 'çocuk peluş oyuncak uyku',
     icon: Star,
     gradient: 'from-amber-500 to-orange-600'
   },
   {
     title: 'Boyama Kitapları',
     description: 'Yaratıcılığı geliştir',
-    path: '/s?k=çocuk+boyama+kitabı+aktivite',
+    searchQuery: 'çocuk boyama kitabı aktivite',
     icon: Sparkles,
     gradient: 'from-teal-500 to-cyan-600'
   }
