@@ -106,7 +106,17 @@ DB_NAME=your_database_name
 - Backend: Railway or similar PaaS
 - Database: MongoDB Atlas or Railway MongoDB
 
-**Latest Update (Session Continued)**
+**Latest Update (Feb 21, 2025)**
+- **Amazon Affiliate Link Hatası Düzeltildi (P0):**
+  - Hatalı link formatı `?k=...?tag=...` → Doğru format `?k=...&tag=...`
+  - Düzeltilen dosyalar:
+    - `AdBanner.jsx` - Ana sayfa ve sidebar reklamları
+    - `AdInterstitial.jsx` - Modal reklam bileşeni
+    - `StorePage.jsx` - Öneri Mağazası sayfası
+    - `AmazonAffiliate.jsx` - Zaten doğruydu (onaylandı)
+  - Tüm Amazon linkleri artık geçerli ve izlenebilir
+
+**Previous Update (Session Continued)**
 - **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
 - Güncellenen dosyalar:
   - `StoryDetailPage.jsx` - İndirme ve paylaşma reklamları
