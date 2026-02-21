@@ -395,11 +395,14 @@ export default function StorePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center gap-3 mb-6">
           <h2 className="text-xl font-bold text-slate-800">Tüm Kategoriler</h2>
-          <span className="text-sm text-slate-500">({CATEGORIES.length} kategori)</span>
+          <span className="text-sm text-slate-500">({categories.length} kategori)</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-          {CATEGORIES.map((category) => {
-            const IconComponent = category.icon;
+          {categories.map((category) => {
+            // Support both static icons (components) and dynamic icons (strings)
+            const IconComponent = typeof category.icon === 'string' 
+              ? getIconComponent(category.icon) 
+              : category.icon;
             const isSelected = selectedCategory === category.id;
             
             return (
