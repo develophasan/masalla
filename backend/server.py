@@ -1885,6 +1885,205 @@ async def get_generation_presets(request: Request):
     return presets
 
 
+# ============= STORE MANAGEMENT APIs =============
+
+@api_router.get("/admin/store/categories")
+async def get_store_categories(request: Request):
+    """Get all store categories"""
+    await require_admin(request)
+    
+    categories = await db.store_categories.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    return categories
+
+@api_router.post("/admin/store/categories")
+async def create_store_category(category: StoreCategoryCreate, request: Request):
+    """Create a new store category"""
+    await require_admin(request)
+    
+    # Generate ID
+    category_id = str(uuid.uuid4())[:8]
+    
+    # Get max order
+    max_order_cat = await db.store_categories.find_one(sort=[("order", -1)])
+    new_order = (max_order_cat.get("order", 0) + 1) if max_order_cat else 0
+    
+    category_data = {
+        "id": category_id,
+        "title": category.title,
+        "description": category.description,
+        "icon": category.icon,
+        "gradient": category.gradient,
+        "bgColor": category.bgColor,
+        "products": [p.model_dump() for p in category.products],
+        "order": new_order,
+        "isActive": category.isActive,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.store_categories.insert_one(category_data)
+    
+    # Return without _id
+    return {k: v for k, v in category_data.items() if k != "_id"}
+
+@api_router.put("/admin/store/categories/{category_id}")
+async def update_store_category(category_id: str, request: Request):
+    """Update a store category"""
+    await require_admin(request)
+    
+    body = await request.json()
+    
+    # Remove _id if present
+    if "_id" in body:
+        del body["_id"]
+    
+    body["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.store_categories.update_one(
+        {"id": category_id},
+        {"$set": body}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Kategori bulunamadı")
+    
+    updated = await db.store_categories.find_one({"id": category_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/admin/store/categories/{category_id}")
+async def delete_store_category(category_id: str, request: Request):
+    """Delete a store category"""
+    await require_admin(request)
+    
+    result = await db.store_categories.delete_one({"id": category_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Kategori bulunamadı")
+    
+    return {"success": True, "message": "Kategori silindi"}
+
+@api_router.get("/admin/store/featured")
+async def get_store_featured(request: Request):
+    """Get featured items"""
+    await require_admin(request)
+    
+    featured = await db.store_featured.find({}, {"_id": 0}).sort("order", 1).to_list(20)
+    return featured
+
+@api_router.post("/admin/store/featured")
+async def create_store_featured(item: StoreFeaturedCreate, request: Request):
+    """Create a new featured item"""
+    await require_admin(request)
+    
+    # Generate ID
+    item_id = str(uuid.uuid4())[:8]
+    
+    # Get max order
+    max_order_item = await db.store_featured.find_one(sort=[("order", -1)])
+    new_order = (max_order_item.get("order", 0) + 1) if max_order_item else 0
+    
+    item_data = {
+        "id": item_id,
+        "title": item.title,
+        "description": item.description,
+        "query": item.query,
+        "badge": item.badge,
+        "gradient": item.gradient,
+        "order": new_order,
+        "isActive": item.isActive,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.store_featured.insert_one(item_data)
+    
+    return {k: v for k, v in item_data.items() if k != "_id"}
+
+@api_router.put("/admin/store/featured/{item_id}")
+async def update_store_featured(item_id: str, request: Request):
+    """Update a featured item"""
+    await require_admin(request)
+    
+    body = await request.json()
+    
+    if "_id" in body:
+        del body["_id"]
+    
+    body["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    result = await db.store_featured.update_one(
+        {"id": item_id},
+        {"$set": body}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Öğe bulunamadı")
+    
+    updated = await db.store_featured.find_one({"id": item_id}, {"_id": 0})
+    return updated
+
+@api_router.delete("/admin/store/featured/{item_id}")
+async def delete_store_featured(item_id: str, request: Request):
+    """Delete a featured item"""
+    await require_admin(request)
+    
+    result = await db.store_featured.delete_one({"id": item_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Öğe bulunamadı")
+    
+    return {"success": True, "message": "Öğe silindi"}
+
+@api_router.post("/admin/store/categories/reorder")
+async def reorder_store_categories(request: Request):
+    """Reorder store categories"""
+    await require_admin(request)
+    
+    body = await request.json()
+    order_list = body.get("order", [])  # List of category IDs in new order
+    
+    for i, cat_id in enumerate(order_list):
+        await db.store_categories.update_one(
+            {"id": cat_id},
+            {"$set": {"order": i}}
+        )
+    
+    return {"success": True, "message": "Sıralama güncellendi"}
+
+@api_router.post("/admin/store/featured/reorder")
+async def reorder_store_featured(request: Request):
+    """Reorder featured items"""
+    await require_admin(request)
+    
+    body = await request.json()
+    order_list = body.get("order", [])
+    
+    for i, item_id in enumerate(order_list):
+        await db.store_featured.update_one(
+            {"id": item_id},
+            {"$set": {"order": i}}
+        )
+    
+    return {"success": True, "message": "Sıralama güncellendi"}
+
+# Public endpoint for frontend to fetch store data
+@api_router.get("/store/data")
+async def get_public_store_data():
+    """Get store data for public frontend"""
+    categories = await db.store_categories.find(
+        {"isActive": True}, 
+        {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    
+    featured = await db.store_featured.find(
+        {"isActive": True}, 
+        {"_id": 0}
+    ).sort("order", 1).to_list(20)
+    
+    return {
+        "categories": categories,
+        "featured": featured
+    }
+
+
 # ============= SEO - SITEMAP =============
 
 from fastapi.responses import PlainTextResponse
