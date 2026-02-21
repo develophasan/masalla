@@ -126,9 +126,10 @@ DB_NAME=your_database_name
   - Editörün Seçimi CRUD (ekleme, düzenleme, silme)
   - Ürün ekleme/silme her kategori için
   - Aktif/Pasif durumu kontrolü
-  - Doğrudan Amazon link testi
+  - **"Varsayılana Dön" butonu** - tüm verileri varsayılan kategorilerle sıfırlar
   - Veritabanı koleksiyonları: `store_categories`, `store_featured`
   - Public API: `/api/store/data` (frontend için)
+  - Mağaza sayfası artık SADECE veritabanından veri gösteriyor
 
 **Previous Update (Session Continued)**
 - **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
