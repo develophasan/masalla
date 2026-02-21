@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
+import { API } from "@/config/api";
 
 const AMAZON_TAG = 'masalspace-21';
 
