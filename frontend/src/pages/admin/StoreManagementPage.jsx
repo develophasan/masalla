@@ -5,7 +5,8 @@ import {
   Plus, Trash2, Edit2, Save, X, GripVertical, ChevronDown, ChevronUp,
   Eye, EyeOff, ExternalLink, Sparkles, BookOpen, Baby, Puzzle, Palette,
   Headphones, Laptop, Gift, Star, Heart, Music, Lamp, GraduationCap,
-  TreePine, Crown, Flame, ArrowLeft, Settings, Package, AlertCircle, Check
+  TreePine, Crown, Flame, ArrowLeft, Settings, Package, AlertCircle, Check,
+  RefreshCw, Database
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
