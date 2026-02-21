@@ -304,8 +304,71 @@ export default function StorePage() {
         </div>
       </section>
 
+      {/* Editörün Seçimi - Featured Picks */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+            <Flame className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">Editörün Seçimi</h2>
+            <p className="text-sm text-slate-500">Bu hafta öne çıkan ürünler</p>
+          </div>
+          <div className="ml-auto flex items-center gap-1 text-amber-600">
+            <TrendingUp className="w-4 h-4" />
+            <span className="text-xs font-medium">Trend</span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {FEATURED_PICKS.map((item, idx) => (
+            <a
+              key={idx}
+              href={createAmazonLink(item.query)}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+            >
+              {/* Gradient Background */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-5 group-hover:opacity-10 transition-opacity`} />
+              
+              {/* Badge */}
+              <div className="absolute top-3 right-3">
+                <span className={`text-xs font-bold px-2 py-1 rounded-full bg-gradient-to-r ${item.gradient} text-white shadow-lg`}>
+                  {item.badge}
+                </span>
+              </div>
+              
+              {/* Content */}
+              <div className="relative p-5">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <Star className="w-6 h-6 text-white" />
+                </div>
+                
+                <h3 className="font-bold text-slate-800 mb-2 group-hover:text-violet-700 transition-colors line-clamp-2">
+                  {item.title}
+                </h3>
+                
+                <p className="text-sm text-slate-500 mb-4 line-clamp-2">
+                  {item.description}
+                </p>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-400">Amazon'da İncele</span>
+                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-violet-500 transition-colors" />
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* Categories Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-xl font-bold text-slate-800">Tüm Kategoriler</h2>
+          <span className="text-sm text-slate-500">({CATEGORIES.length} kategori)</span>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {CATEGORIES.map((category) => {
             const IconComponent = category.icon;
