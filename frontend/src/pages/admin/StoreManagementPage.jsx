@@ -64,6 +64,8 @@ export default function StoreManagementPage() {
   const [editingFeatured, setEditingFeatured] = useState(null);
   const [expandedCategories, setExpandedCategories] = useState({});
   const [message, setMessage] = useState(null);
+  const [resetting, setResetting] = useState(false);
+  const [storeStatus, setStoreStatus] = useState({ has_data: false, categories_count: 0, featured_count: 0 });
 
   // Check admin auth
   useEffect(() => {
