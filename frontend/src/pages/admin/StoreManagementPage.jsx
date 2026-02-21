@@ -154,8 +154,8 @@ export default function StoreManagementPage() {
     try {
       const isNew = !category.id;
       const url = isNew 
-        ? `${API_URL}/api/admin/store/categories`
-        : `${API_URL}/api/admin/store/categories/${category.id}`;
+        ? `${API}/admin/store/categories`
+        : `${API}/admin/store/categories/${category.id}`;
       
       const res = await fetch(url, {
         method: isNew ? 'POST' : 'PUT',
@@ -181,7 +181,7 @@ export default function StoreManagementPage() {
     if (!confirm('Bu kategoriyi silmek istediğinize emin misiniz?')) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/store/categories/${categoryId}`, {
+      const res = await fetch(`${API}/admin/store/categories/${categoryId}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -201,8 +201,8 @@ export default function StoreManagementPage() {
     try {
       const isNew = !item.id;
       const url = isNew 
-        ? `${API_URL}/api/admin/store/featured`
-        : `${API_URL}/api/admin/store/featured/${item.id}`;
+        ? `${API}/admin/store/featured`
+        : `${API}/admin/store/featured/${item.id}`;
       
       const res = await fetch(url, {
         method: isNew ? 'POST' : 'PUT',
@@ -228,7 +228,7 @@ export default function StoreManagementPage() {
     if (!confirm('Bu öğeyi silmek istediğinize emin misiniz?')) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/admin/store/featured/${itemId}`, {
+      const res = await fetch(`${API}/admin/store/featured/${itemId}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
