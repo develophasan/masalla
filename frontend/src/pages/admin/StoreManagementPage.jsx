@@ -380,6 +380,23 @@ export default function StoreManagementPage() {
             <Flame className="w-4 h-4" />
             Editörün Seçimi ({featured.length})
           </Button>
+
+          {/* Reset to Defaults Button - Always visible */}
+          {storeStatus.has_data && (
+            <Button
+              variant="outline"
+              onClick={handleResetToDefaults}
+              disabled={resetting}
+              className="ml-auto flex items-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50"
+            >
+              {resetting ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4" />
+              )}
+              Varsayılana Dön
+            </Button>
+          )}
         </div>
 
         {/* Categories Tab */}
