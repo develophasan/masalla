@@ -109,12 +109,16 @@ DB_NAME=your_database_name
 **Latest Update (Feb 21, 2025)**
 - **Amazon Affiliate Link Hatası Düzeltildi (P0):**
   - Hatalı link formatı `?k=...?tag=...` → Doğru format `?k=...&tag=...`
-  - Düzeltilen dosyalar:
-    - `AdBanner.jsx` - Ana sayfa ve sidebar reklamları
-    - `AdInterstitial.jsx` - Modal reklam bileşeni
-    - `StorePage.jsx` - Öneri Mağazası sayfası
-    - `AmazonAffiliate.jsx` - Zaten doğruydu (onaylandı)
+  - Düzeltilen dosyalar: AdBanner.jsx, AdInterstitial.jsx, StorePage.jsx
   - Tüm Amazon linkleri artık geçerli ve izlenebilir
+
+- **Öneri Mağazası İçeriği Genişletildi (P1):**
+  - "Editörün Seçimi" bölümü eklendi (Tübitak, Tonguç, Montessori, Sesli Projektör)
+  - 3 yeni kategori eklendi:
+    - Okul Öncesi Hazırlık (alfabe, sayılar, yazı çalışmaları)
+    - Dış Mekan & Bahçe Oyunları (bisiklet, scooter, kum havuzu)
+    - Karakter & Lisanslı Ürünler (Disney, Peppa Pig, PJ Masks)
+  - Toplam kategori sayısı: 13
 
 **Previous Update (Session Continued)**
 - **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
