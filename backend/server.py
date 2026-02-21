@@ -232,6 +232,53 @@ class AdminLogin(BaseModel):
     username: str
     password: str
 
+# ============= STORE MANAGEMENT MODELS =============
+
+class StoreProduct(BaseModel):
+    name: str
+    query: str
+    highlight: bool = False
+
+class StoreCategory(BaseModel):
+    id: Optional[str] = None
+    title: str
+    description: str
+    icon: str  # lucide icon name
+    gradient: str  # tailwind gradient classes
+    bgColor: str  # tailwind bg color class
+    products: List[StoreProduct] = []
+    order: int = 0
+    isActive: bool = True
+
+class StoreCategoryCreate(BaseModel):
+    title: str
+    description: str
+    icon: str = "BookOpen"
+    gradient: str = "from-violet-500 to-purple-600"
+    bgColor: str = "bg-violet-50"
+    products: List[StoreProduct] = []
+    order: int = 0
+    isActive: bool = True
+
+class StoreFeaturedItem(BaseModel):
+    id: Optional[str] = None
+    title: str
+    description: str
+    query: str
+    badge: str  # "En Çok Satan", "Popüler", etc.
+    gradient: str
+    order: int = 0
+    isActive: bool = True
+
+class StoreFeaturedCreate(BaseModel):
+    title: str
+    description: str
+    query: str
+    badge: str = "Önerilen"
+    gradient: str = "from-violet-500 to-purple-600"
+    order: int = 0
+    isActive: bool = True
+
 # ============= PASSWORD HELPERS =============
 
 def hash_password(password: str) -> str:
