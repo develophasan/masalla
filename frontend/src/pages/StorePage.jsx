@@ -19,6 +19,38 @@ const createAmazonLink = (searchQuery) => {
   return `https://www.amazon.com.tr/s?k=${encodedQuery}&tag=${AMAZON_TAG}`;
 };
 
+// Editörün Seçimi - Öne Çıkan Ürünler
+const FEATURED_PICKS = [
+  {
+    title: 'Tübitak Popüler Bilim Kitapları',
+    description: 'Bilimi sevdiren en çok satan seriler',
+    query: 'tübitak popüler bilim çocuk kitap',
+    badge: 'En Çok Satan',
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  {
+    title: 'Tonguç Akademi Okul Öncesi',
+    description: 'Eğlenceli okula hazırlık setleri',
+    query: 'tonguç akademi okul öncesi',
+    badge: 'Popüler',
+    gradient: 'from-orange-500 to-red-500'
+  },
+  {
+    title: 'Montessori Aktivite Setleri',
+    description: 'Öğrenirken eğlenen çocuklar için',
+    query: 'montessori aktivite seti çocuk',
+    badge: 'Tavsiye',
+    gradient: 'from-emerald-500 to-teal-500'
+  },
+  {
+    title: 'Sesli Masal Projektörü',
+    description: 'Uyku öncesi sihirli anlar',
+    query: 'çocuk hikaye projektör gece lambası',
+    badge: 'Yeni',
+    gradient: 'from-purple-500 to-pink-500'
+  }
+];
+
 const CATEGORIES = [
   {
     id: 'masal-kitaplari',
