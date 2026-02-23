@@ -29,7 +29,7 @@
     "User login with Bearer token authentication", 
     "GET /auth/me returns current user info with Authorization header",
     "User profile page accessible with Bearer token",
-    "Admin login with admin/masallardiyariai credentials",
+    "Admin login with admin/ADMIN_PASSWORD credentials",
     "Admin dashboard stats API with Bearer token authentication",
     "Admin protected routes /api/admin/stats, /api/admin/users working",
     "Credit balance check /api/credits/balance with Bearer token",

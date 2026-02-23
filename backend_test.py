@@ -165,10 +165,10 @@ class MasalSepetiAPITester:
         return False
 
     def test_admin_login(self):
-        """Test POST /admin/login - Admin login with admin/masallardiyariai"""
+        """Test POST /admin/login - Admin login with admin/ADMIN_PASSWORD_FROM_ENV"""
         admin_data = {
             "username": "admin",
-            "password": "masallardiyariai"
+            "password": "ADMIN_PASSWORD_FROM_ENV"
         }
         
         success, response = self.run_test(

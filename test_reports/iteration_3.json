@@ -28,7 +28,7 @@
     "User registration with name, surname, email, phone, password",
     "User login with email and password authentication",
     "GET /auth/me returns current user info with 10 credits",
-    "Admin API login with admin/masallardiyariai credentials",
+    "Admin API login with admin/ADMIN_PASSWORD credentials",
     "Admin stats API returns dashboard data",
     "Credit balance and credit request APIs functional",
     "Homepage responsive navbar with all required elements",
