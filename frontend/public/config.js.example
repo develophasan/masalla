@@ -1,0 +1,5 @@
+// Runtime configuration - Copy this to config.js and update values
+// This file should be generated at deploy time with actual values
+window.ENV = {
+  REACT_APP_BACKEND_URL: "https://your-backend-url.com"
+};
