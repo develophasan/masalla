@@ -44,89 +44,89 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-1">
-            {/* Credits Badge */}
-            {isAuthenticated && (
-              <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 px-3 py-1.5 rounded-full text-sm font-medium mr-2">
-                <Coins className="w-4 h-4" />
-                <span>{user?.credits || 0} Kredi</span>
-              </div>
-            )}
-
+          <div className="hidden md:flex items-center gap-1 lg:gap-2">
             <Link to="/create">
-              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
-                <Plus className="w-4 h-4 mr-1.5" />
-                Masal Ekle
+              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50 text-sm lg:text-base">
+                <Plus className="w-4 h-4 mr-1 lg:mr-1.5" />
+                <span className="hidden lg:inline">Masal</span> Ekle
               </Button>
             </Link>
             <Link to="/stories">
-              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
-                <Library className="w-4 h-4 mr-1.5" />
-                Tüm Masallar
+              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50 text-sm lg:text-base">
+                <Library className="w-4 h-4 mr-1 lg:mr-1.5" />
+                <span className="hidden lg:inline">Tüm</span> Masallar
               </Button>
             </Link>
             <Link to="/magaza">
-              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
-                <ShoppingBag className="w-4 h-4 mr-1.5" />
+              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50 text-sm lg:text-base">
+                <ShoppingBag className="w-4 h-4 mr-1 lg:mr-1.5" />
                 Mağaza
               </Button>
             </Link>
             <Link to="/about">
-              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50">
-                <Info className="w-4 h-4 mr-1.5" />
+              <Button variant="ghost" className="text-slate-600 hover:text-violet-600 hover:bg-violet-50 text-sm lg:text-base">
+                <Info className="w-4 h-4 mr-1 lg:mr-1.5" />
                 Hakkımızda
               </Button>
             </Link>
 
             {isAuthenticated ? (
-              <div className="relative ml-2">
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 bg-violet-50 hover:bg-violet-100 text-violet-700 px-3 py-2 rounded-full transition-colors"
-                >
-                  {user?.picture ? (
-                    <img src={user.picture} alt="" className="w-6 h-6 rounded-full" />
-                  ) : (
-                    <User className="w-5 h-5" />
-                  )}
-                  <span className="font-medium text-sm">{user?.name?.split(' ')[0]}</span>
-                  <ChevronDown className="w-4 h-4" />
-                </button>
+              <>
+                {/* Credits Badge - After menu items */}
+                <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 px-2 lg:px-3 py-1.5 rounded-full text-xs lg:text-sm font-medium ml-1 lg:ml-2">
+                  <Coins className="w-3.5 lg:w-4 h-3.5 lg:h-4" />
+                  <span>{user?.credits || 0}</span>
+                </div>
+                
+                <div className="relative ml-1 lg:ml-2">
+                  <button
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-1.5 lg:gap-2 bg-violet-50 hover:bg-violet-100 text-violet-700 px-2 lg:px-3 py-2 rounded-full transition-colors"
+                  >
+                    {user?.picture ? (
+                      <img src={user.picture} alt="" className="w-6 h-6 rounded-full" />
+                    ) : (
+                      <User className="w-5 h-5" />
+                    )}
+                    <span className="font-medium text-sm hidden lg:inline">{user?.name?.split(' ')[0]}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
 
-                {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
-                    <Link
-                      to="/profile"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-violet-50 hover:text-violet-600"
-                    >
-                      <User className="w-4 h-4" />
-                      Profilim
-                    </Link>
-                    {user?.role === 'admin' && (
+                  {userMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
                       <Link
-                        to="/admin"
+                        to="/profile"
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-violet-50 hover:text-violet-600"
                       >
-                        <Shield className="w-4 h-4" />
-                        Admin Panel
+                        <User className="w-4 h-4" />
+                        Profilim
                       </Link>
-                    )}
-                    <hr className="my-2 border-slate-100" />
-                    <button
-                      onClick={() => { handleLogout(); setUserMenuOpen(false); }}
-                      className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 w-full text-left"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Çıkış Yap
-                    </button>
-                  </div>
-                )}
-              </div>
+                      {user?.role === 'admin' && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-violet-50 hover:text-violet-600"
+                        >
+                          <Shield className="w-4 h-4" />
+                          Admin Panel
+                        </Link>
+                      )}
+                      <hr className="my-2 border-slate-100" />
+                      <button
+                        onClick={() => { handleLogout(); setUserMenuOpen(false); }}
+                        className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 w-full text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Çıkış Yap
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             ) : (
               <Link to="/login">
-                <Button className="ml-2 bg-violet-500 hover:bg-violet-600 text-white rounded-full">
+                <Button className="ml-2 bg-violet-500 hover:bg-violet-600 text-white rounded-full text-sm lg:text-base">
                   Giriş Yap
                 </Button>
               </Link>
