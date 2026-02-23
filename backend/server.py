@@ -1212,7 +1212,10 @@ async def admin_login(login_data: AdminLogin, response: Response):
     """Admin login with credentials from environment"""
     
     admin_username = os.environ.get('ADMIN_USERNAME', 'admin')
-    admin_password = os.environ.get('ADMIN_PASSWORD', 'masallardiyariai')
+    admin_password = os.environ.get('ADMIN_PASSWORD')
+    
+    if not admin_password:
+        raise HTTPException(status_code=500, detail="Admin şifresi yapılandırılmamış")
     
     if login_data.username != admin_username or login_data.password != admin_password:
         raise HTTPException(status_code=401, detail="Geçersiz kullanıcı adı veya şifre")
