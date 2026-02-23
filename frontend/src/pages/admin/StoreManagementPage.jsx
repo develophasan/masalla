@@ -337,18 +337,18 @@ export default function StoreManagementPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Status Banner - Show if no data */}
         {!storeStatus.has_data && (
-          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between">
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <Database className="w-6 h-6 text-amber-600" />
+              <Database className="w-5 sm:w-6 h-5 sm:h-6 text-amber-600 flex-shrink-0" />
               <div>
-                <p className="font-medium text-amber-800">Mağaza veritabanı boş</p>
-                <p className="text-sm text-amber-600">Varsayılan kategorileri ve ürünleri yüklemek için butona tıklayın</p>
+                <p className="font-medium text-amber-800 text-sm sm:text-base">Mağaza veritabanı boş</p>
+                <p className="text-xs sm:text-sm text-amber-600">Varsayılan kategorileri ve ürünleri yüklemek için butona tıklayın</p>
               </div>
             </div>
             <Button
               onClick={handleResetToDefaults}
               disabled={resetting}
-              className="bg-amber-500 hover:bg-amber-600 text-white"
+              className="bg-amber-500 hover:bg-amber-600 text-white w-full sm:w-auto"
             >
               {resetting ? (
                 <>
