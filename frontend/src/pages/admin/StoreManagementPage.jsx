@@ -295,27 +295,29 @@ export default function StoreManagementPage() {
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/admin')}
+                className="flex-shrink-0"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
-              <div>
-                <h1 className="text-xl font-bold text-slate-800">Mağaza Yönetimi</h1>
-                <p className="text-sm text-slate-500">Öneri Mağazası içeriklerini düzenle</p>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-xl font-bold text-slate-800 truncate">Mağaza Yönetimi</h1>
+                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">Öneri Mağazası içeriklerini düzenle</p>
               </div>
             </div>
             <a
               href="/magaza"
               target="_blank"
-              className="flex items-center gap-2 text-sm text-violet-600 hover:text-violet-700"
+              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-violet-600 hover:text-violet-700 flex-shrink-0"
             >
               <ExternalLink className="w-4 h-4" />
-              Mağazayı Görüntüle
+              <span className="hidden sm:inline">Mağazayı Görüntüle</span>
+              <span className="sm:hidden">Görüntüle</span>
             </a>
           </div>
         </div>
