@@ -365,23 +365,25 @@ export default function StoreManagementPage() {
           </div>
         )}
 
-        <div className="flex flex-wrap gap-2 mb-6">
-          <Button
-            variant={activeTab === 'categories' ? 'default' : 'outline'}
-            onClick={() => setActiveTab('categories')}
-            className="flex items-center gap-2"
-          >
-            <Package className="w-4 h-4" />
-            Kategoriler ({categories.length})
-          </Button>
-          <Button
-            variant={activeTab === 'featured' ? 'default' : 'outline'}
-            onClick={() => setActiveTab('featured')}
-            className="flex items-center gap-2"
-          >
-            <Flame className="w-4 h-4" />
-            Editörün Seçimi ({featured.length})
-          </Button>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 mb-4 sm:mb-6">
+          <div className="flex gap-2">
+            <Button
+              variant={activeTab === 'categories' ? 'default' : 'outline'}
+              onClick={() => setActiveTab('categories')}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-sm"
+            >
+              <Package className="w-4 h-4" />
+              <span className="hidden xs:inline">Kategoriler</span> ({categories.length})
+            </Button>
+            <Button
+              variant={activeTab === 'featured' ? 'default' : 'outline'}
+              onClick={() => setActiveTab('featured')}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-sm"
+            >
+              <Flame className="w-4 h-4" />
+              <span className="hidden xs:inline">Editör</span> ({featured.length})
+            </Button>
+          </div>
 
           {/* Reset to Defaults Button - Always visible */}
           {storeStatus.has_data && (
@@ -389,14 +391,14 @@ export default function StoreManagementPage() {
               variant="outline"
               onClick={handleResetToDefaults}
               disabled={resetting}
-              className="ml-auto flex items-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50"
+              className="sm:ml-auto flex items-center justify-center gap-2 text-amber-600 border-amber-300 hover:bg-amber-50 text-sm"
             >
               {resetting ? (
                 <RefreshCw className="w-4 h-4 animate-spin" />
               ) : (
                 <RefreshCw className="w-4 h-4" />
               )}
-              Varsayılana Dön
+              <span>Varsayılana Dön</span>
             </Button>
           )}
         </div>
