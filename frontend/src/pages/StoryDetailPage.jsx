@@ -819,6 +819,16 @@ export default function StoryDetailPage() {
                 İndir
               </Button>
             </div>
+            
+            {/* Hidden Audio Element */}
+            <audio
+              ref={audioRef}
+              src={`data:audio/mpeg;base64,${story.audio_base64}`}
+              onTimeUpdate={handleTimeUpdate}
+              onLoadedMetadata={handleLoadedMetadata}
+              onEnded={handleEnded}
+              preload="metadata"
+            />
           </div>
         )}
 
