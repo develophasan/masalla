@@ -107,6 +107,24 @@ export default function Footer() {
                   Kullanım Koşulları
                 </Link>
               </li>
+              <li>
+                <Link to="/kvkk" className="flex items-center gap-2 text-slate-600 hover:text-violet-600 transition-colors text-sm">
+                  <Scale className="w-4 h-4" />
+                  KVKK Aydınlatma
+                </Link>
+              </li>
+              <li>
+                <Link to="/cookies" className="flex items-center gap-2 text-slate-600 hover:text-violet-600 transition-colors text-sm">
+                  <Cookie className="w-4 h-4" />
+                  Çerez Politikası
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="flex items-center gap-2 text-slate-600 hover:text-violet-600 transition-colors text-sm">
+                  <MessageSquare className="w-4 h-4" />
+                  İletişim
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
