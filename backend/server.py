@@ -2472,9 +2472,13 @@ async def generate_sitemap():
     static_pages = [
         {"loc": "/", "priority": "1.0", "changefreq": "daily"},
         {"loc": "/stories", "priority": "0.9", "changefreq": "daily"},
+        {"loc": "/magaza", "priority": "0.7", "changefreq": "weekly"},
         {"loc": "/about", "priority": "0.5", "changefreq": "monthly"},
+        {"loc": "/contact", "priority": "0.5", "changefreq": "yearly"},
         {"loc": "/privacy", "priority": "0.3", "changefreq": "yearly"},
         {"loc": "/terms", "priority": "0.3", "changefreq": "yearly"},
+        {"loc": "/kvkk", "priority": "0.3", "changefreq": "yearly"},
+        {"loc": "/cookies", "priority": "0.3", "changefreq": "yearly"},
     ]
     
     for page in static_pages:
