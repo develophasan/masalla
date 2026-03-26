@@ -279,6 +279,14 @@ class StoreFeaturedCreate(BaseModel):
     order: int = 0
     isActive: bool = True
 
+# ============= CONTACT FORM MODEL =============
+
+class ContactMessage(BaseModel):
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
+
 # ============= PASSWORD HELPERS =============
 
 def hash_password(password: str) -> str:
