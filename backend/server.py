@@ -2402,6 +2402,59 @@ async def get_public_store_data():
     }
 
 
+# ============= CONTACT FORM =============
+
+@api_router.post("/contact")
+async def submit_contact_form(message: ContactMessage):
+    """Submit a contact form message"""
+    try:
+        contact_data = {
+            "id": str(uuid.uuid4()),
+            "name": message.name,
+            "email": message.email,
+            "subject": message.subject,
+            "message": message.message,
+            "status": "new",  # new, read, replied
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.contact_messages.insert_one(contact_data)
+        
+        return {
+            "success": True,
+            "message": "Mesajınız başarıyla gönderildi"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Mesaj gönderilemedi: {str(e)}")
+
+@api_router.get("/admin/contact-messages")
+async def get_contact_messages(request: Request):
+    """Get all contact messages (admin only)"""
+    await require_admin(request)
+    
+    messages = await db.contact_messages.find(
+        {}, 
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return messages
+
+@api_router.put("/admin/contact-messages/{message_id}/status")
+async def update_contact_message_status(message_id: str, request: Request):
+    """Update contact message status"""
+    await require_admin(request)
+    
+    body = await request.json()
+    new_status = body.get("status", "read")
+    
+    await db.contact_messages.update_one(
+        {"id": message_id},
+        {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {"success": True}
+
+
 # ============= SEO - SITEMAP =============
 
 from fastapi.responses import PlainTextResponse
