@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, Mail, Shield, FileText, Info, BookOpen, ExternalLink, ShoppingBag } from 'lucide-react';
+import { Heart, Mail, Shield, FileText, Info, BookOpen, ExternalLink, ShoppingBag, Scale, Cookie, MessageSquare } from 'lucide-react';
 import { AmazonCategoryGrid } from './AmazonAffiliate';
 
 export default function Footer() {
