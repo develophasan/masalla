@@ -79,6 +79,9 @@ function AppRouter() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/kvkk" element={<KVKKPage />} />
+          <Route path="/cookies" element={<CookiePolicyPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/dev/api" element={<ApiDocsPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
@@ -88,6 +91,7 @@ function AppRouter() {
       </div>
       {!hideFooter && <Footer />}
       {!hideBottomNav && <BottomNav />}
+      <CookieConsent />
     </div>
   );
 }
