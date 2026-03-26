@@ -107,6 +107,17 @@ DB_NAME=your_database_name
 - Database: MongoDB Atlas or Railway MongoDB
 
 **Latest Update (Feb 21, 2025)**
+
+- **AdSense Uyumluluk İyileştirmeleri:**
+  - ✅ **KVKK Aydınlatma Metni** sayfası eklendi (`/kvkk`)
+  - ✅ **Çerez Politikası** sayfası eklendi (`/cookies`)
+  - ✅ **İletişim** sayfası eklendi (`/contact`) - Form ile mesaj gönderme
+  - ✅ **Çerez İzni Banner'ı** eklendi - GDPR/KVKK uyumlu popup
+  - ✅ Footer'a tüm yasal linkler eklendi (5 link)
+  - ✅ Sitemap güncellendi (yeni sayfalar eklendi)
+  - Backend: İletişim formu API'si (`/api/contact`)
+  - Geliştirici bilgileri GitHub'dan alındı (Hasan Özdemir)
+
 - **Amazon Affiliate Link Hatası Düzeltildi (P0):**
   - Hatalı link formatı `?k=...?tag=...` → Doğru format `?k=...&tag=...`
   - Düzeltilen dosyalar: AdBanner.jsx, AdInterstitial.jsx, StorePage.jsx
@@ -114,22 +125,9 @@ DB_NAME=your_database_name
 
 - **Öneri Mağazası İçeriği Genişletildi (P1):**
   - "Editörün Seçimi" bölümü eklendi (Tübitak, Tonguç, Montessori, Sesli Projektör)
-  - 3 yeni kategori eklendi:
-    - Okul Öncesi Hazırlık (alfabe, sayılar, yazı çalışmaları)
-    - Dış Mekan & Bahçe Oyunları (bisiklet, scooter, kum havuzu)
-    - Karakter & Lisanslı Ürünler (Disney, Peppa Pig, PJ Masks)
-  - Toplam kategori sayısı: 13
-
-- **Admin Panel: Mağaza Yönetimi Sayfası Eklendi:**
-  - Yeni sayfa: `/admin/store`
-  - Kategoriler CRUD (ekleme, düzenleme, silme)
-  - Editörün Seçimi CRUD (ekleme, düzenleme, silme)
-  - Ürün ekleme/silme her kategori için
-  - Aktif/Pasif durumu kontrolü
-  - **"Varsayılana Dön" butonu** - tüm verileri varsayılan kategorilerle sıfırlar
-  - Veritabanı koleksiyonları: `store_categories`, `store_featured`
-  - Public API: `/api/store/data` (frontend için)
-  - Mağaza sayfası artık SADECE veritabanından veri gösteriyor
+  - 3 yeni kategori eklendi (Toplam 13)
+  - Admin panel: Mağaza Yönetimi sayfası (`/admin/store`)
+  - "Varsayılana Dön" butonu
 
 **Previous Update (Session Continued)**
 - **Reklam Süresi Güncellemesi:** İndirme, paylaşma ve masal oluşturma için Amazon reklam gösterim süresi 5 saniyeden **10 saniyeye** çıkarıldı
